@@ -1,0 +1,145 @@
+.nd_dual_grid{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.nd_con2{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: start;
+}
+.nd_con2_elem{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 7rem;
+    height: 9rem;
+    /* border: 1px solid black; */
+}
+.nd_input1{
+    width: 5rem;
+    height: 2.5rem;
+    outline: none;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+}
+.frame_price_con{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.frame_price_elem{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.f_price{
+    width: 6rem;
+    height: 2.5rem;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nd_dual_con3{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+}
+.nd_con3_elem{
+    display: flex;
+    /* gap: 0.5rem; */
+}
+.nd_con3_e1{
+    width: 3.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+.nd_con3_e2{
+    width: 1rem;
+    display: flex;
+    align-items: center;
+}
+.nd_con3_e3{
+    width: 17rem;
+    height: 2rem;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+    font-size: 12px;
+    padding-left: 0.5rem;
+}
+
+
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+    .nd_con3_e3 {
+        width: 11rem;
+    }
+    .nd_dual_con3{    
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+    }
+    .nd_dual_grid{
+        display: flex;
+        flex-direction: column;
+    }
+    .nd_con2_elem{
+        height: 4rem;
+        width: 6rem;
+    }
+    .nd_input1 {
+        width: 4rem;
+        height: 2rem;
+    }
+    .f_price {
+        width: 5rem;
+        height: 2rem;
+    }
+    .flex_between{
+        flex-direction: column;
+        align-items: start;
+    }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Styles for screens between 321 and 480 pixels */
+    .nd_con3_e3 {
+        width: 11rem;
+    }
+    .nd_dual_con3{    
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+    }
+    .nd_con2_elem{
+        height: 5rem;
+    }
+    .page_title {
+        font-size: 20px;
+    }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+    /* Styles for screens between 321 and 480 pixels */
+    .nd_con3_e3 {
+      width: 11rem;
+    }
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+    .label-existing-patient {
+      font-size: 15px;
+    }
+    .existing-patient-inner-inputs {
+        padding: 6px 9px;
+    }
+}

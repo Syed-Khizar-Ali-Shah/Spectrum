@@ -1,0 +1,64 @@
+.user_header{
+    height: 3rem;
+    background: #DAE4FD;
+    border-radius: 4px 4px 0px 0px;
+    display: grid;
+    grid-template-columns: 7% 17% 22% 15% 11% 14% 14%;
+    color: #212529;
+    font-family: 'Manrope';
+    font-weight: 600;
+}
+.user_header div{
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user_elem{
+    display: grid;
+    grid-template-columns: 7% 17% 22% 15% 11% 14% 14%;
+    color: #5B5B5B;
+    font-family: 'Manrope';
+    font-weight: 500;
+    height: 4rem;
+    font-size: 14px;
+}
+.user_elem_child{
+    /* border: 1px solid black; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+  .user_header {
+    font-size: 10px;
+    grid-template-columns: 7% 15% 18% 14% 14% 18% 14%;
+  }
+  .user_elem {
+    grid-template-columns: 6% 18% 25% 15% 14% 13% 9%;
+    font-size: 8px;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Styles for screens between 321 and 480 pixels */
+  .user_header {
+    font-size: 11px;
+    grid-template-columns: 7% 15% 18% 14% 14% 18% 14%;
+  }
+  .user_elem {
+    grid-template-columns: 6% 18% 25% 15% 14% 13% 9%;
+    font-size: 11px;
+  }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+}

@@ -1,0 +1,102 @@
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.268);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login_main_box{
+    background-color: #4C004A;
+    height: 30rem;
+    width: 32rem;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.login_main_box button{
+    background-color: #DAE4FD;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 22px;
+    font-family: 'Manrope';
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+.login_input_con{
+    border: 2px solid white;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    height: 2.5rem;
+    width: 20rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 5px;
+    margin: 1rem 0;
+}
+.login_txt{
+    font-size: 18px;
+    color: white;
+}
+.login_txt::placeholder {
+    color: white;
+}
+.login_powered{
+    /* border: 1px solid black; */
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+    padding: 0 20px;
+}
+.login_powered img{
+    height: 3rem;
+}
+.login_powered div{
+    color: white;
+    font-size: 13px;
+    font-weight: 400;
+    font-family: 'Manrope';
+}
+.login_xmark{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+
+
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+  .login_main_box {
+    width: 24rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+}

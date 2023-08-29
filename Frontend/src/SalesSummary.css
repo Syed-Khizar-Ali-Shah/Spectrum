@@ -1,0 +1,125 @@
+.ss_header11{
+    min-height: 3rem;
+    background: #DAE4FD;
+    border-radius: 4px 4px 0px 0px;
+    color: #212529;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Manrope';
+    /* font-weight: 600; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.ss_header11 div {
+    width: 8rem;
+    /* height: 100%; */
+    padding: 0px 14px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+}
+.ss_body1{
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px rgba(56, 65, 74, 0.14902);
+    border-radius: 4px;
+    min-height: 17rem;
+}
+.ss_body_in{
+    min-height: 3rem;
+    border-bottom: 1px solid #D0D0D0;
+    /* border-radius: 4px 4px 0px 0px; */
+    color: #212529;
+    font-family: 'Manrope';
+    font-size: 13px;
+    /* font-weight: 600; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.ss_body_in div{
+    width: 8rem;
+    /* height: 100%; */
+    padding: 0px 14px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    margin: 1rem 0;
+}
+
+
+
+
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+      
+    .ss_header11 div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+    }
+    .ss_header11 {
+        justify-content: start;
+    }
+    .ss_body_in div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+        margin: 0.5rem 0;
+    }
+    .ss_body_in {
+        justify-content: start;
+    }
+
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Styles for screens between 321 and 480 pixels */
+    .ss_header11 div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+    }
+    .ss_header11 {
+        justify-content: start;
+    }
+    .ss_body_in div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+        margin: 1rem 0;
+    }
+    .ss_body_in {
+        justify-content: start;
+    }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Styles for screens between 321 and 480 pixels */
+    .ss_header11 div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+    }
+    .ss_header11 {
+        justify-content: start;
+    }
+    .ss_body_in div {
+        width: 6rem;
+        padding: 0px 6px;
+        font-size: 10px;
+    }
+    .ss_body_in {
+        justify-content: start;
+    }
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+}

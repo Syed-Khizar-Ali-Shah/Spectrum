@@ -1,0 +1,24 @@
+.lens_row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 29rem;
+    margin: 12px 0px;
+}
+
+
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Styles for screens between 321 and 480 pixels */
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+}

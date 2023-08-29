@@ -1,0 +1,99 @@
+.input3_flex{
+    display: flex;
+    justify-content: space-between;
+}
+.ps_grid2{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.ps_input1 {
+    border: 1px solid #CED4DA;
+    border-radius: 2px;
+    font-size: 10px;
+    outline: none;
+    height: 1.7rem;
+    width: 12rem;
+    padding: 6px;
+    color: #9599AD;
+    margin-bottom: 1.2rem;
+}
+.ps_pr{
+    padding-left: 1rem;
+}
+.rl_con44 {
+    /* border: 1px solid black; */
+    height: 8rem;
+    margin-bottom: 2rem;
+    display: grid;
+}
+.ps_header{
+    height: 3rem;
+    background: #DAE4FD;
+    border-radius: 4px 4px 0px 0px;
+    color: #212529;
+    font-family: 'Manrope';
+    /* font-weight: 600; */
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+}
+.ps_border{
+    border-right: 1px solid #D0D0D0;
+}
+@media (max-width: 319px) {
+    /* Styles for screens up to 320 pixels */
+  }
+@media (min-width: 320px) and (max-width: 480px) {
+  /* Styles for screens between 321 and 480 pixels */
+    .ps_pr{
+        padding-left: 0.4rem;
+    }
+    .rl_con44{
+        grid-template-columns: 7% 12% 12% 13% 13% 19% 12% 12% !important;
+        width: 17rem !important;
+    }
+    .input3_flex{
+        flex-wrap: wrap;
+    }
+    .ps_grid2{
+        display: flex;
+        flex-direction: column;
+    }
+    .ps_border{
+        display: none;
+    }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Styles for screens between 321 and 480 pixels */
+    .ps_pr{
+        padding-left: 0.4rem;
+    }
+    .rl_con44{
+        grid-template-columns: 7% 12% 12% 13% 13% 19% 12% 12% !important;
+        width: 19rem !important;
+    }
+    .input3_flex{
+        flex-wrap: wrap;
+    }
+    .ps_grid2{
+        display: flex;
+        flex-direction: column;
+    }
+    .ps_border{
+        display: none;
+    }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+    /* Styles for screens between 321 and 480 pixels */
+    .ps_pr{
+        padding-left: 0.4rem;
+    }
+    .rl_con44{
+        grid-template-columns: 7% 12% 12% 13% 13% 19% 12% 12% !important;
+        width: 19rem !important;
+    }
+    
+}
+@media (min-width: 993px) {
+  /* Styles for screens above 993 pixels */
+}
