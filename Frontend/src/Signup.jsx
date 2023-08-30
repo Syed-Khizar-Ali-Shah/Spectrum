@@ -50,7 +50,7 @@ function Signup() {
         <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
           <div
             className="login_main_box"
-            style={{ width: "70%", height: "60%"}}
+            style={{ width: "70%", height: "fit-content"}}
           >
             <svg
               width="238"
