@@ -14,7 +14,7 @@ const taskRoutes = require('./routes/task');
 
 app.use(cors(
     {
-        origin: ["https://deploy-mern-frontend.vercel.app"],
+        origin: ["https://spectrum-updated.vercel.app"],
         methods: ["POST", "GET", "PUT", "DELETE"],
         credentials: true
     }
