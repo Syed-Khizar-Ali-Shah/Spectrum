@@ -12,15 +12,13 @@ const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
 const taskRoutes = require('./routes/task');
 
-// app.use(express.static(path.join(__dirname, "./client/build")))
-// app.get('*', function(_, res) {
-//     try {
-//         res.sendFile(path.join(__dirname, "./client/build/index.html"));
-//     } catch (err) {
-//         res.status(500).send(err);
-//     }
-// });
-
+app.use(cors(
+    {
+        origin: ["https://spectrum-updated.verce"],
+        methods: ["POST", "GET", "PUT", "DELETE"],
+        credentials: true
+    }
+));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
