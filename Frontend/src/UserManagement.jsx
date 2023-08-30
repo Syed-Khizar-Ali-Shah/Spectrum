@@ -168,17 +168,6 @@ function UserManagement() {
   // Function to handle page change
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
-    // window.scrollTo(0,428);
-    // window.scrollTo({
-    //   top: 0,
-    //   left: 0,
-    //   behavior: 'smooth'
-    // });
-    // Replace 'article-1' with the id of the target div
-    // const targetDiv = document.getElementById('article-main');
-    // if (targetDiv) {
-    //   targetDiv.scrollIntoView({ behavior: 'smooth' });
-    // }
   };
   // Calculate index of the first article to display on the current page
   const startIndex = (currentPage - 1) * 5;
