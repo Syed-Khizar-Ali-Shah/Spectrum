@@ -12,6 +12,16 @@ const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
 const taskRoutes = require('./routes/task');
 
+// app.use(express.static(path.join(__dirname, "./client/build")))
+// app.get('*', function(_, res) {
+//     try {
+//         res.sendFile(path.join(__dirname, "./client/build/index.html"));
+//     } catch (err) {
+//         res.status(500).send(err);
+//     }
+// });
+
+
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -32,13 +42,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/patient', patientRoutes);
 app.use('/api/task', taskRoutes)
 
-app.use(express.static(path.join(__dirname, "../Frontend/build")))
-
-app.get('*', function(req,res){
-    res.sendFile(path.join(__dirname,"../Frontend/build/index.html"));
-})
-
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })

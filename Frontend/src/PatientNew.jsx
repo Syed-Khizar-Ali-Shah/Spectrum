@@ -48,7 +48,7 @@ function PatientNew() {
   }
 
   const handleSavePatient = () => {
-    if(!title || !forename || !surname || !dob || address1 || address2 || city || country || postcode || email || landline || mobile || gender || doctor || patientType || HC2orHC3Number || HC3PatientContribution || contactedBy.length === 0 || !notes) {
+    if(!title || !forename || !surname || !dob || !address1 || !address2 || !city || !country || !postcode || !email || !landline || !mobile || !gender || !doctor || !patientType || !HC2orHC3Number || !HC3PatientContribution || !notes) {
        setMsg('All fields are required!');
        return
     }
