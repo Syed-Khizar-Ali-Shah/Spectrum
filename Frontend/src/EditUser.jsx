@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { baseUrl } from "./utils/data";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import SyncLoader from 'react-spinners/SyncLoader'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function Signup() {
+function EditUser() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState("");
@@ -16,8 +16,20 @@ function Signup() {
 
   const navigate = useNavigate()
 
+  const {id} = useParams()
+
+  useEffect(() => {
+      axios.get(`${baseUrl}/api/user/${id}`).then(res => {
+        setUsername(res.data.username);
+        setEmail(res.data.email);
+        setUserType(res.data.role);
+      }).catch(err => {
+        console.log(err);
+      })
+  }, [])
+
   const notify = () => {
-    toast.success('Registered Successfully')
+    toast.success('User Updated')
   }
 
   const notifyErr = () => {
@@ -25,12 +37,14 @@ function Signup() {
   }
 
   const handleSubmit = async () => {
-    if(!username || !email || !userType || !password) {
+    if(!username || !email || !userType) {
         return
     }
+
+    console.log({username, email, userType, password});
     setLoading(true)
     try {
-       const res = axios.post(`${baseUrl}/api/auth/register`, {username, email, userType, password});
+       const res = axios.put(`${baseUrl}/api/user/${id}`, {username, email, role : userType, password});
        notify();
        setLoading(false)
        setTimeout(() => {
@@ -45,7 +59,7 @@ function Signup() {
   }
   return (
     <>
-       <ToastContainer />
+    <ToastContainer />
       <div style={{width: "100%", height:"100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
           <div
@@ -82,7 +96,7 @@ function Signup() {
                 letterSpacing: "1.5px",
               }}
             >
-              Add User
+              Edit User
             </div>
             <div className="login_input_con">
               <div className="login_txt">{userType ? userType : 'User Type'}</div>
@@ -92,7 +106,7 @@ function Signup() {
                 onChange={(e) => setUserType(e.target.value)} // Update the selectedUserType state
                 style={{ width: "25px" }}
               >
-                <option value=""></option>
+                <option value={userType}></option>
                 <option value="Admin">Admin</option>
                 <option value="Optom">Optom</option>
                 <option value="Manager">Manager</option>
@@ -103,6 +117,7 @@ function Signup() {
               <input
                 type="text"
                 placeholder="Username"
+                value={username}
                 className="login_txt"
                 style={{
                   border: "none",
@@ -133,6 +148,7 @@ function Signup() {
               <input
                 type="email"
                 placeholder="Email"
+                value={email}
                 className="login_txt"
                 style={{
                   border: "none",
@@ -185,7 +201,7 @@ function Signup() {
                 />
               </svg>
             </div>
-            <button onClick={handleSubmit}>{loading ? <SyncLoader color="#ffffff" /> : 'Add User'}</button>
+            <button onClick={handleSubmit}>{loading ? <SyncLoader color="#ffffff" /> : 'Update User'}</button>
             <div className="login_powered">
               <div>Powered by</div>
               <img src="/powered.png" alt="" />
@@ -197,4 +213,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default EditUser;

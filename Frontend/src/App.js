@@ -29,6 +29,7 @@ import StaffPerformance from './StaffPerformance';
 import Kpis from './Kpis';
 import Singup from './Signup';
 import Signup from './Signup';
+import EditUser from './EditUser';
 
 function App() {
   
@@ -429,7 +430,7 @@ function App() {
                 <div className='side_bar_title' style={{color:admin?blueCol:'#FFFFFF'}} >Admin</div>
               </li>     
             </NavLink> 
-            <NavLink className='sidebar_list_con' to='/signup'>
+            {/* <NavLink className='sidebar_list_con' to='/signup'>
               <li onClick={activeSignup} >
                 <svg width="22" height="22" viewBox="0 0 33 34" fill="none" xmlns="http://www.w3.org/2000/svg" style={{background: 'none'}}>
                   <path d="M13.4473 13.1238C16.4848 13.1238 18.9473 10.6585 18.9473 7.61732C18.9473 4.57617 16.4848 2.11084 13.4473 2.11084C10.4097 2.11084 7.94727 4.57617 7.94727 7.61732C7.94727 10.6585 10.4097 13.1238 13.4473 13.1238Z"/>
@@ -438,7 +439,7 @@ function App() {
                 </svg>
                 <div className='side_bar_title' style={{color : 'white'}}>Signup</div>
               </li>     
-            </NavLink>         
+            </NavLink>          */}
             <NavLink className='sidebar_list_con' to='/user-management'>
               <li onClick={activeUserManagement} style={{background: userManagement ?'#F4F3F6':'none'}} >
                 <svg width="22" height="22" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -554,6 +555,7 @@ function App() {
               <Route path='/reporting' element={<Reporting/>} />
               <Route path='/admin' element={<Admin/>} />
               <Route path='/signup' element={<Signup/>} />
+              <Route path='/edit-user/:id' element={<EditUser/>} />
               <Route path='/user-management' element={<UserManagement/>} />
               <Route path='/till' element={<Till/>} />
               <Route path='/gos1' element={<GOS1/>} />

@@ -13,7 +13,12 @@ const getAllUsers = async (req, res) => {
 
 // Controller function to get a single user by ID
 const getUserById = async (req, res) => {
-     const user = await User.findById(req.param.id)
+    try{
+     const user = await User.findById(req.params.id)
+     res.json(user);
+    } catch(error) {
+      res.status(400).json({ message: 'user not found' });
+    }
 };
 
 // Controller function to create a new user
@@ -44,8 +49,9 @@ const updateUser = async (req, res) => {
 
 // Controller function to delete a user by ID
 const deleteUser = async (req, res) => {
+  console.log(req.params.id)
   try {
-    await req.user.remove();
+    await User.findByIdAndDelete(req.params.id)
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to delete user' });

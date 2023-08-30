@@ -20,6 +20,6 @@ const userSchema = new mongoose.Schema({
         otp: String,
         expiresAt: Date,
     },
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('User', userSchema);
