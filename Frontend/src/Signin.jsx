@@ -6,35 +6,82 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import SyncLoader from 'react-spinners/SyncLoader'
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setToken, setUser } from "./redux/spectrumSlice"
 
-function Signup() {
-  const [username, setUsername] = useState("");
+function Signin() {
+//   const [username, setUsername] = useState("");
+const [forgotPassword, setForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
-  const [userType, setUserType] = useState("");
+//   const [userType, setUserType] = useState("");
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch();
 
   const navigate = useNavigate()
 
   const notify = () => {
-    toast.success('Registered Successfully')
-  }
+    toast.success("Password Updated");
+  };
 
   const notifyErr = () => {
-    toast.error('Something went wrong')
-  }
+    toast.error("Something went wrong");
+  };
+
+  const handleOTP = async () => {
+    if (!email) {
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${baseUrl}/api/auth/forgot-password`, {
+        email: email,
+      });
+      console.log(res.data);
+      setIsUpdate(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!email || !otp || !newPassword) {
+      return;
+    }
+
+    try {
+      const res =await axios.post(`${baseUrl}/api/auth/reset-password`, {
+        email: email,
+        newPassword: newPassword,
+        otp: otp,
+      });
+      console.log(res.data);
+      setIsUpdate(true);
+      notify();
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      notifyErr();
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
-    if(!username || !email || !userType || !password) {
+    if(!email || !password) {
         return
     }
     setLoading(true)
     try {
-       const res = await axios.post(`${baseUrl}/api/auth/register`, {username, email, userType, password});
-       notify();
+       const res =await axios.post(`${baseUrl}/api/auth/login`, {email,password});
+       dispatch(setUser(res.data.user));
+        dispatch(setToken(res.data.token));
+    //    notify();
        setLoading(false)
        setTimeout(() => {
-        navigate('/user-management');
+        navigate('/');
        },1000)
     } catch(err) {
         console.log(err);
@@ -48,7 +95,7 @@ function Signup() {
        <ToastContainer />
       <div style={{width: "100%", height:"100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-          <div
+          {!forgotPassword ? <div
             className="login_main_box"
             style={{ width: "70%", height: "fit-content"}}
           >
@@ -82,52 +129,7 @@ function Signup() {
                 letterSpacing: "1.5px",
               }}
             >
-              Add User
-            </div>
-            <div className="login_input_con">
-              <div className="login_txt">{userType ? userType : 'User Type'}</div>
-              <select
-                id="userType"
-                value={userType} // Use the selectedUserType state variable
-                onChange={(e) => setUserType(e.target.value)} // Update the selectedUserType state
-                style={{ width: "25px" }}
-              >
-                <option value=""></option>
-                <option value="Admin">Admin</option>
-                <option value="Optom">Optom</option>
-                <option value="Manager">Manager</option>
-                <option value="Dispensing">Dispensing</option>
-              </select>
-            </div>
-            <div className="login_input_con">
-              <input
-                type="text"
-                placeholder="Username"
-                className="login_txt"
-                style={{
-                  border: "none",
-                  background: "none",
-                  color: "white",
-                  outline: "none",
-                }}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <svg
-                width="35"
-                height="22"
-                viewBox="0 0 35 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M34.1467 28.6934C32.0042 26.372 29.4043 24.5195 26.5106 23.2525C23.6169 21.9854 20.4922 21.3313 17.3333 21.3313C14.1744 21.3313 11.0497 21.9854 8.15608 23.2525C5.26241 24.5195 2.66247 26.372 0.52 28.6934C0.189222 29.0591 0.00418971 29.5336 0 30.0267V38.0267C0.00701126 38.5525 0.220816 39.0544 0.595132 39.4237C0.969447 39.793 1.47416 40.0001 2 40H32.6667C33.1971 40 33.7058 39.7893 34.0809 39.4142C34.456 39.0392 34.6667 38.5305 34.6667 38V30C34.656 29.5161 34.4714 29.0523 34.1467 28.6934Z"
-                  fill="white"
-                />
-                <path
-                  d="M17.3333 18.6667C22.488 18.6667 26.6667 14.488 26.6667 9.33333C26.6667 4.17868 22.488 0 17.3333 0C12.1787 0 8 4.17868 8 9.33333C8 14.488 12.1787 18.6667 17.3333 18.6667Z"
-                  fill="white"
-                />
-              </svg>
+              Login
             </div>
             <div className="login_input_con">
               <input
@@ -185,16 +187,117 @@ function Signup() {
                 />
               </svg>
             </div>
-            <button onClick={handleSubmit}>{loading ? <SyncLoader color="#ffffff" /> : 'Add User'}</button>
+            <p
+                onClick={() => setForgotPassword(true)}
+                style={{ cursor: "pointer", color: "white" }}
+              >
+                Forgot Password?
+              </p>
+            <button onClick={handleSubmit}>{loading ? <SyncLoader color="#ffffff" /> : 'Login'}</button>
             <div className="login_powered">
               <div>Powered by</div>
               <img src="/powered.png" alt="" />
             </div>
-          </div>
+          </div>  : !isUpdate ? (
+            <div className="login_main_box">
+              <p style={{ color: "white", paddingBottom: "10px" }}>
+                Enter your email here, <br /> an OTP will be sent to your email
+                address!
+              </p>
+              <div className="login_input_con">
+                <input
+                  type="email"
+                  required
+                  placeholder="Email"
+                  className="login_txt"
+                  style={{
+                    border: "none",
+                    background: "none",
+                    color: "white",
+                    outline: "none",
+                  }}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <svg
+                  width="35"
+                  height="22"
+                  viewBox="0 0 35 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M34.1467 28.6934C32.0042 26.372 29.4043 24.5195 26.5106 23.2525C23.6169 21.9854 20.4922 21.3313 17.3333 21.3313C14.1744 21.3313 11.0497 21.9854 8.15608 23.2525C5.26241 24.5195 2.66247 26.372 0.52 28.6934C0.189222 29.0591 0.00418971 29.5336 0 30.0267V38.0267C0.00701126 38.5525 0.220816 39.0544 0.595132 39.4237C0.969447 39.793 1.47416 40.0001 2 40H32.6667C33.1971 40 33.7058 39.7893 34.0809 39.4142C34.456 39.0392 34.6667 38.5305 34.6667 38V30C34.656 29.5161 34.4714 29.0523 34.1467 28.6934Z"
+                    fill="white"
+                  />
+                  <path
+                    d="M17.3333 18.6667C22.488 18.6667 26.6667 14.488 26.6667 9.33333C26.6667 4.17868 22.488 0 17.3333 0C12.1787 0 8 4.17868 8 9.33333C8 14.488 12.1787 18.6667 17.3333 18.6667Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+              <button onClick={handleOTP}>Send OTP</button>
+            </div>
+          ) : (
+            <div className="login_main_box">
+              <div className="login_input_con">
+                <input
+                  type="password"
+                  placeholder="Enter New Password"
+                  className="login_txt"
+                  style={{
+                    border: "none",
+                    background: "none",
+                    color: "white",
+                    outline: "none",
+                  }}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <svg
+                  width="34"
+                  height="22"
+                  viewBox="0 0 34 37"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M32.0784 15.4766H27.8266V11.4298C27.828 11.4125 27.828 11.3957 27.828 11.3808C27.828 5.10576 22.7227 0 16.4458 0C10.1707 0 5.06496 5.10576 5.06496 11.3808V15.4766H1.25808C1.09285 15.4766 0.929225 15.5091 0.776559 15.5723C0.623894 15.6355 0.485178 15.7281 0.368342 15.845C0.251506 15.9618 0.15884 16.1005 0.0956374 16.2532C0.0324354 16.4059 -6.29857e-05 16.5695 9.16459e-08 16.7347V35.2459C-6.29857e-05 35.4112 0.0324354 35.5748 0.0956374 35.7274C0.15884 35.8801 0.251506 36.0188 0.368342 36.1357C0.485178 36.2525 0.623894 36.3452 0.776559 36.4084C0.929225 36.4716 1.09285 36.5041 1.25808 36.504H32.0789C32.2441 36.5041 32.4077 36.4716 32.5604 36.4084C32.7131 36.3452 32.8518 36.2525 32.9686 36.1357C33.0854 36.0188 33.1781 35.8801 33.2413 35.7274C33.3045 35.5748 33.337 35.4112 33.337 35.2459V16.7347C33.337 16.5695 33.3044 16.4058 33.2411 16.2532C33.1779 16.1005 33.0852 15.9618 32.9683 15.845C32.8514 15.7281 32.7127 15.6355 32.56 15.5723C32.4073 15.5091 32.2437 15.4766 32.0784 15.4766ZM11.7677 11.3808C11.7677 8.8008 13.8658 6.70512 16.4458 6.70512C19.0094 6.70512 21.0994 8.77872 21.1243 11.3366L21.1229 11.3515H21.1243V15.4766H11.7677V11.3808Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+              <div className="login_input_con">
+                <input
+                  type="number"
+                  placeholder="Enter OTP sent to your email"
+                  className="login_txt"
+                  style={{
+                    border: "none",
+                    background: "none",
+                    color: "white",
+                    outline: "none",
+                  }}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                <svg
+                  width="34"
+                  height="22"
+                  viewBox="0 0 34 37"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M32.0784 15.4766H27.8266V11.4298C27.828 11.4125 27.828 11.3957 27.828 11.3808C27.828 5.10576 22.7227 0 16.4458 0C10.1707 0 5.06496 5.10576 5.06496 11.3808V15.4766H1.25808C1.09285 15.4766 0.929225 15.5091 0.776559 15.5723C0.623894 15.6355 0.485178 15.7281 0.368342 15.845C0.251506 15.9618 0.15884 16.1005 0.0956374 16.2532C0.0324354 16.4059 -6.29857e-05 16.5695 9.16459e-08 16.7347V35.2459C-6.29857e-05 35.4112 0.0324354 35.5748 0.0956374 35.7274C0.15884 35.8801 0.251506 36.0188 0.368342 36.1357C0.485178 36.2525 0.623894 36.3452 0.776559 36.4084C0.929225 36.4716 1.09285 36.5041 1.25808 36.504H32.0789C32.2441 36.5041 32.4077 36.4716 32.5604 36.4084C32.7131 36.3452 32.8518 36.2525 32.9686 36.1357C33.0854 36.0188 33.1781 35.8801 33.2413 35.7274C33.3045 35.5748 33.337 35.4112 33.337 35.2459V16.7347C33.337 16.5695 33.3044 16.4058 33.2411 16.2532C33.1779 16.1005 33.0852 15.9618 32.9683 15.845C32.8514 15.7281 32.7127 15.6355 32.56 15.5723C32.4073 15.5091 32.2437 15.4766 32.0784 15.4766ZM11.7677 11.3808C11.7677 8.8008 13.8658 6.70512 16.4458 6.70512C19.0094 6.70512 21.0994 8.77872 21.1243 11.3366L21.1229 11.3515H21.1243V15.4766H11.7677V11.3808Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+              <button onClick={handleUpdatePassword}>Update Password</button>
+            </div>
+          )}
         </div>
       </div>
     </>
   );
 }
 
-export default Signup;
+export default Signin;

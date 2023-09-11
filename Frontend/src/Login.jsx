@@ -27,7 +27,7 @@ function Login({ showLogin, setshowLogin }) {
     }
 
     try {
-      const res = axios.post(`${baseUrl}/api/auth/forgot-password`, {
+      const res = await axios.post(`${baseUrl}/api/auth/forgot-password`, {
         email: email,
       });
       console.log(res.data);
@@ -37,13 +37,13 @@ function Login({ showLogin, setshowLogin }) {
     }
   };
 
-  const handleUpdatePassword = () => {
+  const handleUpdatePassword = async () => {
     if (!email || !otp || !newPassword) {
       return;
     }
 
     try {
-      const res = axios.post(`${baseUrl}/api/auth/reset-password`, {
+      const res =await axios.post(`${baseUrl}/api/auth/reset-password`, {
         email: email,
         newPassword: newPassword,
         otp: otp,
