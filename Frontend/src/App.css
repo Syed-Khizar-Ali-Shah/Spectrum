@@ -3,6 +3,58 @@
   padding: 0px;
   margin: 0px;
 }
+
+.search {
+  width: 600px;
+  height: fit-content;
+  max-height: 50vh;
+  overflow: scroll;
+  background-color: white;
+  position: absolute;
+  z-index: 50;
+  top: 75px;
+  left: 24%;
+}
+
+.close-container {
+     position: relative;
+     display: flex;
+     justify-content: flex-end;
+}
+
+.close {
+  padding: 0.5rem;
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Styling for list items */
+.list-item {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.list-item:hover {
+  background-color: #ddd;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

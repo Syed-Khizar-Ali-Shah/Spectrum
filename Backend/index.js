@@ -11,6 +11,8 @@ const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
 const taskRoutes = require('./routes/task');
+const newSightTestRoutes = require('./routes/newSightTest')
+const searchRoutes = require('./routes/search')
 
 // app.use(cors(
 //     {
@@ -41,6 +43,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/patient', patientRoutes);
 app.use('/api/task', taskRoutes)
+app.use('/api/newSightTest', newSightTestRoutes)
+app.use('/api/search', searchRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

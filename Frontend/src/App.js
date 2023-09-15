@@ -32,11 +32,43 @@ import Signup from "./Signup";
 import EditUser from "./EditUser";
 import Signin from "./Signin";
 import Protected from "./Protected";
-import { useSelector } from "react-redux";
-import { setUser } from "./redux/spectrumSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser,setSearchPatients } from "./redux/spectrumSlice";
+import axios from 'axios';
+import { baseUrl } from "./utils/data";
 
 function App() {
   const user = useSelector((state) => state.spectrumReducer.user);
+  const [searchValue, setSearchValue] = useState('');
+  const [searchResult, setSearchResult] = useState();
+  const [showSearch, setShowSearch] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleClick = (patient) => {
+     dispatch(setSearchPatients(patient))
+    setShowSearch(false);
+  }
+
+  const handleSearch = async () => {
+    console.log("s", searchValue);
+    try {
+      const response = await axios.get(`${baseUrl}/api/search?value=${searchValue}`);
+      setSearchResult(response.data)
+      setShowSearch(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  useEffect(() => {
+
+    if(searchValue.trim().length > 0) {
+      setTimeout(() => {
+        handleSearch();
+      }, 2000)
+    }
+  }, [searchValue]);
 
   console.log("user", user);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 992);
@@ -902,6 +934,7 @@ function App() {
                   className="nav_search_input"
                   type="text"
                   placeholder="Search"
+                  onChange={(e) => setSearchValue(e.target.value)}
                 />
                 <svg
                   width="18"
@@ -940,6 +973,21 @@ function App() {
               <div className="nav_right_text">John Smith</div>
             </div>
           </div>}
+          
+            {showSearch && 
+            <div className="search">
+              <div className="close-container">
+                
+                <div className="close" onClick={() => setShowSearch(false)}>x</div>
+               
+                </div>
+               <ul className="list">
+                {searchResult?.map(patient => (
+                  <li className="list-item" onClick={() => handleClick(patient)}>{patient.forename +" "+patient.surname}</li>
+                ))}
+               </ul>
+            </div>}
+          
           <div className="main_pages">
             <Routes>
               <Route
@@ -1148,5 +1196,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

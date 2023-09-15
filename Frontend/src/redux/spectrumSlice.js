@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   token: {},
   user: {},
+  searchPatients : []
 };
 
 export const spectrumSlice = createSlice({
@@ -18,11 +19,16 @@ export const spectrumSlice = createSlice({
       state.token = action.payload;
       console.log("testtoken", state.token);
     },
+    setSearchPatients : (state, action) => {
+      state.searchPatients = action.payload;
+      console.log("searchPatients", state.searchPatients);
+    },
   },
 });
 
 export const {
   setUser,
   setToken,
+  setSearchPatients
 } = spectrumSlice.actions;
 export default spectrumSlice.reducer;
