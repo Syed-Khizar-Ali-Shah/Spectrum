@@ -38,7 +38,7 @@ router.put('/historyAndSymptoms/:id', updateHistoryAndSymptoms);
 router.delete('/historyAndSymptoms/:id', deleteHistoryAndSymptoms);
 
 // Routes for OccularExamination
-router.post('/occularExamination', createOccularExamination);
+router.post('/occularExamination/:patientID', createOccularExamination);
 router.get('/occularExamination/:id', getOccularExamination);
 router.put('/occularExamination/:id', updateOccularExamination);
 router.delete('/occularExamination/:id', deleteOccularExamination);

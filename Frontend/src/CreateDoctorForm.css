@@ -1,0 +1,81 @@
+/* CreateDoctorForm.css */
+
+.create-doctor-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dfh2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333;
+  }
+  
+  .dflabel {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+    color: #555555;
+  }
+  
+  .dfinput[type="text"],
+  .dfinput[type="date"],
+  .dfinput[type="time"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333333;
+  }
+  
+  .date-time-container {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .date-time-container label {
+    margin-bottom: 8px;
+  }
+  
+  .time-slot-container {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background-color: #ffffff;
+  }
+  
+  .add-time-button,
+  .remove-time-button,
+  .add-date-button,
+  .remove-date-button,
+  .create-doctor-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4C004A;
+    color: #ffffff;
+    font-size: 16px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .add-time-button:hover,
+  .remove-time-button:hover,
+  .add-date-button:hover,
+  .remove-date-button:hover,
+  .create-doctor-button:hover {
+    background-color: #4C004A;
+  }
+  

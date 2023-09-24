@@ -184,7 +184,7 @@
 @media (min-width: 320px) and (max-width: 480px) {
   /* Styles for screens between 321 and 480 pixels */
     .make_a_con {
-      height: 25rem;
+      height: 32rem;
       width: 23rem;
     }
     .txt_8px{

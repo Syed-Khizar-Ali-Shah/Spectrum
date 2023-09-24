@@ -10,9 +10,12 @@ const path = require("path");
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
+const doctorRoutes = require('./routes/doctorRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 const taskRoutes = require('./routes/task');
 const newSightTestRoutes = require('./routes/newSightTest')
 const searchRoutes = require('./routes/search')
+const contactLenseRoutes = require('./routes/contactLense');
 
 // app.use(cors(
 //     {
@@ -42,9 +45,12 @@ mongoose.connect(process.env.MONGO_URL).then((res) => {
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/patient', patientRoutes);
+app.use('/api/doctor', doctorRoutes);
+app.use('/api/appointments', appointmentRoutes);
 app.use('/api/task', taskRoutes)
 app.use('/api/newSightTest', newSightTestRoutes)
 app.use('/api/search', searchRoutes);
+app.use('/api/contactLense', contactLenseRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

@@ -59,10 +59,137 @@ function NewSightTest() {
     otherNotes: "",
   });
 
+  //Ocullar Examination states
+  const [RELids, setRELids] = useState("");
+  const [RELashes, setRELashes] = useState("");
+  const [REConjunctiva, setREConjunctiva] = useState("");
+  const [RESclera, setRESclera] = useState("");
+  const [RECornea, setRECornea] = useState("");
+  const [REAndCha, setREAndCha] = useState("");
+  const [REIris, setREIris] = useState("");
+  const [REPupils, setREPupils] = useState("");
+  const [RELense, setRELense] = useState("");
+  const [REPosChaa, setREPosChaa] = useState("");
+  const [RECDRatio, setRECDRatio] = useState("");
+  const [RENRR, setRENRR] = useState("");
+  const [REMacular, setREMacular] = useState("");
+  const [REAV, setREAV] = useState("");
+  const [REPeriphery, setREPeriphery] = useState("");
+  const [REEye, setREEye] = useState("");
+  const [RELens2, setRELens2] = useState("");
+  const [REFundus, setREFundus] = useState("");
+
+  const [LELids, setLELids] = useState("");
+  const [LELashes, setLELashes] = useState("");
+  const [LEConjunctiva, setLEConjunctiva] = useState("");
+  const [LESclera, setLESclera] = useState("");
+  const [LECornea, setLECornea] = useState("");
+  const [LEAndCha, setLEAndCha] = useState("");
+  const [LEIris, setLEIris] = useState("");
+  const [LEPupils, setLEPupils] = useState("");
+  const [LELense, setLELense] = useState("");
+  const [LEPosChaa, setLEPosChaa] = useState("");
+  const [LECDRatio, setLECDRatio] = useState("");
+  const [LENRR, setLENRR] = useState("");
+  const [LEMacular, setLEMacular] = useState("");
+  const [LEAV, setLEAV] = useState("");
+  const [LEPeriphery, setLEPeriphery] = useState("");
+  const [LEEye, setLEEye] = useState("");
+  const [LELens2, setLELens2] = useState("");
+  const [LEFundus, setLEFundus] = useState("");
+
+  const [ophthalmoscopyNotes, setOphthalmoscopyNotes] = useState("");
+  const [occularHealthExaminationMethods, setOccularHealthExaminationMethods] =
+    useState({
+      slitLamp: false,
+      directOpthalmoscope: false,
+      OCT: false,
+      volk: false,
+      fundusImaging: false,
+    });
+
+  const handleHealthExaminationMethods = (e) => {
+    // const name = e.target.name;
+    // const updatedExaminationMethods = [...occularHealthExaminationMethods]; // Create a new array based on the current state
+
+    // if (!updatedExaminationMethods.includes(name)) {
+    //   updatedExaminationMethods.push(name);
+    // } else {
+    //   const toRemoveIdx = updatedExaminationMethods.findIndex((item) => item === name);
+    //   updatedExaminationMethods.splice(toRemoveIdx, 1);
+    // }
+
+    // Now, update the state with the new array
+    setOccularHealthExaminationMethods({
+      ...occularHealthExaminationMethods,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
     setFormData({ ...formData, [name]: newValue });
+  };
+
+  const handleSaveOccularExamination = () => {
+    // Create an object with all the form data
+    const dataToSend = {
+      patientID,
+      RELids,
+      RELashes,
+      REConjunctiva,
+      RESclera,
+      RECornea,
+      REAndCha,
+      REIris,
+      REPupils,
+      RELense,
+      REPosChaa,
+      RECDRatio,
+      RENRR,
+      REMacular,
+      REAV,
+      REPeriphery,
+      REEye,
+      RELens2,
+      REFundus,
+      LELids,
+      LELashes,
+      LEConjunctiva,
+      LESclera,
+      LECornea,
+      LEAndCha,
+      LEIris,
+      LEPupils,
+      LELense,
+      LEPosChaa,
+      LECDRatio,
+      LENRR,
+      LEMacular,
+      LEAV,
+      LEPeriphery,
+      LEEye,
+      LELens2,
+      LEFundus,
+      ophthalmoscopyNotes,
+      occularHealthExaminationMethods,
+    };
+
+    console.log("oe", dataToSend);
+    console.log("methods", occularHealthExaminationMethods);
+
+    axios
+      .post(
+        `${baseUrl}/api/newSightTest/occularExamination/${searchPatient._id}`,
+        { ...dataToSend, occularHealthExaminationMethods }
+      )
+      .then((res) => {
+        alert("Data Saved!");
+      })
+      .catch((err) => {
+        alert("Error occured while saving data!");
+      });
   };
 
   const handleSaveHistoryAndSymptoms = async () => {
@@ -80,8 +207,8 @@ function NewSightTest() {
 
       // Send a POST request to your server to store the data
       const response = await axios.post(
-        `${baseUrl}/api/newSightTest/historyAndSymptoms/${patientID}`,
-        { ...formData, patientID }
+        `${baseUrl}/api/newSightTest/historyAndSymptoms/${searchPatient?._id}`,
+        { ...formData, patientID: searchPatient._id }
       );
       console.log(response.data);
       alert("Data Saved!");
@@ -1019,7 +1146,7 @@ function NewSightTest() {
                 id=""
                 className="nst_ta"
                 placeholder="No significant headaches"
-                value={formData.familyGeneralHealth}
+                value={formData?.familyGeneralHealth}
                 onChange={handleInputChange}
                 required
               ></textarea>
@@ -1368,40 +1495,46 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Lids</div>
                     <select
-                      name=""
                       id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RELids"
+                      value={RELids}
+                      onChange={(e) => setRELids(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">MGD GD1</option>
-                      <option value="">MGD GD2</option>
-                      <option value="">MGD GD3</option>
-                      <option value="">MGD GD4</option>
-                      <option value="">Chalazion</option>
-                      <option value="">Stye</option>
-                      <option value="">Allergic Papillae</option>
-                      <option value="">Ptosis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="MGD GD1">MGD GD1</option>
+                      <option value="MGD GD2">MGD GD2</option>
+                      <option value="MGD GD3">MGD GD3</option>
+                      <option value="MGD GD4">MGD GD4</option>
+                      <option value="Chalazion">Chalazion</option>
+                      <option value="Stye">Stye</option>
+                      <option value="Allergic Papillae">
+                        Allergic Papillae
+                      </option>
+                      <option value="Ptosis">Ptosis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Lashes</div>
                     <select
-                      name=""
                       id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RELashes"
+                      value={RELashes}
+                      onChange={(e) => setRELashes(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Blepharitis GD1</option>
-                      <option value="">Blepharitis GD2</option>
-                      <option value="">Blepharitis GD3</option>
-                      <option value="">Blepharitis GD4</option>
-                      <option value="">Trichiasis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Blepharitis GD1">Blepharitis GD1</option>
+                      <option value="Blepharitis GD2">Blepharitis GD2</option>
+                      <option value="Blepharitis GD3">Blepharitis GD3</option>
+                      <option value="Blepharitis GD4">Blepharitis GD4</option>
+                      <option value="Trichiasis">Trichiasis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1409,33 +1542,39 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Conjunctiva</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REConjunctiva"
+                      value={REConjunctiva}
+                      onChange={(e) => setREConjunctiva(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Hyperaemia GD1</option>
-                      <option value="">Hyperaemia GD2</option>
-                      <option value="">Hyperaemia GD3</option>
-                      <option value="">Hyperaemia GD4</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Hyperaemia GD1">Hyperaemia GD1</option>
+                      <option value="Hyperaemia GD2">Hyperaemia GD2</option>
+                      <option value="yperaemia GD3">Hyperaemia GD3</option>
+                      <option value="Hyperaemia GD4">Hyperaemia GD4</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Sclera</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RESclera"
+                      value={RESclera}
+                      onChange={(e) => setRESclera(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Diffuse Scleritis</option>
-                      <option value="">Nodular Scleritis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Diffuse Scleritis">
+                        Diffuse Scleritis
+                      </option>
+                      <option value="Nodular Scleritis">
+                        Nodular Scleritis
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1443,36 +1582,40 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Cornea</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RECornea"
+                      value={RECornea}
+                      onChange={(e) => setRECornea(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">PDS</option>
-                      <option value="">Scarring</option>
-                      <option value="">Epithelial erosion / Staining</option>
-                      <option value="">Dystrophy</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="PDS">PDS</option>
+                      <option value="Scarring">Scarring</option>
+                      <option value="Epithelial erosion / Staining">
+                        Epithelial erosion / Staining
+                      </option>
+                      <option value="Dystrophy">Dystrophy</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Ant. Cha</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REAndCha"
+                      value={REAndCha}
+                      onChange={(e) => setREAndCha(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Aqueous Flare</option>
-                      <option value="">VH GD1</option>
-                      <option value="">VH GD2</option>
-                      <option value="">VH GD3</option>
-                      <option value="">VH GD4</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Aqueous Flare">Aqueous Flare</option>
+                      <option value="VH GD1">VH GD1</option>
+                      <option value="VH GD2">VH GD2</option>
+                      <option value="VH GD3">VH GD3</option>
+                      <option value="VH GD4">VH GD4</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1480,35 +1623,41 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Iris</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RELids"
+                      value={REIris}
+                      onChange={(e) => setREIris(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Nevus</option>
-                      <option value="">Transillumination</option>
-                      <option value="">Distortion</option>
-                      <option value="">Surgical damage</option>
-                      <option value="">Melanoma</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Nevus">Nevus</option>
+                      <option value="Transillumination">
+                        Transillumination
+                      </option>
+                      <option value="Distortion">Distortion</option>
+                      <option value="Surgical damage">Surgical damage</option>
+                      <option value="Melanoma">Melanoma</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Pupils</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REPupils"
+                      value={REPupils}
+                      onChange={(e) => setREPupils(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">PERRLA/ NO RAPD</option>
-                      <option value="">RAPD</option>
-                      <option value="">Holmes- Aidie Pupil</option>
-                      <option value="">Horners Syndrome</option>
-                      <option value="">See Notes</option>
+                      <option value="PERRLA/ NO RAPD">PERRLA/ NO RAPD</option>
+                      <option value="RAPD">RAPD</option>
+                      <option value="Holmes- Aidie Pupil">
+                        Holmes- Aidie Pupil
+                      </option>
+                      <option value="Horners Syndrome">Horners Syndrome</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1516,36 +1665,48 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Lens</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RELens"
+                      value={RELense}
+                      onChange={(e) => setRELense(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Nuclear Change</option>
-                      <option value="">Nuclear Cataract</option>
-                      <option value="">Cortical Cataract</option>
-                      <option value="">Capsular Cataract</option>
-                      <option value="">Mixed Cataract</option>
-                      <option value="">Congenital Cataract</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Nuclear Change">Nuclear Change</option>
+                      <option value="Nuclear Cataract">Nuclear Cataract</option>
+                      <option value="Cortical Cataract">
+                        Cortical Cataract
+                      </option>
+                      <option value="Capsular Cataract">
+                        Capsular Cataract
+                      </option>
+                      <option value="Mixed Cataract">Mixed Cataract</option>
+                      <option value="Congenital Cataract">
+                        Congenital Cataract
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Pos. Chaa</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REPosChaa"
+                      value={REPosChaa}
+                      onChange={(e) => setREPosChaa(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">PVD</option>
-                      <option value="">Asteroid Hyalosis</option>
-                      <option value="">Vitreous Haemorrhage</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="PVD">PVD</option>
+                      <option value="Asteroid Hyalosis">
+                        Asteroid Hyalosis
+                      </option>
+                      <option value="Vitreous Haemorrhage">
+                        Vitreous Haemorrhage
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1553,54 +1714,56 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">CD Ratio</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RECDRatioR"
+                      value={RECDRatio}
+                      onChange={(e) => setRECDRatio(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">0.05</option>
-                      <option value="">0.1</option>
-                      <option value="">0.15</option>
-                      <option value="">0.2</option>
-                      <option value="">0.25</option>
-                      <option value="">0.3</option>
-                      <option value="">0.35</option>
-                      <option value="">0.4</option>
-                      <option value="">0.45</option>
-                      <option value="">0.5</option>
-                      <option value="">0.45</option>
-                      <option value="">0.5</option>
-                      <option value="">0.55</option>
-                      <option value="">0.6</option>
-                      <option value="">0.65</option>
-                      <option value="">0.7</option>
-                      <option value="">0.75</option>
-                      <option value="">0.8</option>
-                      <option value="">0.85</option>
-                      <option value="">0.9</option>
-                      <option value="">0.95</option>
-                      <option value="">1.0</option>
-                      <option value="">See Notes</option>
+                      <option value="0.05">0.05</option>
+                      <option value="0.1">0.1</option>
+                      <option value="0.15">0.15</option>
+                      <option value="0.2">0.2</option>
+                      <option value="0.25">0.25</option>
+                      <option value="0.3">0.3</option>
+                      <option value="0.35">0.35</option>
+                      <option value="0.4">0.4</option>
+                      <option value="0.45">0.45</option>
+                      <option value="0.5">0.5</option>
+                      <option value="0.45">0.45</option>
+                      <option value="0.5">0.5</option>
+                      <option value="0.55">0.55</option>
+                      <option value="0.6">0.6</option>
+                      <option value="0.65">0.65</option>
+                      <option value="0.7">0.7</option>
+                      <option value="0.75">0.75</option>
+                      <option value="0.8">0.8</option>
+                      <option value="0.85">0.85</option>
+                      <option value="0.9">0.9</option>
+                      <option value="0.95">0.95</option>
+                      <option value="1.0">1.0</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">NRR</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="RENRR"
+                      value={RENRR}
+                      onChange={(e) => setRENRR(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">
-                        Pink, defined, Flat , <br /> ISNT applies
+
+                      <option value="Glaucomatous">Glaucomatous</option>
+                      <option value="NRR Thinning">NRR Thinning</option>
+                      <option value="Raised / Inflammation">
+                        Raised / Inflammation
                       </option>
-                      <option value="">Glaucomatous</option>
-                      <option value="">NRR Thinning</option>
-                      <option value="">Raised / Inflammation</option>
-                      <option value="">Blurred Margins</option>
-                      <option value="">See Notes</option>
+                      <option value="Blurred Margins">Blurred Margins</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1608,38 +1771,42 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Macular</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REMacular"
+                      value={REMacular}
+                      onChange={(e) => setREMacular(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Clear Reflex</option>
-                      <option value="">Drusen</option>
-                      <option value="">Dry AMD</option>
-                      <option value="">Wet AMD</option>
-                      <option value="">Macula Hole</option>
-                      <option value="">Diabetic Maculopathy</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Clear Reflex">Clear Reflex</option>
+                      <option value="Drusen">Drusen</option>
+                      <option value="Dry AMD">Dry AMD</option>
+                      <option value="Wet AMD">Wet AMD</option>
+                      <option value="Macula Hole">Macula Hole</option>
+                      <option value="Diabetic Maculopathy">
+                        Diabetic Maculopathy
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">AV</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REAV"
+                      value={REAV}
+                      onChange={(e) => setREAV(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">2/3, Clear/ Healthy</option>
-                      <option value="">1/3</option>
-                      <option value="">4/5</option>
-                      <option value="">Tortuous</option>
-                      <option value="">Nipping</option>
-                      <option value="">Atherosclerosis</option>
-                      <option value="">See Notes</option>
+                      <option value="2/3">2/3</option>
+                      <option value="1/3">1/3</option>
+                      <option value="4/5">4/5</option>
+                      <option value="Tortuous">Tortuous</option>
+                      <option value="Nipping">Nipping</option>
+                      <option value="Atherosclerosis">Atherosclerosis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1647,17 +1814,22 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Periphery</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="REPeriphery"
+                      value={REPeriphery}
+                      onChange={(e) => setREPeriphery(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy Flat</option>
-                      <option value="">Nevus</option>
-                      <option value="">Melanoma</option>
-                      <option value="">Retinal Detachment</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy Flat">
+                        Clear/ Healthy Flat
+                      </option>
+                      <option value="Nevus">Nevus</option>
+                      <option value="Melanoma">Melanoma</option>
+                      <option value="Retinal Detachment">
+                        Retinal Detachment
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div></div>
@@ -1710,7 +1882,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setREEye(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
@@ -1745,7 +1922,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setRELens2(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
@@ -1784,7 +1966,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setREFundus(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -1801,40 +1988,44 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Lids</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LELids"
+                      value={LELids}
+                      onChange={(e) => setLELids(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">MGD GD1</option>
-                      <option value="">MGD GD2</option>
-                      <option value="">MGD GD3</option>
-                      <option value="">MGD GD4</option>
-                      <option value="">Chalazion</option>
-                      <option value="">Stye</option>
-                      <option value="">Allergic Papillae</option>
-                      <option value="">Ptosis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="MGD GD1">MGD GD1</option>
+                      <option value="MGD GD2">MGD GD2</option>
+                      <option value="MGD GD3">MGD GD3</option>
+                      <option value="MGD GD4">MGD GD4</option>
+                      <option value="Chalazion">Chalazion</option>
+                      <option value="Stye">Stye</option>
+                      <option value="Allergic Papillae">
+                        Allergic Papillae
+                      </option>
+                      <option value="Ptosis">Ptosis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Lashes</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LELashes"
+                      value={LELashes}
+                      onChange={(e) => setLELashes(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Blepharitis GD1</option>
-                      <option value="">Blepharitis GD2</option>
-                      <option value="">Blepharitis GD3</option>
-                      <option value="">Blepharitis GD4</option>
-                      <option value="">Trichiasis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Blepharitis GD1">Blepharitis GD1</option>
+                      <option value="Blepharitis GD2">Blepharitis GD2</option>
+                      <option value="Blepharitis GD3">Blepharitis GD3</option>
+                      <option value="Blepharitis GD4">Blepharitis GD4</option>
+                      <option value="Trichiasis">Trichiasis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1842,33 +2033,39 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Conjunctiva</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEConjunctiva"
+                      value={LEConjunctiva}
+                      onChange={(e) => setLEConjunctiva(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Hyperaemia GD1</option>
-                      <option value="">Hyperaemia GD2</option>
-                      <option value="">Hyperaemia GD3</option>
-                      <option value="">Hyperaemia GD4</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Hyperaemia GD1">Hyperaemia GD1</option>
+                      <option value="Hyperaemia GD2">Hyperaemia GD2</option>
+                      <option value="Hyperaemia GD3">Hyperaemia GD3</option>
+                      <option value="Hyperaemia GD4">Hyperaemia GD4</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Sclera</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LESclera"
+                      value={LESclera}
+                      onChange={(e) => setLESclera(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Diffuse Scleritis</option>
-                      <option value="">Nodular Scleritis</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Diffuse Scleritis">
+                        Diffuse Scleritis
+                      </option>
+                      <option value="Nodular Scleritis">
+                        Nodular Scleritis
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1876,36 +2073,40 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Cornea</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LECornea"
+                      value={LECornea}
+                      onChange={(e) => setLECornea(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">PDS</option>
-                      <option value="">Scarring</option>
-                      <option value="">Epithelial erosion / Staining</option>
-                      <option value="">Dystrophy</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="PDS">PDS</option>
+                      <option value="Scarring">Scarring</option>
+                      <option value="Epithelial erosion / Staining">
+                        Epithelial erosion / Staining
+                      </option>
+                      <option value="Dystrophy">Dystrophy</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Ant. Cha</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEAndCha"
+                      value={LEAndCha}
+                      onChange={(e) => setLEAndCha(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Aqueous Flare</option>
-                      <option value="">VH GD1</option>
-                      <option value="">VH GD2</option>
-                      <option value="">VH GD3</option>
-                      <option value="">VH GD4</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Aqueous Flare">Aqueous Flare</option>
+                      <option value="VH GD1">VH GD1</option>
+                      <option value="VH GD2">VH GD2</option>
+                      <option value="VH GD3">VH GD3</option>
+                      <option value="VH GD4">VH GD4</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1913,35 +2114,41 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Iris</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEIris"
+                      value={LEIris}
+                      onChange={(e) => setLEIris(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Nevus</option>
-                      <option value="">Transillumination</option>
-                      <option value="">Distortion</option>
-                      <option value="">Surgical damage</option>
-                      <option value="">Melanoma</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Nevus">Nevus</option>
+                      <option value="Transillumination">
+                        Transillumination
+                      </option>
+                      <option value="Distortion">Distortion</option>
+                      <option value="Surgical damage">Surgical damage</option>
+                      <option value="Melanoma">Melanoma</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Pupils</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEPupils"
+                      value={LEPupils}
+                      onChange={(e) => setLEPupils(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">PERRLA/ NO RAPD</option>
-                      <option value="">RAPD</option>
-                      <option value="">Holmes- Aidie Pupil</option>
-                      <option value="">Horners Syndrome</option>
-                      <option value="">See Notes</option>
+                      <option value="PERRLA/ NO RAPD">PERRLA/ NO RAPD</option>
+                      <option value="RAPD">RAPD</option>
+                      <option value="Holmes- Aidie Pupil">
+                        Holmes- Aidie Pupil
+                      </option>
+                      <option value="Horners Syndrome">Horners Syndrome</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1949,36 +2156,48 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Lens</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LELense"
+                      value={LELense}
+                      onChange={(e) => setLELense(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Nuclear Change</option>
-                      <option value="">Nuclear Cataract</option>
-                      <option value="">Cortical Cataract</option>
-                      <option value="">Capsular Cataract</option>
-                      <option value="">Mixed Cataract</option>
-                      <option value="">Congenital Cataract</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Nuclear Change">Nuclear Change</option>
+                      <option value="Nuclear Cataract">Nuclear Cataract</option>
+                      <option value="Cortical Cataract">
+                        Cortical Cataract
+                      </option>
+                      <option value="Capsular Cataract">
+                        Capsular Cataract
+                      </option>
+                      <option value="Mixed Cataract">Mixed Cataract</option>
+                      <option value="Congenital Cataract">
+                        Congenital Cataract
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">Pos. Chaa</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEPosChaa"
+                      value={LEPosChaa}
+                      onChange={(e) => setLEPosChaa(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">PVD</option>
-                      <option value="">Asteroid Hyalosis</option>
-                      <option value="">Vitreous Haemorrhage</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="PVD">PVD</option>
+                      <option value="Asteroid Hyalosis">
+                        Asteroid Hyalosis
+                      </option>
+                      <option value="Vitreous Haemorrhage">
+                        Vitreous Haemorrhage
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -1986,54 +2205,56 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">CD Ratio</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LECDRatio"
+                      value={LECDRatio}
+                      onChange={(e) => setLECDRatio(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">0.05</option>
-                      <option value="">0.1</option>
-                      <option value="">0.15</option>
-                      <option value="">0.2</option>
-                      <option value="">0.25</option>
-                      <option value="">0.3</option>
-                      <option value="">0.35</option>
-                      <option value="">0.4</option>
-                      <option value="">0.45</option>
-                      <option value="">0.5</option>
-                      <option value="">0.45</option>
-                      <option value="">0.5</option>
-                      <option value="">0.55</option>
-                      <option value="">0.6</option>
-                      <option value="">0.65</option>
-                      <option value="">0.7</option>
-                      <option value="">0.75</option>
-                      <option value="">0.8</option>
-                      <option value="">0.85</option>
-                      <option value="">0.9</option>
-                      <option value="">0.95</option>
-                      <option value="">1.0</option>
-                      <option value="">See Notes</option>
+                      <option value="0.05">0.05</option>
+                      <option value="0.1">0.1</option>
+                      <option value="0.15">0.15</option>
+                      <option value="0.2">0.2</option>
+                      <option value="0.25">0.25</option>
+                      <option value="0.3">0.3</option>
+                      <option value="0.35">0.35</option>
+                      <option value="0.4">0.4</option>
+                      <option value="0.45">0.45</option>
+                      <option value="0.5">0.5</option>
+                      <option value="0.45">0.45</option>
+                      <option value="0.5">0.5</option>
+                      <option value="0.55">0.55</option>
+                      <option value="0.6">0.6</option>
+                      <option value="0.65">0.65</option>
+                      <option value="0.7">0.7</option>
+                      <option value="0.75">0.75</option>
+                      <option value="0.8">0.8</option>
+                      <option value="0.85">0.85</option>
+                      <option value="0.9">0.9</option>
+                      <option value="0.95">0.95</option>
+                      <option value="1.0">1.0</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">NRR</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LENRR"
+                      value={LENRR}
+                      onChange={(e) => setLENRR(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">
-                        Pink, defined, Flat , <br /> ISNT applies
+
+                      <option value="Glaucomatous">Glaucomatous</option>
+                      <option value="NRR Thinning">NRR Thinning</option>
+                      <option value="Raised / Inflammation">
+                        Raised / Inflammation
                       </option>
-                      <option value="">Glaucomatous</option>
-                      <option value="">NRR Thinning</option>
-                      <option value="">Raised / Inflammation</option>
-                      <option value="">Blurred Margins</option>
-                      <option value="">See Notes</option>
+                      <option value="Blurred Margins">Blurred Margins</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -2041,38 +2262,44 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Macular</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEMacular"
+                      value={LEMacular}
+                      onChange={(e) => setLEMacular(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy</option>
-                      <option value="">Clear Reflex</option>
-                      <option value="">Drusen</option>
-                      <option value="">Dry AMD</option>
-                      <option value="">Wet AMD</option>
-                      <option value="">Macula Hole</option>
-                      <option value="">Diabetic Maculopathy</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy">Clear/ Healthy</option>
+                      <option value="Clear Reflex">Clear Reflex</option>
+                      <option value="Drusen">Drusen</option>
+                      <option value="Dry AMD">Dry AMD</option>
+                      <option value="Wet AMD">Wet AMD</option>
+                      <option value="Macula Hole">Macula Hole</option>
+                      <option value="Diabetic Maculopathy">
+                        Diabetic Maculopathy
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div>
                     <div className="p4_d_txt1">AV</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEAV"
+                      value={LEAV}
+                      onChange={(e) => setLEAV(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">2/3, Clear/ Healthy</option>
-                      <option value="">1/3</option>
-                      <option value="">4/5</option>
-                      <option value="">Tortuous</option>
-                      <option value="">Nipping</option>
-                      <option value="">Atherosclerosis</option>
-                      <option value="">See Notes</option>
+                      <option value="2/3, Clear/ Healthy">
+                        2/3, Clear/ Healthy
+                      </option>
+                      <option value="1/3">1/3</option>
+                      <option value="4/5">4/5</option>
+                      <option value="Tortuous">Tortuous</option>
+                      <option value="Nipping">Nipping</option>
+                      <option value="Atherosclerosis">Atherosclerosis</option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                 </div>
@@ -2080,17 +2307,22 @@ function NewSightTest() {
                   <div>
                     <div className="p4_d_txt1">Periphery</div>
                     <select
-                      name=""
-                      id=""
                       className="p4_select"
                       placeholder="Select"
+                      name="LEPeriphery"
+                      value={LEPeriphery}
+                      onChange={(e) => setLEPeriphery(e.target.value)}
                     >
                       <option value="">Select</option>
-                      <option value="">Clear/ Healthy Flat</option>
-                      <option value="">Nevus</option>
-                      <option value="">Melanoma</option>
-                      <option value="">Retinal Detachment</option>
-                      <option value="">See Notes</option>
+                      <option value="Clear/ Healthy Flat">
+                        Clear/ Healthy Flat
+                      </option>
+                      <option value="Nevus">Nevus</option>
+                      <option value="Melanoma">Melanoma</option>
+                      <option value="Retinal Detachment">
+                        Retinal Detachment
+                      </option>
+                      <option value="See Notes">See Notes</option>
                     </select>
                   </div>
                   <div></div>
@@ -2144,7 +2376,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setLEEye(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
@@ -2179,7 +2416,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setLELens2(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
@@ -2219,7 +2461,12 @@ function NewSightTest() {
                     </div>
                   </div>
                   <div className="img_note_elem">
-                    <input type="text" placeholder="Note" className="note_12" />
+                    <input
+                      type="text"
+                      placeholder="Note"
+                      className="note_12"
+                      onChange={(e) => setLEFundus(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -2233,10 +2480,13 @@ function NewSightTest() {
               className="nst_ta"
               style={{ width: "100%" }}
               placeholder="Type here"
+              onChange={(e) => setOphthalmoscopyNotes(e.target.value)}
             ></textarea>
             <div className="ppe_btn_con">
               <div className="saveCon_btn_elem">
-                <div>Save & Continue</div>
+                <div onClick={handleSaveOccularExamination}>
+                  Save & Continue
+                </div>
                 <svg
                   width="25"
                   height="15"
@@ -2267,31 +2517,59 @@ function NewSightTest() {
           </div>
           <div className="nst_body padd_com g_22" style={{ height: "auto" }}>
             <div className="b_d_con_end">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name="slitLamp"
+                onChange={handleHealthExaminationMethods}
+              />
               <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
                 Slit Lamp
               </div>
             </div>
             <div className="b_d_con_end">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name="directOpthalmoscope"
+                id=""
+                value={RELids}
+                onChange={handleHealthExaminationMethods}
+              />
               <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
                 Direct Ophthalmoscope
               </div>
             </div>
             <div className="b_d_con_end">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name="OCT"
+                id=""
+                value={RELids}
+                onChange={handleHealthExaminationMethods}
+              />
               <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
                 OCT
               </div>
             </div>
             <div className="b_d_con_end">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name="volk"
+                id=""
+                value={RELids}
+                onChange={handleHealthExaminationMethods}
+              />
               <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
                 Volk
               </div>
             </div>
             <div className="b_d_con_end">
-              <input type="checkbox" name="" id="" />
+              <input
+                type="checkbox"
+                name="fundusImaging"
+                id=""
+                value={RELids}
+                onChange={handleHealthExaminationMethods}
+              />
               <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
                 Fundus Imaging
               </div>

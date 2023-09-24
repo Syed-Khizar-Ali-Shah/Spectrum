@@ -36,6 +36,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser,setSearchPatients } from "./redux/spectrumSlice";
 import axios from 'axios';
 import { baseUrl } from "./utils/data";
+import CreateDoctorForm from "./CreateDoctorForm";
 
 function App() {
   const user = useSelector((state) => state.spectrumReducer.user);
@@ -53,7 +54,12 @@ function App() {
     console.log("s", searchValue);
     try {
       const response = await axios.get(`${baseUrl}/api/search?value=${searchValue}`);
-      setSearchResult(response.data)
+      // if(response.data.length === 0) {
+      //   alert("No result found")
+      //   setShowSearch(false);
+      //   return
+      // }
+       setSearchResult(response.data)
       setShowSearch(true);
     } catch (error) {
       console.error(error);
@@ -76,6 +82,7 @@ function App() {
   const [dashboard, setDashboard] = useState(true);
   const [diary, setDiary] = useState(false);
   const [patient, setPatient] = useState(false);
+  const [doctor, setDoctor] = useState(false);
   const [communication, setCommunication] = useState(false);
   const [tasks, setTasks] = useState(false);
   const [stock, setStock] = useState(false);
@@ -97,6 +104,7 @@ function App() {
 
   function activeDashboard() {
     // setshowSignup(false);
+    setDoctor(false);
     setDashboard(true);
     setDiary(false);
     setPatient(false);
@@ -113,6 +121,7 @@ function App() {
     setgos6(false);
   }
   function activeDiary() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(true);
@@ -130,6 +139,7 @@ function App() {
     setgos6(false);
   }
   function activePatient() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -146,7 +156,26 @@ function App() {
     setgos4(false);
     setgos6(false);
   }
+  function activeDoctor() {
+    // setshowSignup(false);
+    setDashboard(false);
+    setDiary(false);
+    setPatient(false);
+    setDoctor(true);
+    setCommunication(false);
+    setTasks(false);
+    setStock(false);
+    setReporting(false);
+    setAdmin(false);
+    setUserManagement(false);
+    setTill(false);
+    setgos1(false);
+    setgos3(false);
+    setgos4(false);
+    setgos6(false);
+  }
   function activeCommunication() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -164,6 +193,7 @@ function App() {
     setgos6(false);
   }
   function activeTasks() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -181,6 +211,7 @@ function App() {
     setgos6(false);
   }
   function activeStock() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -198,6 +229,7 @@ function App() {
     setgos6(false);
   }
   function activeReporting() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -215,6 +247,7 @@ function App() {
     setgos6(false);
   }
   function activeAdmin() {
+    setDoctor(false);
     // setshowSignup(false);
     setshowLogin(true);
     setDashboard(false);
@@ -233,6 +266,7 @@ function App() {
     setgos6(false);
   }
   function activeSignup() {
+    setDoctor(false);
     setAdmin(false);
     // setshowSignup(true);
     setDashboard(false);
@@ -251,6 +285,7 @@ function App() {
     setgos6(false);
   }
   function activeUserManagement() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -268,6 +303,7 @@ function App() {
     setgos6(false);
   }
   function activeTill() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -285,6 +321,7 @@ function App() {
     setgos6(false);
   }
   function activeGos1() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -302,6 +339,7 @@ function App() {
     setgos6(false);
   }
   function activeGos3() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -319,6 +357,7 @@ function App() {
     setgos6(false);
   }
   function activeGos4() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -336,6 +375,7 @@ function App() {
     setgos6(false);
   }
   function activeGos6() {
+    setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
     setDiary(false);
@@ -497,7 +537,36 @@ function App() {
                   </div>
                 </li>
               </NavLink>
-              <NavLink className="sidebar_list_con" to="/communication">
+              <NavLink className="sidebar_list_con" to="/doctor">
+                <li
+                  onClick={activeDoctor}
+                  style={{ background: doctor ? "#F4F3F6" : "none" }}
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 23 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.5 11.8679C14.5376 11.8679 17 9.4026 17 6.36146C17 3.32031 14.5376 0.85498 11.5 0.85498C8.46243 0.85498 6 3.32031 6 6.36146C6 9.4026 8.46243 11.8679 11.5 11.8679Z"
+                      fill={doctor ? blueCol : "white"}
+                    />
+                    <path
+                      d="M22.5 24.2576V18.7511C22.5 17.9251 22.0875 17.0992 21.4 16.5485C19.8875 15.3096 17.9625 14.4836 16.0375 13.9329C14.6625 13.52 13.15 13.2446 11.5 13.2446C9.9875 13.2446 8.475 13.52 6.9625 13.9329C5.0375 14.4836 3.1125 15.4472 1.6 16.5485C0.9125 17.0992 0.5 17.9251 0.5 18.7511V24.2576H22.5Z"
+                      fill={doctor ? blueCol : "white"}
+                    />
+                  </svg>
+                  <div
+                    className="side_bar_title"
+                    style={{ color: doctor ? blueCol : "#FFFFFF" }}
+                  >
+                    Doctor
+                  </div>
+                </li>
+              </NavLink>
+              {/* <NavLink className="sidebar_list_con" to="/communication">
                 <li
                   onClick={activeCommunication}
                   style={{ background: communication ? "#F4F3F6" : "none" }}
@@ -518,7 +587,7 @@ function App() {
                     Communication
                   </div>
                 </li>
-              </NavLink>
+              </NavLink> */}
               <NavLink className="sidebar_list_con" to="/tasks">
                 <li
                   onClick={activeTasks}
@@ -544,7 +613,7 @@ function App() {
                   </div>
                 </li>
               </NavLink>
-              <NavLink className="sidebar_list_con" to="/stock">
+              {/* <NavLink className="sidebar_list_con" to="/stock">
                 <li
                   onClick={activeStock}
                   style={{ background: stock ? "#F4F3F6" : "none" }}
@@ -690,7 +759,7 @@ function App() {
                     Admin
                   </div>
                 </li>
-              </NavLink>
+              </NavLink> */}
               {/* <NavLink className='sidebar_list_con' to='/signup'>
               <li onClick={activeSignup} >
                 <svg width="22" height="22" viewBox="0 0 33 34" fill="none" xmlns="http://www.w3.org/2000/svg" style={{background: 'none'}}>
@@ -746,7 +815,7 @@ function App() {
                   </div>
                 </li>
               </NavLink>
-              <NavLink className="sidebar_list_con" to="/till">
+              {/* <NavLink className="sidebar_list_con" to="/till">
                 <li
                   onClick={activeTill}
                   style={{ background: till ? "#F4F3F6" : "none" }}
@@ -770,7 +839,7 @@ function App() {
                     Till
                   </div>
                 </li>
-              </NavLink>
+              </NavLink> */}
               <div
                 className="sidebar_list_con"
                 onClick={() => {
@@ -826,13 +895,13 @@ function App() {
                 className="gos_childs"
                 style={{ display: gosReveal ? "block" : "none" }}
               >
-                <NavLink className="sidebar_list_con" to="/gos1">
+                {/* <NavLink className="sidebar_list_con" to="/gos1">
                   <li
                     onClick={activeGos1}
                     style={{ background: gos1 ? "#F4F3F6" : "none" }}
                     className="gos_opener_elem"
                   >
-                    {/* hello              */}
+                    
                     <div
                       className="side_bar_title"
                       style={{
@@ -844,8 +913,8 @@ function App() {
                       {isMobile ? <>G1</> : <>GOS 1</>}{" "}
                     </div>
                   </li>
-                </NavLink>
-                <NavLink className="sidebar_list_con" to="/gos3">
+                </NavLink> */}
+                {/* <NavLink className="sidebar_list_con" to="/gos3">
                   <li
                     onClick={activeGos3}
                     style={{ background: gos3 ? "#F4F3F6" : "none" }}
@@ -915,8 +984,11 @@ function App() {
                     Logout
                   </div>
                 </li>
-              </NavLink>
+              </NavLink> */}
+          </div>
+
             </ul>
+            
           )}
           <div className="sponsored_logo">
             <div className="flex powered_txt">Powered By</div>
@@ -975,18 +1047,24 @@ function App() {
           </div>}
           
             {showSearch && 
-            <div className="search">
-              <div className="close-container">
-                
-                <div className="close" onClick={() => setShowSearch(false)}>x</div>
-               
-                </div>
-               <ul className="list">
-                {searchResult?.map(patient => (
-                  <li className="list-item" onClick={() => handleClick(patient)}>{patient.forename +" "+patient.surname}</li>
-                ))}
-               </ul>
-            </div>}
+           <div style={{ position: 'relative', backgroundColor: '#f5f5f5', padding: '15px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)', borderRadius: '5px' }}>
+           <div className="close-container" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+             <div className="close" onClick={() => setShowSearch(false)} style={{ cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: '#333' }}>✕</div>
+           </div>
+           <ul style={{ listStyle: 'none', padding: 0 }}>
+             {searchResult?.map((patient) => (
+               <li
+                 onClick={() => handleClick(patient)}
+                 style={{ padding: '10px', cursor: 'pointer', borderBottom: '1px solid #ddd', color: '#333', fontWeight: '500' }}
+                 key={patient._id}
+               >
+                 {patient.forename + ' ' + patient.surname}
+               </li>
+             ))}
+           </ul>
+         </div>
+         
+          }
           
           <div className="main_pages">
             <Routes>
@@ -1011,6 +1089,14 @@ function App() {
                 element={
                   <Protected user={user}>
                     <PatientNew />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/doctor"
+                element={
+                  <Protected user={user}>
+                    <CreateDoctorForm />
                   </Protected>
                 }
               />

@@ -1,0 +1,170 @@
+[33mcommit 4335347779e70e4bf0d7c9df6ad9f8925cc148c8[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Fri Sep 15 13:44:57 2023 +0500
+
+    latest
+
+[33mcommit ef6d0718b402516aaa9ae82adb573b6a01f54435[m
+Merge: 0f3cb14 bed5e78
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Tue Sep 12 00:04:53 2023 +0500
+
+    Merge branch 'main' of https://github.com/imsyedrehan/spectrum-private
+
+[33mcommit 0f3cb14519dfa94dfc3eda3494320b9557207551[m
+Merge: 7e396c4 fc38f8e
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Tue Sep 12 00:04:06 2023 +0500
+
+    routes protected
+
+[33mcommit bed5e787c2e18cf15a2b8d07654df1afdcb4708a[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Mon Sep 4 21:52:41 2023 +0500
+
+    Update .env
+
+[33mcommit 7e396c46d28b4ebb2c2f61838d4e19d6cd4b233f[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Thu Aug 31 01:45:55 2023 +0500
+
+    update!
+
+[33mcommit 673e6bbc0f843a66ccf88e5d8ea3b632811fd196[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Thu Aug 31 01:42:43 2023 +0500
+
+    design updated
+
+[33mcommit 2211adb4d33e046d43bba7aa4359ab0741c2a9c2[m
+Merge: 7974ef8 f670557
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Thu Aug 31 01:36:33 2023 +0500
+
+    user crud
+
+[33mcommit 7974ef8271418e92fcf5ed8ca57a210c58cdb919[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:28:51 2023 +0500
+
+    updated!!
+
+[33mcommit 7bd4757ff01275bdc88bed09fd87d3156b491f79[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:28:21 2023 +0500
+
+    update!!
+
+[33mcommit f6705575a5a746c46ce75d36a1d102fa08776a45[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:26:22 2023 +0500
+
+    Updated cors
+
+[33mcommit 713ba22a3eb543d0945fb291947acb271632b066[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:19:07 2023 +0500
+
+    Update index.js
+
+[33mcommit e80e60f6938b4e1137b65d18b08342d01da54309[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:13:43 2023 +0500
+
+    Update index.js
+
+[33mcommit 2e9378cd7d265122e3b8871418905158f9d642d8[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:05:28 2023 +0500
+
+    Update data.js
+
+[33mcommit f78b8242c67f75002b5e8864fd1f6469d757641c[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 23:03:40 2023 +0500
+
+    production
+
+[33mcommit 72e8f7a798a2c534d17124cc1e26177a5c0047f9[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 22:58:04 2023 +0500
+
+    update!
+
+[33mcommit fc38f8ee43c664e81485831a4838a8ba6a4dbc85[m
+Author: Syed Rehan <rehan2k7@gmail.com>
+Date:   Wed Aug 30 18:08:49 2023 +0100
+
+    Initial commit
+
+[33mcommit c4e8de1e957fb5751fc625fe18ab7f27137b9b8e[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 21:51:53 2023 +0500
+
+    updated
+
+[33mcommit 1b4d6a458e8c1828d6aa751efd21d0404a5c0c5d[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 21:51:26 2023 +0500
+
+    first commit
+
+[33mcommit 88bc5ac221258005f02d37bef3f1b6096df57b67[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 18:42:50 2023 +0500
+
+    update bcrypt2
+
+[33mcommit f5db653e6db40fc7cdaa1acd1de77cfacc828270[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 18:35:54 2023 +0500
+
+    update bcrypt
+
+[33mcommit b3b4470649a2198c3f74e6b72c56dbbff9aef589[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 17:36:44 2023 +0500
+
+    rename
+
+[33mcommit e5e111edb63029333299e67257fb131c6caa3e45[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 17:23:32 2023 +0500
+
+    vercel
+
+[33mcommit d0079aae6e667ce8ff6b9e98f58ee84e18d2cc30[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 17:04:01 2023 +0500
+
+    first
+
+[33mcommit 17b3ca5f22afddce3f034c072a7a7e0d7fafe9f0[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 12:13:39 2023 +0500
+
+    mern
+
+[33mcommit ae46b6a56131e65050cfa3dcb38daa823d781189[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 00:54:07 2023 +0500
+
+    modified
+
+[33mcommit 0ef453572ce31f0ee4c1bc6ea6a854f3cca79233[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 00:24:12 2023 +0500
+
+    new commit
+
+[33mcommit d307e963f53fe9303ca231fa05e9d3438a399b15[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Wed Aug 30 00:06:44 2023 +0500
+
+    later commit
+
+[33mcommit 7b3c7720c1cede46cef11b55c8304e3e78c9e5ae[m
+Author: Syed-Khizar-Ali-Shah <115891972+Syed-Khizar-Ali-Shah@users.noreply.github.com>
+Date:   Tue Aug 29 23:37:55 2023 +0500
+
+    Add existing project files to Git

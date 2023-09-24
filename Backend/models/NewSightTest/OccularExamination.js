@@ -1,158 +1,166 @@
 const mongoose = require("mongoose");
 
 const occularExaminationSchema = new mongoose.Schema({
+  patientID: {
+    type: String,
+    require : true
+  },
   RELids: {
     type: String,
-    require: true,
+     
   },
   RELashes: {
     type: String,
-    require: true,
+     
   },
   REConjunctiva: {
     type: String,
-    require: true,
+     
   },
   RESclera: {
     type: String,
-    require: true,
+     
   },
   RECornea: {
-    type: Number,
-    require: true,
+    type: String,
+     
   },
   REAndCha: {
     type: String,
-    require: true,
+     
   },
   REIris: {
     type: String,
-    require: true,
+     
   },
   REPupils: {
     type: String,
-    require: true,
+     
   },
   RELense: {
-    type: Number,
-    require: true,
+    type: String,
+     
   },
   REPosChaa: {
     type: String,
-    require: true,
+     
   },
   RECDRatio: {
     type: String,
-    require: true,
+     
   },
   RENRR: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   REMacular: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   REAV: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   REPeriphery: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   REEye: {
     type: String,
-    require: true,
+     
   },
   RELens2: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   REFundus: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LELids: {
     type: String,
-    require: true,
+     
   },
   LELashes: {
     type: String,
-    require: true,
+     
   },
   LEConjunctiva: {
     type: String,
-    require: true,
+     
   },
   LESclera: {
     type: String,
-    require: true,
+     
   },
   LECornea: {
-    type: Number,
-    require: true,
+    type: String,
+     
   },
   LEAndCha: {
     type: String,
-    require: true,
+     
   },
-  LEAndChaEIris: {
+  LEIris: {
     type: String,
-    require: true,
+     
   },
   LEPupils: {
     type: String,
-    require: true,
+     
   },
   LELense: {
-    type: Number,
-    require: true,
+    type: String,
+     
   },
   LEPosChaa: {
     type: String,
-    require: true,
+     
   },
   LECDRatio: {
     type: String,
-    require: true,
+     
   },
   LENRR: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LEMacular: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LEAV: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LEPeriphery: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LEEye: {
     type: String,
-    require: true,
+     
   },
   LELens2: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   LEFundus: {
-    type: Boolean,
-    require: true,
+    type: String,
+     
   },
   ophthalmoscopyNotes: {
     type: String,
-    require: true,
+     
   },
-  occularHealthExaminationMethods:{
-    type:Array,
-  
-  }
+  occularHealthExaminationMethods:
+     {
+      slitLamp: Boolean,
+      directOpthalmoscope: Boolean,
+      OCT : Boolean,
+      volk: Boolean,
+      fundusImaging : Boolean,
+     }
 });
 
 module.exports = mongoose.model("OccularExamination", occularExaminationSchema);
