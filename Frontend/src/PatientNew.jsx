@@ -326,15 +326,15 @@ function PatientNew() {
   const handleSaveHistoryAndSymptoms = async () => {
     try {
       // Frontend validation: Ensure required fields are filled
-      if (
-        !formData.reasonForVisit ||
-        !formData.POH ||
-        !formData.GH ||
-        !formData.medication
-      ) {
-        alert("Please fill in all required fields.");
-        return;
-      }
+      // if (
+      //   !formData.reasonForVisit ||
+      //   !formData.POH ||
+      //   !formData.GH ||
+      //   !formData.medication
+      // ) {
+      //   alert("Please fill in all required fields.");
+      //   return;
+      // }
 
       // Send a POST request to your server to store the data
       const response = await axios.put(
