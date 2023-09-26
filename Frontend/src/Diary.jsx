@@ -1,10 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import './Diary.css'
 import { useState } from 'react'
+import { baseUrl } from './utils/data';
+import axios from 'axios';
 
 function Diary() {
   const [dateToday,setDateToday] = useState(new Date());
   const [showMakeAppmnt,setshowMakeAppmnt] = useState(false);
+  const [appointments, setAppointments] = useState([]);
+
+  console.log('app',appointments)
 
   const datePickerRef = useRef(null);
 
@@ -16,6 +21,15 @@ function Diary() {
     const selectedDate = new Date(event.target.value);
     setDateToday(selectedDate);
   };
+
+  useEffect(() => {
+     axios.get(`${baseUrl}/api/appointments`).then(res => {
+      setAppointments(res.data);
+     }).catch(err=> {
+      console.log(err)
+     })
+  }, [])
+  
   return (
     <>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
