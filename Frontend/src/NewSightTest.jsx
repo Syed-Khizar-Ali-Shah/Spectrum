@@ -585,7 +585,7 @@ function NewSightTest() {
         >
           Ocular Examination
         </div>
-        <div
+        {/* <div
           className="report_child"
           onClick={change5}
           style={{
@@ -595,7 +595,7 @@ function NewSightTest() {
           }}
         >
           Additional Examinations
-        </div>
+        </div> */}
         <div
           className="report_child"
           onClick={change6}
