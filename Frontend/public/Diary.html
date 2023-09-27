@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spectrum Diary</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@5/main.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <style>
+      /* Add some basic styling to position the form as a small popup */
+      #appointmentForm {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+        /* Add a border with a defined color */
+        display: none;
+        z-index: 1000;
+        /* Ensure the form is above other elements */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="calendar"></div>
+
+    <!-- New Appointment Form -->
+    <div id="appointmentForm">
+      <form id="newAppointmentForm">
+        <!-- Use FullCalendar for time selection -->
+        <label for="datePicker">Date:</label>
+        <input type="text" id="datePicker" name="datePicker" required /><br />
+        <label for="timePicker">Time:</label>
+        <input type="text" id="timePicker" name="timePicker" required /><br />
+        <label for="customerName">Customer Name:</label>
+        <input
+          type="text"
+          id="customerName"
+          name="customerName"
+          required
+        /><br />
+        <label for="clinicianName">Clinician Name:</label>
+        <input
+          type="text"
+          id="clinicianName"
+          name="clinicianName"
+          required
+        /><br />
+        <label for="appointmentType">Type of Appointment:</label>
+        <input
+          type="text"
+          id="appointmentType"
+          name="appointmentType"
+          required
+        /><br />
+        <input type="hidden" id="editAppointmentId" name="editAppointmentId" />
+        <button type="submit" id="addEditButton">Add Appointment</button>
+        <button type="button" id="deleteButton" onclick="deleteAppointment()">
+          Delete
+        </button>
+        <button type="button" onclick="closeAppointmentForm()">Cancel</button>
+      </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      let selectedAppointmentId = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var calendarEl = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: "dayGridMonth",
+          events: "/appointments",
+          dateClick: function (info) {
+            document.getElementById("datePicker").value = info.dateStr;
+            document.getElementById("timePicker").value = ""; // Clear the time picker
+            document.getElementById("appointmentForm").style.display = "block";
+            document.getElementById("addEditButton").textContent =
+              "Add Appointment";
+            selectedAppointmentId = null;
+          },
+          eventClick: function (info) {
+            document.getElementById("datePicker").value = moment(
+              info.event.start
+            ).format("DD/MM/YYYY");
+            document.getElementById("timePicker").value = moment(
+              info.event.start
+            ).format("HH:mm");
+            document.getElementById("customerName").value = info.event.title;
+            document.getElementById("clinicianName").value =
+              info.event.extendedProps.clinician;
+            document.getElementById("appointmentType").value =
+              info.event.extendedProps.type;
+            document.getElementById("appointmentForm").style.display = "block";
+            document.getElementById("addEditButton").textContent =
+              "Edit Appointment";
+            document.getElementById("deleteButton").style.display = "block";
+            selectedAppointmentId = info.event.id;
+          },
+          eventRender: function (info) {
+            // Add time information to the event title
+            var eventTime = moment(info.event.start).format("HH:mm");
+            info.el.querySelector(".fc-title").textContent =
+              eventTime + " - " + info.event.title;
+          },
+          eventTimeFormat: {
+            hour: "2-digit",
+            minute: "2-digit",
+            separator: " - ",
+          },
+        });
+        calendar.render();
+
+        // Initialize Flatpickr time picker
+        var timepicker = flatpickr("#timePicker", {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: true,
+        });
+
+        // Initialize Flatpickr date picker for date selection
+        var datepicker = flatpickr("#datePicker", {
+          dateFormat: "d m y", // Change date format to day month year
+          onClose: function (selectedDates, dateStr, instance) {
+            // Trigger the dateClick event when a date is selected
+            calendar.dateClick({
+              date: new Date(dateStr),
+              dateStr: dateStr,
+              jsEvent: null,
+              view: null,
+            });
+          },
+        });
+
+        document
+          .getElementById("newAppointmentForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            var selectedDate = document.getElementById("datePicker").value;
+            var selectedTime = document.getElementById("timePicker").value;
+            var selectedDateTime = moment(
+              selectedDate + " " + selectedTime,
+              "DD/MM/YYYY HH:mm"
+            );
+            if (selectedDateTime.isValid()) {
+              var adjustedDateTime = selectedDateTime.toISOString();
+              var newAppointment = {
+                start: adjustedDateTime,
+                title: document.getElementById("customerName").value,
+                type: document.getElementById("appointmentType").value,
+                clinician: document.getElementById("clinicianName").value,
+              };
+              if (selectedAppointmentId) {
+                // Edit existing appointment
+                fetch(`/appointments/${selectedAppointmentId}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newAppointment),
+                })
+                  .then((response) => response.json())
+                  .then((updatedAppointment) => {
+                    calendar.getEventById(selectedAppointmentId).remove();
+                    updatedAppointment.start = moment
+                      .utc(updatedAppointment.start)
+                      .local()
+                      .format("DD/MM/YYYY HH:mm");
+                    calendar.addEvent(updatedAppointment);
+                    document.getElementById("appointmentForm").style.display =
+                      "none";
+                    location.reload(); // Refresh the page
+                  });
+              } else {
+                // Add new appointment
+                fetch("/appointments", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newAppointment),
+                })
+                  .then((response) => response.json())
+                  .then((appointment) => {
+                    appointment.start = moment
+                      .utc(appointment.start)
+                      .local()
+                      .format("DD/MM/YYYY HH:mm");
+                    calendar.addEvent(appointment);
+                    document.getElementById("appointmentForm").style.display =
+                      "none";
+                    location.reload(); // Refresh the page
+                  });
+              }
+            } else {
+              alert(
+                "Invalid date and time format. Please use DD/MM/YYYY HH:mm format."
+              );
+            }
+          });
+      });
+
+      function closeAppointmentForm() {
+        document.getElementById("appointmentForm").style.display = "none";
+        selectedAppointmentId = null;
+        document.getElementById("addEditButton").textContent =
+          "Add Appointment";
+        document.getElementById("deleteButton").style.display = "none";
+      }
+
+      function deleteAppointment() {
+        if (selectedAppointmentId) {
+          if (confirm("Are you sure you want to delete this appointment?")) {
+            fetch(`/appointments/${selectedAppointmentId}`, {
+              method: "DELETE",
+            }).then(() => {
+              calendar.getEventById(selectedAppointmentId).remove();
+              document.getElementById("appointmentForm").style.display = "none";
+              location.reload(); // Refresh the page
+            });
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -29,6 +29,170 @@ function NewSightTest() {
   const [CLWearer, setCLWearer] = useState(false);
   const [driver, setDriver] = useState(false);
 
+  //Refraction
+  const [previusRX1, setPreviusRX1] = useState({});
+  const [previusRX2, setPreviusRX2] = useState({});
+  const [retinoscopy, setRetinoscopy] = useState({});
+  const [subjectiveRX, setSubjectiveRX] = useState({});
+  const [complexRX, setComplexRX] = useState({});
+  const [modifiedRXGiven, setModifiedRXGiven] = useState(false);
+  const [outcomes, setOutcomes] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
+  const [examinationComment, setExaminationComment] = useState("");
+  const [recall, setRecall] = useState("");
+
+  const handleOutcomes = (e) => {
+    const name = e.target.name;
+    const updatedOutcomes = [...outcomes]; // Create a new array based on the current state
+
+    if (!updatedOutcomes?.includes(name)) {
+      updatedOutcomes.push(name);
+    } else {
+      const toRemoveIdx = updatedOutcomes.findIndex((item) => item === name);
+      updatedOutcomes.splice(toRemoveIdx, 1);
+    }
+
+    // Now, update the state with the new array
+    setOutcomes(updatedOutcomes);
+  };
+
+  const handleRecommendations = (e) => {
+    const name = e.target.name;
+    const updatedRecommendations = [...recommendations]; // Create a new array based on the current state
+
+    if (!updatedRecommendations?.includes(name)) {
+      updatedRecommendations.push(name);
+    } else {
+      const toRemoveIdx = updatedRecommendations.findIndex(
+        (item) => item === name
+      );
+      updatedRecommendations.splice(toRemoveIdx, 1);
+    }
+
+    // Now, update the state with the new array
+    setRecommendations(updatedRecommendations);
+  };
+
+  const handleSaveRefraction = () => {
+    const form = {
+      previusRX1: { ...previusRX1 },
+      previusRX2: { ...previusRX2 },
+      retinoscopy: { ...retinoscopy },
+      subjectiveRX: { ...subjectiveRX },
+      complexRX: { ...complexRX },
+      modifiedRXGiven,
+      outcomes,
+      recommendations,
+      examinationComment,
+      recall,
+    };
+
+    // console.log("refraction", form);
+    console.log("searchpatient", searchPatient._id);
+
+    axios
+      .post(`${baseUrl}/api/refraction`, {
+        ...form,
+        patientId: searchPatient?._id,
+      })
+      .then((res) => {
+        alert("Refraction data saved");
+      })
+      .catch((err) => {
+        alert("something went wrong");
+      });
+  };
+
+  //previous RX
+  const [previousRX, setPreviousRX] = useState({
+    // Define initial state for the form fields
+    RSPH: "",
+    RCYL: "",
+    RAxis: "",
+    RPrism: "",
+    RDirection: "",
+    RAdd: "",
+    RVA: "",
+    LSPH: "",
+    LCYL: "",
+    LAxis: "",
+    LPrism: "",
+    LDirection: "",
+    LAdd: "",
+    LVA: "",
+    R2SPH: "",
+    R2CYL: "",
+    R2Axis: "",
+    R2Prism: "",
+    R2Direction: "",
+    R2Add: "",
+    R2VA: "",
+    L2SPH: "",
+    L2CYL: "",
+    L2Axis: "",
+    L2Prism: "",
+    L2Direction: "",
+    L2Add: "",
+    L2VA: "",
+    notes: "",
+  });
+
+  const handlePreviousRXInput = (event) => {
+    const { name, value } = event.target;
+    setPreviousRX({
+      ...previousRX,
+      [name]: value,
+    });
+  };
+
+  const handleSubmitPreviousRX = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Send a POST request to the server
+      await axios.post(`${baseUrl}/api/previousRX`, {
+        ...previousRX,
+        patientId: searchPatient?._id,
+      });
+      // Clear the form or show a success message
+      setPreviousRX({
+        RSPH: "",
+        RCYL: "",
+        RAxis: "",
+        RPrism: "",
+        RDirection: "",
+        RAdd: "",
+        RVA: "",
+        LSPH: "",
+        LCYL: "",
+        LAxis: "",
+        LPrism: "",
+        LDirection: "",
+        LAdd: "",
+        LVA: "",
+        R2SPH: "",
+        R2CYL: "",
+        R2Axis: "",
+        R2Prism: "",
+        R2Direction: "",
+        R2Add: "",
+        R2VA: "",
+        L2SPH: "",
+        L2CYL: "",
+        L2Axis: "",
+        L2Prism: "",
+        L2Direction: "",
+        L2Add: "",
+        L2VA: "",
+      });
+
+      alert("Prescription submitted successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting prescription");
+    }
+  };
+
   //history and symptoms states
   const [formData, setFormData] = useState({
     reasonForVisit: "",
@@ -263,22 +427,22 @@ function NewSightTest() {
   }, [searchPatient]);
 
   const handleSavePatientInfo = () => {
-    if (
-      !title ||
-      !fullName ||
-      !dob ||
-      !address ||
-      !email ||
-      !mobile ||
-      !gender ||
-      !patientCategory ||
-      !patientID ||
-      !occupation ||
-      !date ||
-      !benefits
-    ) {
-      return;
-    }
+    // if (
+    //   !title ||
+    //   !fullName ||
+    //   !dob ||
+    //   !address ||
+    //   !email ||
+    //   !mobile ||
+    //   !gender ||
+    //   !patientCategory ||
+    //   !patientID ||
+    //   !occupation ||
+    //   !date ||
+    //   !benefits
+    // ) {
+    //   return;
+    // }
 
     const formData = {
       title,
@@ -694,383 +858,442 @@ function NewSightTest() {
         </div>
       )}
       {report2 && (
-        <div className="nst_body padd_com" style={{ height: "auto" }}>
-          <div className="rb2_bottom2">
-            <div>
-              <div className="input_label">Previous RX 1</div>
-              <div className="rx_txt2">
-                (Click here to pre-populated with the patients previous
-                subjective RX)
+        <>
+          <div className="nst_body padd_com" style={{ height: "auto" }}>
+            <div className="rb2_bottom2">
+              <div>
+                <div className="input_label">Previous RX 1</div>
+                <div className="rx_txt2">
+                  (Click here to pre-populated with the patients previous
+                  subjective RX)
+                </div>
+                <div className="rl_con2">
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2"></div>
+                    <div
+                      className="rl_item_r1_2"
+                      style={{ alignItems: "center" }}
+                    >
+                      R:
+                    </div>
+                    <div
+                      className="rl_item_r1_2"
+                      style={{ alignItems: "center" }}
+                    >
+                      L:
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      SPH
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RSPH"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LSPH"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      CYL
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RCYL"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LCYL"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Axis
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RAxis"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LAxis"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Prism
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RPrism"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LPrism"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Direction
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RDirection"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LDirection"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Add
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RAdd"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LAdd"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      VA
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="RVA"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="LVA"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="rl_con2">
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2"></div>
-                  <div
-                    className="rl_item_r1_2"
-                    style={{ alignItems: "center" }}
-                  >
-                    R:
-                  </div>
-                  <div
-                    className="rl_item_r1_2"
-                    style={{ alignItems: "center" }}
-                  >
-                    L:
-                  </div>
+              <div>
+                <div className="input_label">
+                  Previous RX 2 (incl from Autorefraction)
                 </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    SPH
+                <div className="rx_txt2"></div>
+                <div className="rl_con2">
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2"></div>
+                    <div
+                      className="rl_item_r1_2"
+                      style={{ alignItems: "center" }}
+                    >
+                      R2:
+                    </div>
+                    <div
+                      className="rl_item_r1_2"
+                      style={{ alignItems: "center" }}
+                    >
+                      L2:
+                    </div>
                   </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      SPH
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2SPH"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2SPH"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      CYL
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2CYL"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2CYL"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    CYL
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Axis
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2Axis"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2Axis"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Prism
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2Prism"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2Prism"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Direction
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name=""
+                        id="R2Direction"
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2Direction"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Axis
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      Add
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2Add"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2Add"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Prism
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Direction
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <select
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                    ></select>
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <select
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                    ></select>
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Add
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    VA
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
+                  <div className="rl_item2">
+                    <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
+                      VA
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="R2VA"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
+                    <div className="rl_item_r1_2">
+                      <input
+                        type="text"
+                        name="L2VA"
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={handlePreviousRXInput}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div>
-              <div className="input_label">
-                Previous RX 2 (incl from Autorefraction)
-              </div>
-              <div className="rx_txt2"></div>
-              <div className="rl_con2">
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2"></div>
-                  <div
-                    className="rl_item_r1_2"
-                    style={{ alignItems: "center" }}
-                  >
-                    R2:
-                  </div>
-                  <div
-                    className="rl_item_r1_2"
-                    style={{ alignItems: "center" }}
-                  >
-                    L2:
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    SPH
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    CYL
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Axis
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Prism
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Direction
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <select
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                    ></select>
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <select
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                    ></select>
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    Add
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="rl_item2">
-                  <div className="rl_item_r1_2" style={{ alignItems: "end" }}>
-                    VA
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="rl_item_r1_2">
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="input_label">Notes</div>
+            <textarea
+              name="notes"
+              id=""
+              className="nst_ta"
+              style={{ height: "5rem", width: "15rem" }}
+              placeholder="Type here"
+              onChange={handlePreviousRXInput}
+            ></textarea>
+          </div>
+          <div className="ppe_btn_con">
+            <div className="saveCon_btn_elem">
+              <div onClick={handleSubmitPreviousRX}>Save</div>
+              <svg
+                width="25"
+                height="15"
+                viewBox="0 0 25 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12.5"
+                  cy="12.5"
+                  r="12.5"
+                  fill="#4C004A"
+                  fill-opacity="0.2"
+                />
+                <path
+                  d="M7.08366 12.5002C7.08366 12.1262 7.3868 11.8231 7.76074 11.8231H15.3102L12.0094 8.52238C11.7397 8.2526 11.7435 7.81403 12.018 7.54906C12.2858 7.29062 12.7112 7.29437 12.9743 7.5575L17.8634 12.4465C17.893 12.4762 17.893 12.5242 17.8634 12.5538L12.9753 17.4418C12.713 17.7042 12.2877 17.7041 12.0253 17.4418C11.7638 17.1803 11.7629 16.7566 12.0232 16.494L15.3102 13.1772H7.76074C7.3868 13.1772 7.08366 12.8741 7.08366 12.5002Z"
+                  fill="#4C004A"
+                />
+              </svg>
             </div>
           </div>
-          <div className="input_label">Notes</div>
-          <textarea
-            name=""
-            id=""
-            className="nst_ta"
-            style={{ height: "5rem", width: "15rem" }}
-            placeholder="Type here"
-          ></textarea>
-        </div>
+        </>
       )}
       {report3 && (
         <div className="nst_body padd_com" style={{ height: "auto" }}>
@@ -3195,19 +3418,31 @@ function NewSightTest() {
                     <div className="rl_item_r1_2">
                       <input
                         type="text"
-                        name=""
+                        name="RSPH"
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RSPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
                       <input
                         type="text"
-                        name=""
+                        name="LSPH"
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LSPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3222,6 +3457,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RCYL: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3231,6 +3472,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LSPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3245,6 +3492,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RAxis: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3254,6 +3507,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LAxis: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3268,6 +3527,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3277,6 +3542,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3285,20 +3556,34 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RDirection: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LDirection: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="rl_item2">
@@ -3312,6 +3597,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            RAdd: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3321,6 +3612,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({
+                            ...previusRX1,
+                            LAdd: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3335,6 +3632,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({ ...previusRX1, RVA: e.target.value });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3344,6 +3644,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX1({ ...previusRX1, LVA: e.target.value });
+                        }}
                       />
                     </div>
                   </div>
@@ -3384,6 +3687,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2SPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3393,6 +3702,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2SPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3407,6 +3722,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2CYL: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3416,6 +3737,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2SPH: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3430,6 +3757,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2Axis: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3439,6 +3772,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2Axis: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3453,6 +3792,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2Prism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3462,6 +3807,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2Prism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3470,20 +3821,34 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2Direction: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2Direction: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="rl_item2">
@@ -3497,6 +3862,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2Add: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3506,6 +3877,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2Add: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3520,6 +3897,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            R2VA: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -3529,6 +3912,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setPreviusRX2({
+                            ...previusRX2,
+                            L2VA: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -3571,6 +3960,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RSPH: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3580,6 +3975,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LSPH: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3594,6 +3995,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RCYL: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3603,6 +4010,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LCYL: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3617,6 +4030,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RAxis: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3626,6 +4045,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LAxis: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3640,6 +4065,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RPrism: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3649,6 +4080,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LPrism: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3657,20 +4094,34 @@ function NewSightTest() {
                     Direction
                   </div>
                   <div className="rl_item_r1_2">
-                    <select
+                    <input
                       type="text"
                       name=""
                       id=""
                       className="input_5_2"
-                    ></select>
+                      placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RDirection: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
                   <div className="rl_item_r1_2">
-                    <select
+                    <input
                       type="text"
                       name=""
                       id=""
                       className="input_5_2"
-                    ></select>
+                      placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LDirection: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="rl_item2">
@@ -3684,6 +4135,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          RAdd: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3693,6 +4150,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LAdd: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3707,6 +4170,9 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({ ...retinoscopy, RVA: e.target.value });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3716,6 +4182,9 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({ ...retinoscopy, LVA: e.target.value });
+                      }}
                     />
                   </div>
                 </div>
@@ -3753,6 +4222,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          REPD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3762,6 +4237,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LEPD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3781,6 +4262,12 @@ function NewSightTest() {
                       }}
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          BINPD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   {/* <div className="rl_item_r1_2">
@@ -3803,6 +4290,9 @@ function NewSightTest() {
                       }}
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({ ...retinoscopy, BVD: e.target.value });
+                      }}
                     />
                   </div>
                   {/* <div className="rl_item_r1_2">
@@ -3820,6 +4310,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          REUnaidedDVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3829,6 +4325,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LEUnaidedDVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3843,6 +4345,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          REUnaidedDVA2: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="rl_item_r1_2">
@@ -3852,27 +4360,15 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setRetinoscopy({
+                          ...retinoscopy,
+                          LEUnaidedDVA2: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
-                {/* <div className="rl_item2">
-                          <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Add</div>
-                          <div className="rl_item_r1_2">
-                            <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                          </div>
-                          <div className="rl_item_r1_2">
-                            <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                          </div>
-                        </div>            
-                        <div className="rl_item2">
-                          <div className="rl_item_r1_2" style={{alignItems: 'end'}} >VA</div>
-                          <div className="rl_item_r1_2">
-                            <input type="text" name="" id="" className='input_5_2'  placeholder='' /> 
-                          </div>
-                          <div className="rl_item_r1_2">
-                            <input type="text" name="" id="" className='input_5_2'  placeholder='' /> 
-                          </div>                
-                        </div>                                                    */}
               </div>
             </div>
             <div className="hr_line"></div>
@@ -3912,6 +4408,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          RESPH: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -3921,6 +4423,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LESPH: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3935,6 +4443,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          RECYL: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -3944,6 +4458,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LECYL: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3958,6 +4478,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          REAxis: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -3967,6 +4493,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LEAxis: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -3981,6 +4513,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          REDVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -3990,6 +4528,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LEDVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -4004,6 +4548,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          REINTADD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -4013,6 +4563,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LEINTADD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -4027,6 +4583,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          REINTVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -4036,6 +4598,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LEINTVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -4053,6 +4621,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          RENEARADD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -4062,6 +4636,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LENEARADD: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -4076,6 +4656,12 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          RENVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                   <div className="pn_item_r1_2">
@@ -4085,174 +4671,18 @@ function NewSightTest() {
                       id=""
                       className="input_5_2"
                       placeholder=""
+                      onChange={(e) => {
+                        setSubjectiveRX({
+                          ...subjectiveRX,
+                          LENVA: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
               </div>
-              {/* <div className='rl_con2' style={{gridTemplateColumns: '7% 13% 13% 14% 16% 22% 15%',width: '18rem'}} >
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2"></div>
-                      <div className="rl_item_r1_2" style={{alignItems: 'center'}} >R:</div>
-                      <div className="rl_item_r1_2" style={{alignItems: 'center'}} >L:</div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >SPH</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >CYL</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Axis</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Prism</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Direction</div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >VA</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' /> 
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' /> 
-                      </div>                
-                    </div>
-                  </div>
-                  <div className='rl_con3' style={{gridTemplateColumns: '13% 13% 11% 13% 13% 12% 12% 13% 11%',width: '29rem'}} >
-                    <div className="rl_item2 no_display" >
-                      <div className="rl_item_r1_2" ></div>
-                      <div className="rl_item_r1_2" style={{alignItems: 'center'}} >R:</div>
-                      <div className="rl_item_r1_2" style={{alignItems: 'center'}} >L:</div>
-                    </div>                                      
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Near Add</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div> 
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Prism</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div>              
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Direction</div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                    </div>              
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Near VA</div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                    </div>              
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Int Add</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                      </div>
-                    </div>            
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Prism</div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input type="text" name="" id="" className='input_5_2'  placeholder='' />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Direction</div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Int VA</div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select type="text" name="" id="" className='input_5_2'></select>
-                      </div>
-                    </div>              
-                                                                      
-                  </div> */}
             </div>
-            {/* <div className="matrix_below"  style={{marginBottom:'2rem'}}>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Right</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Left</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Combined</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >BVD</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >BIN BVCA</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                </div> */}
+
             <div className="hr_line"></div>
             <div
               className="input_label"
@@ -4316,6 +4746,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, RSPH: e.target.value });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4325,6 +4758,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, LSPH: e.target.value });
+                        }}
                       />
                     </div>
                   </div>
@@ -4339,6 +4775,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, RCYL: e.target.value });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4348,6 +4787,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, LCYL: e.target.value });
+                        }}
                       />
                     </div>
                   </div>
@@ -4362,6 +4804,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, RAxis: e.target.value });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4371,6 +4816,9 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({ ...complexRX, LAxis: e.target.value });
+                        }}
                       />
                     </div>
                   </div>
@@ -4385,6 +4833,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RHPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4394,6 +4848,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LHPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -4402,18 +4862,34 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">IN</option>
-                        <option value="">OUT</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RDirection: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">IN</option>
-                        <option value="">OUT</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LDirection: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="rl_item2">
@@ -4427,6 +4903,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RVPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4436,6 +4918,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LVPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -4467,18 +4955,34 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">UP</option>
-                        <option value="">DOWN</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RDirection2: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">UP</option>
-                        <option value="">DOWN</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LDirection2: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -4487,20 +4991,34 @@ function NewSightTest() {
                       Int Add
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RINTADD: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select
+                      <input
                         type="text"
                         name=""
                         id=""
                         className="input_5_2"
-                      ></select>
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LINTADD: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="rl_item2">
@@ -4514,6 +5032,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RNEARADD: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4523,6 +5047,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LNEARADD: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -4537,6 +5067,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RNVHPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4546,6 +5082,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LNVHPrism: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -4555,18 +5097,34 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">IN</option>
-                        <option value="">OUT</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RDirection3: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">IN</option>
-                        <option value="">OUT</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LDirection3: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -4581,6 +5139,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RNVHPrism2: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                     <div className="rl_item_r1_2">
@@ -4590,6 +5154,12 @@ function NewSightTest() {
                         id=""
                         className="input_5_2"
                         placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LNVHPrism2: e.target.value,
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -4599,45 +5169,40 @@ function NewSightTest() {
                       Direction
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">UP</option>
-                        <option value="">DOWN</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            RDirection4: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                     <div className="rl_item_r1_2">
-                      <select type="text" name="" id="" className="input_5_2">
-                        <option value=""></option>
-                        <option value="">UP</option>
-                        <option value="">DOWN</option>
-                      </select>
+                      <input
+                        type="text"
+                        name=""
+                        id=""
+                        className="input_5_2"
+                        placeholder=""
+                        onChange={(e) => {
+                          setComplexRX({
+                            ...complexRX,
+                            LDirection4: e.target.value,
+                          });
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
               </div>
             )}
-            {/* <div className="matrix_below"  style={{marginBottom:'2rem'}}>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Right</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Left</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >PD Combined</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >BVD</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                  <div className='matrix_below_elem'>
-                    <div className="input_label" style={{margin:'0'}} >BIN BVCA</div>
-                    <input type="text" name="" id="" className='input_5_2' placeholder='' />
-                  </div>
-                </div> */}
+
             <div className="hr_line"></div>
             <div className="p6_con5">
               <div
@@ -4645,34 +5210,69 @@ function NewSightTest() {
                 style={{ borderRight: "1px solid #D0D0D0" }}
               >
                 <div className="flex_align mb8">
-                  <input type="checkbox" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    onChange={(e) => setModifiedRXGiven(!modifiedRXGiven)}
+                  />
                   <div className="input_label2">Modified Rx Given</div>
                 </div>
                 <div className="input_label2 mb8">Outcomes:</div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="No Change - New RX required"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">
                     No Change - New RX required
                   </div>
                 </div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="No Change"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">No Change</div>
                 </div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="New Rx"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">New Rx</div>
                 </div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="No RX"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">No RX</div>
                 </div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="Consultation Only"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">Consultation Only</div>
                 </div>
                 <div className="flex_align mb8">
-                  <input type="radio" name="" id="" />
+                  <input
+                    type="checkbox"
+                    name="Prefer to HES"
+                    id=""
+                    onChange={handleOutcomes}
+                  />
                   <div className="input_label2">Prefer to HES</div>
                 </div>
               </div>
@@ -4681,69 +5281,149 @@ function NewSightTest() {
                 <div className="p6_con5">
                   <div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="distance"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Distance</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="near"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Near</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Intermediate"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Intermediate</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Verifocal"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Verifocal</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Bifocal"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Bifocal</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Occupational"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Occupational</div>
                     </div>
                   </div>
                   <div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="HMAR"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">HMAR</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Photocromic"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Photocromic</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Slim 30 (1.6)"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Slim 30 (1.6)</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Slim 40 (1.67)"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Slim 40 (1.67)</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Slim 50 (1.74)"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Slim 50 (1.74)</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Tint"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Tint</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Polaroid"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Polaroid</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="CR39 (1.5)"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">CR39 (1.5)</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Glass"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Glass</div>
                     </div>
                     <div className="flex_align mb8">
-                      <input type="checkbox" name="" id="" />
+                      <input
+                        type="checkbox"
+                        name="Polycarbonate (1.59)"
+                        id=""
+                        onChange={handleRecommendations}
+                      />
                       <div className="input_label2">Polycarbonate (1.59)</div>
                     </div>
                   </div>
@@ -4761,6 +5441,7 @@ function NewSightTest() {
                   style={{ width: "21rem", height: "4rem" }}
                   placeholder="Healthy eye, 
                       2 year recall-any concerns to return sooner"
+                  onChange={(e) => setExaminationComment(e.target.value)}
                 ></textarea>
               </div>
               <div>
@@ -4769,6 +5450,7 @@ function NewSightTest() {
                   type="date"
                   className="form_input"
                   placeholder="10/15/2023"
+                  onChange={(e) => setRecall(e.target.value)}
                 />
               </div>
             </div>
@@ -4776,6 +5458,7 @@ function NewSightTest() {
               <button
                 className="save-btn"
                 style={{ position: "absolute", right: "0" }}
+                onClick={handleSaveRefraction}
               >
                 Save
               </button>

@@ -11,14 +11,14 @@ const createOccularExamination = async (req, res) => {
     await occularExamination.save();
     console.log("1");
 
-    const patientInfo = await NewSightTest.findOne({ patientID: req.params.patientID });
-    if (!patientInfo) {
-      return res.status(404).json({ error: 'Patient not found' });
-    }
+    // const patientInfo = await NewSightTest.findOne({ patientID: req.params.patientID });
+    // if (!patientInfo) {
+    //   return res.status(404).json({ error: 'Patient not found' });
+    // }
 
-    // Update patientInfo with the historyAndSymptoms ID
-    patientInfo.occularExaminations = occularExamination._id;
-    await patientInfo.save(); // Save the updated patientInfo
+    // // Update patientInfo with the historyAndSymptoms ID
+    // patientInfo.occularExaminations = occularExamination._id;
+    // await patientInfo.save(); // Save the updated patientInfo
 
     res.status(201).json(occularExamination);
   } catch (error) {

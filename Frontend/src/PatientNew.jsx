@@ -119,6 +119,11 @@ function PatientNew() {
     setAvailableTimeSlots(updatedTimeSlots);
   };
 
+  //refraction
+  const [refraction, setRefraction] = useState({});
+
+  console.log("ref", refraction[0]);
+
   //Contact Lense
   let initialFormData = {
     fullName: "",
@@ -245,29 +250,29 @@ function PatientNew() {
 
   useEffect(() => {
     if (searchPatient) {
-      setTitle(searchPatient.title);
-      setForename(searchPatient.forename);
-      setSurname(searchPatient.surname);
-      setDob(searchPatient.dob);
-      setAddress1(searchPatient.address1);
-      setAddress2(searchPatient.address2);
-      setCity(searchPatient.city);
-      setCountry(searchPatient.country);
-      setPostcode(searchPatient.postcode);
-      setEmail(searchPatient.email);
-      setLandline(searchPatient.landline);
-      setMobile(searchPatient.mobile);
-      setGender(searchPatient.gender);
-      setDoctor(searchPatient.doctor);
-      setPatientType(searchPatient.patientType);
-      setHC2orHC3Number(searchPatient.HC2orHC3Number);
-      setHC3PatientContribution(searchPatient.HC3PatientContribution);
-      setPatientHasGlucoma(searchPatient.patientHasGlucoma);
-      setpatientHasDiabetic(searchPatient.patientHasDiabetic);
-      setContactedBy(searchPatient.contactedBy);
-      setPromotionalCommunication(searchPatient.promotionalCommunication);
-      setNotes(searchPatient.notes);
-      setUpdateID(searchPatient._id);
+      setTitle(searchPatient?.title);
+      setForename(searchPatient?.forename);
+      setSurname(searchPatient?.surname);
+      setDob(searchPatient?.dob);
+      setAddress1(searchPatient?.address1);
+      setAddress2(searchPatient?.address2);
+      setCity(searchPatient?.city);
+      setCountry(searchPatient?.country);
+      setPostcode(searchPatient?.postcode);
+      setEmail(searchPatient?.email);
+      setLandline(searchPatient?.landline);
+      setMobile(searchPatient?.mobile);
+      setGender(searchPatient?.gender);
+      setDoctor(searchPatient?.doctor);
+      setPatientType(searchPatient?.patientType);
+      setHC2orHC3Number(searchPatient?.HC2orHC3Number);
+      setHC3PatientContribution(searchPatient?.HC3PatientContribution);
+      setPatientHasGlucoma(searchPatient?.patientHasGlucoma);
+      setpatientHasDiabetic(searchPatient?.patientHasDiabetic);
+      setContactedBy(searchPatient?.contactedBy);
+      setPromotionalCommunication(searchPatient?.promotionalCommunication);
+      setNotes(searchPatient?.notes);
+      setUpdateID(searchPatient?._id);
 
       axios
         .get(
@@ -275,7 +280,7 @@ function PatientNew() {
         )
         .then((res) => {
           console.log("hs", res.data);
-          setFormData(...res.data);
+          setFormData({ ...res.data });
         })
         .catch((err) => {
           console.log(err);
@@ -297,7 +302,16 @@ function PatientNew() {
         .get(`${baseUrl}/api/contactLense/${searchPatient._id}`)
         .then((res) => {
           console.log("cl", res.data);
-          setCLData(res.data);
+          setCLData({ ...res.data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      axios
+        .get(`${baseUrl}/api/refraction/${searchPatient._id}`)
+        .then((res) => {
+          setRefraction({ ...res.data });
         })
         .catch((err) => {
           console.log(err);
@@ -550,6 +564,10 @@ function PatientNew() {
     } else {
       setPromotionalCommunication(false);
     }
+  };
+
+  const makeAppoint = () => {
+    window.open("Diary.html", "_blank");
   };
 
   const handleContactBy = (e) => {
@@ -1073,7 +1091,7 @@ function PatientNew() {
                       fill="#4C004A"
                     />
                   </svg>
-                  <div>Make Appointment</div>
+                  <div onClick={makeAppoint}>Make Appointment</div>
                 </div>
               </div>
             )}
@@ -1415,1663 +1433,405 @@ function PatientNew() {
 
             {/*history and symptoms*/}
 
-            <div className="nst_body padd_com" style={{ height: "auto" }}>
-              <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
-                <div>
-                  <div className="input_label">
-                    Reason for visit{" "}
-                    <span className="rx_txt2">Default value set</span>{" "}
-                  </div>
-                  <textarea
-                    id=""
-                    className="nst_ta"
-                    placeholder="Routine, Distance"
-                    name="reasonForVisit"
-                    value={formData.reasonForVisit}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-                <div>
-                  <div className="input_label">
-                    POH <span className="rx_txt2">Default value set</span>{" "}
-                  </div>
-                  <textarea
-                    name="POH"
-                    id=""
-                    className="nst_ta"
-                    placeholder="None"
-                    value={formData.POH}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-              </div>
-              <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
-                <div>
-                  <div className="input_label">
-                    GH <span className="rx_txt2">Default value set</span>{" "}
-                  </div>
-                  <textarea
-                    name="GH"
-                    id=""
-                    className="nst_ta"
-                    placeholder="Good"
-                    value={formData.GH}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-                <div>
-                  <div className="input_label">
-                    Medication <span className="rx_txt2"></span>{" "}
-                  </div>
-                  <textarea
-                    name="medication"
-                    id=""
-                    className="nst_ta"
-                    placeholder="None"
-                    value={formData.medication}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-              </div>
-              <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
-                <div>
-                  <div className="input_label">
-                    Family General Health (FGH){" "}
-                    <span className="rx_txt2">Default value set</span>{" "}
-                  </div>
-                  <textarea
-                    name="familyGeneralHealth"
-                    id=""
-                    className="nst_ta"
-                    placeholder="No significant headaches"
-                    value={formData?.familyGeneralHealth}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-                <div>
-                  <div className="input_label">
-                    Family Ocular Health (FOH){" "}
-                    <span className="rx_txt2">Default value set</span>{" "}
-                  </div>
-                  <textarea
-                    name="familyOcularHealth"
-                    id=""
-                    className="nst_ta"
-                    // placeholder="No significant Hx, No glaucoma"
-                    value={formData.familyOcularHealth}
-                    onChange={handleInputChange}
-                    required
-                  ></textarea>
-                </div>
-              </div>
-              <div className="ppe_btn_con">
-                <div className="ppe_btn_elem">
-                  <svg
-                    width="33"
-                    height="20"
-                    viewBox="0 0 33 33"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M1.62305 16.5C2.91555 9.46 9.08517 4.125 16.4992 4.125C23.9132 4.125 30.0814 9.46 31.3753 16.5C30.0828 23.54 23.9132 28.875 16.4992 28.875C9.08517 28.875 2.91692 23.54 1.62305 16.5H1.62305ZM16.4983 23.3759C20.2952 23.3759 23.3733 20.2978 23.3733 16.5009C23.3733 12.7039 20.2953 9.62587 16.4983 9.62585C12.7014 9.62584 9.62331 12.7039 9.62329 16.5008C9.62327 20.2978 12.7013 23.3758 16.4982 23.3759H16.4983ZM16.4993 20.625C15.0255 20.625 13.6638 19.8388 12.9269 18.5625C12.1901 17.2862 12.1901 15.7138 12.9269 14.4375C13.6638 13.1612 15.0255 12.375 16.4993 12.375C17.973 12.375 19.3348 13.1612 20.0716 14.4375C20.8085 15.7138 20.8085 17.2862 20.0716 18.5625C19.3348 19.8388 17.973 20.625 16.4993 20.625Z"
-                      fill="#4C004A"
-                    />
-                  </svg>
-                  <div>Patients Previous Examination</div>
-                </div>
-              </div>
-              <div
-                className="nst_con2"
-                style={{
-                  borderTop: "1px solid #D0D0D0",
-                  borderBottom: "1px solid #D0D0D0",
-                }}
-              >
-                <div
-                  className="nst_con2_elem"
-                  style={{
-                    borderRight: "1px solid #D0D0D0",
-                    paddingBottom: "1rem",
-                  }}
-                >
-                  <div className="nst_con2_e1_txt1">Medication</div>
-                  <div className="c2_dual_con">
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="thyroxine"
-                        id="thyroxine"
-                        checked={formData.thyroxine}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">Thyroxine</div>
-                    </div>
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name=""
-                        id="timolol"
-                        checked={formData.timolol}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">TIMOLOL</div>
-                    </div>
-                  </div>
-                  <div className="c2_dual_con">
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="atenolol"
-                        id="atenolol"
-                        checked={formData.atenolol}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">Atenolol</div>
-                    </div>
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="timoptol"
-                        id="timoptol"
-                        checked={formData.timoptol}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">TIMOPTOL</div>
-                    </div>
-                  </div>
-                  <div className="c2_dual_con">
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="bendroflumethiazide"
-                        id="bendroflumethiazide"
-                        checked={formData.bendroflumethiazide}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">
-                        Bendroflumethiazide
-                      </div>
-                    </div>
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="xalatan"
-                        id="xalatan"
-                        checked={formData.xalatan}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">XALATAN</div>
-                    </div>
-                  </div>
-                  <div className="c2_dual_con">
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="bisoprololfumarate"
-                        id="bisoprololfumarate"
-                        checked={formData.bisoprololfumarate}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">
-                        Bisoprolol Fumarate
-                      </div>
-                    </div>
-                    <div className="c2_dual_elem">
-                      <input
-                        type="checkbox"
-                        name="betoptic"
-                        id="betoptic"
-                        checked={formData.betoptic}
-                        onChange={handleInputChange}
-                      />
-                      <div className="nst_con2_e1_txt2">Betoptic</div>
-                    </div>
-                  </div>
-
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="furosenide"
-                      id="furosenide"
-                      checked={formData.furosenide}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">FUROsemide</div>
-                  </div>
-
-                  <div className="c2_dual_elem" style={{ marginTop: "2rem" }}>
-                    <input
-                      type="checkbox"
-                      name="gliclazide"
-                      id="gliclazide"
-                      value={formData.gliclazide}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <div className="nst_con2_e1_txt2">Gliclazide</div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="insulin"
-                      id="insulin"
-                      checked={formData.insulin}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Insulin</div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="metforminHydrochiloride"
-                      id="metforminHydrochiloride"
-                      checked={formData.metforminHydrochiloride}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">
-                      Metformin Hydrochiloride
-                    </div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="omeprazole"
-                      id="omeprazole"
-                      checked={formData.omeprazole}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Omeprazole</div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="ramipril"
-                      id="ramipril"
-                      checked={formData.ramipril}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Ramipril</div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="statin"
-                      id="statin"
-                      checked={formData.statin}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Statin</div>
-                  </div>
-                </div>
-                <div className="nst_con2_elem" style={{ paddingLeft: "1rem" }}>
-                  <div className="nst_con2_e1_txt1">Patient Information</div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="patientHasGlucomaHS"
-                      id="patientHasGlucomaHS"
-                      checked={formData.patientHasGlucomaHS}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Patient has Glaucoma</div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="patientHasFamilyHistoryOfGlucoma"
-                      id="patientHasFamilyHistoryOfGlucoma"
-                      checked={formData.patientHasFamilyHistoryOfGlucoma}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">
-                      Patient has family history of Glaucoma
-                    </div>
-                  </div>
-                  <div className="c2_dual_elem">
-                    <input
-                      type="checkbox"
-                      name="patientHasDiabeticHS"
-                      id="patientHasDiabeticHS"
-                      checked={formData.patientHasDiabeticHS}
-                      onChange={handleInputChange}
-                    />
-                    <div className="nst_con2_e1_txt2">Patient is Diabetic</div>
-                  </div>
-                  <div className="ppe_btn_con">
-                    {plNote && (
-                      <div>
-                        <div className="input_label">
-                          Note <span className="rx_txt2"></span>{" "}
-                        </div>
-                        <textarea
-                          name="lifeStyleNote"
-                          id=""
-                          className="nst_ta"
-                          placeholder="Type here"
-                          value={formData.lifeStyleNote}
-                          onChange={handleInputChange}
-                          required
-                        ></textarea>
-                      </div>
-                    )}
-                    <div
-                      className="ppe_btn_elem"
-                      onClick={() => {
-                        setplNote(!plNote);
-                      }}
-                    >
-                      <svg
-                        width="22"
-                        height="17"
-                        viewBox="0 0 22 23"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M18.6002 0.314537C18.1815 -0.104194 17.5144 -0.104194 17.0957 0.314537L9.01246 8.39773C8.88472 8.51841 8.79956 8.67451 8.74278 8.84483L7.42279 13.2519C7.30922 13.6281 7.41568 14.0326 7.69247 14.3094C7.89115 14.5152 8.16793 14.6216 8.44472 14.6216C8.54404 14.6216 8.65052 14.6074 8.74988 14.579L13.1569 13.259C13.3273 13.2022 13.4834 13.1171 13.604 12.9894L21.6873 4.90613C21.886 4.70744 21.9995 4.43776 21.9995 4.15388C21.9995 3.87003 21.886 3.60035 21.6873 3.40162L18.6002 0.314537Z"
-                          fill="#4C004A"
-                        />
-                        <path
-                          d="M20.9355 9.93793C20.3474 9.93793 19.871 10.4147 19.871 11.0024V18.0992C19.871 19.0778 19.075 19.8734 18.0968 19.8734H3.90323C2.92499 19.8734 2.12903 19.0778 2.12903 18.0992V3.90567C2.12903 2.92709 2.92499 2.13147 3.90323 2.13147H11C11.588 2.13147 12.0645 1.65466 12.0645 1.06696C12.0645 0.479259 11.588 0.00244141 11 0.00244141H3.90323C1.75098 0.00244141 0 1.75376 0 3.90567V18.0992C0 20.2511 1.75098 22.0024 3.90323 22.0024H18.0968C20.249 22.0024 22 20.2511 22 18.0992V11.0024C22 10.4147 21.5235 9.93793 20.9355 9.93793Z"
-                          fill="#4C004A"
-                        />
-                      </svg>
-                      <div>Patients lifestyle notes</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="rx_txt2" style={{ marginTop: "1rem" }}>
-                Click to view MIMS website
-              </div>
-              <div className="input_label">Other Notes</div>
-              <textarea
-                name="otherNotes"
-                id=""
-                className="nst_ta"
-                style={{ width: "100%" }}
-                placeholder="Type here"
-                value={formData.otherNotes}
-                onChange={handleInputChange}
-                required
-              ></textarea>
-              <div className="ppe_btn_con">
-                <div className="saveCon_btn_elem">
-                  <div onClick={handleSaveHistoryAndSymptoms}>Update</div>
-                  <svg
-                    width="25"
-                    height="15"
-                    viewBox="0 0 25 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="12.5"
-                      cy="12.5"
-                      r="12.5"
-                      fill="#4C004A"
-                      fill-opacity="0.2"
-                    />
-                    <path
-                      d="M7.08366 12.5002C7.08366 12.1262 7.3868 11.8231 7.76074 11.8231H15.3102L12.0094 8.52238C11.7397 8.2526 11.7435 7.81403 12.018 7.54906C12.2858 7.29062 12.7112 7.29437 12.9743 7.5575L17.8634 12.4465C17.893 12.4762 17.893 12.5242 17.8634 12.5538L12.9753 17.4418C12.713 17.7042 12.2877 17.7041 12.0253 17.4418C11.7638 17.1803 11.7629 16.7566 12.0232 16.494L15.3102 13.1772H7.76074C7.3868 13.1772 7.08366 12.8741 7.08366 12.5002Z"
-                      fill="#4C004A"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Occular Examination */}
-
-            <>
+            {formData._id && (
               <div className="nst_body padd_com" style={{ height: "auto" }}>
-                <div className="p4_oe_con">
-                  <div className="p4_oe_con_elem border-right1">
-                    <div className="p4_elem_text1">Right Eye</div>
-                    <div
-                      className="input_label"
-                      style={{ margin: "1rem 0", height: "1rem" }}
-                    ></div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Lids</div>
-                        <select
-                          id=""
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RELids"
-                          value={OEForm?.RELids}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RELids}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="MGD GD1">MGD GD1</option>
-                          <option value="MGD GD2">MGD GD2</option>
-                          <option value="MGD GD3">MGD GD3</option>
-                          <option value="MGD GD4">MGD GD4</option>
-                          <option value="Chalazion">Chalazion</option>
-                          <option value="Stye">Stye</option>
-                          <option value="Allergic Papillae">
-                            Allergic Papillae
-                          </option>
-                          <option value="Ptosis">Ptosis</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Lashes</div>
-                        <select
-                          id=""
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RELashes"
-                          value={OEForm?.RELashes}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RELashes}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Blepharitis GD1">
-                            Blepharitis GD1
-                          </option>
-                          <option value="Blepharitis GD2">
-                            Blepharitis GD2
-                          </option>
-                          <option value="Blepharitis GD3">
-                            Blepharitis GD3
-                          </option>
-                          <option value="Blepharitis GD4">
-                            Blepharitis GD4
-                          </option>
-                          <option value="Trichiasis">Trichiasis</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Conjunctiva</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REConjunctiva"
-                          value={OEForm?.REConjunctiva}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REConjunctiva}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Hyperaemia GD1">Hyperaemia GD1</option>
-                          <option value="Hyperaemia GD2">Hyperaemia GD2</option>
-                          <option value="yperaemia GD3">Hyperaemia GD3</option>
-                          <option value="Hyperaemia GD4">Hyperaemia GD4</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Sclera</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RESclera"
-                          value={OEForm?.RESclera}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RESclera}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Diffuse Scleritis">
-                            Diffuse Scleritis
-                          </option>
-                          <option value="Nodular Scleritis">
-                            Nodular Scleritis
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Cornea</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RECornea"
-                          value={OEForm?.RECornea}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RECornea}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="PDS">PDS</option>
-                          <option value="Scarring">Scarring</option>
-                          <option value="Epithelial erosion / Staining">
-                            Epithelial erosion / Staining
-                          </option>
-                          <option value="Dystrophy">Dystrophy</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Ant. Cha</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REAndCha"
-                          value={OEForm?.REAndCha}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REAndCha}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Aqueous Flare">Aqueous Flare</option>
-                          <option value="VH GD1">VH GD1</option>
-                          <option value="VH GD2">VH GD2</option>
-                          <option value="VH GD3">VH GD3</option>
-                          <option value="VH GD4">VH GD4</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Iris</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RELids"
-                          value={OEForm?.REIris}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REIris}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Nevus">Nevus</option>
-                          <option value="Transillumination">
-                            Transillumination
-                          </option>
-                          <option value="Distortion">Distortion</option>
-                          <option value="Surgical damage">
-                            Surgical damage
-                          </option>
-                          <option value="Melanoma">Melanoma</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Pupils</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REPupils"
-                          value={OEForm?.REPupils}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REPupils}</option>
-                          <option value="PERRLA/ NO RAPD">
-                            PERRLA/ NO RAPD
-                          </option>
-                          <option value="RAPD">RAPD</option>
-                          <option value="Holmes- Aidie Pupil">
-                            Holmes- Aidie Pupil
-                          </option>
-                          <option value="Horners Syndrome">
-                            Horners Syndrome
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Lens</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RELens"
-                          value={OEForm?.RELense}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RELense}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Nuclear Change">Nuclear Change</option>
-                          <option value="Nuclear Cataract">
-                            Nuclear Cataract
-                          </option>
-                          <option value="Cortical Cataract">
-                            Cortical Cataract
-                          </option>
-                          <option value="Capsular Cataract">
-                            Capsular Cataract
-                          </option>
-                          <option value="Mixed Cataract">Mixed Cataract</option>
-                          <option value="Congenital Cataract">
-                            Congenital Cataract
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Pos. Chaa</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REPosChaa"
-                          value={OEForm?.REPosChaa}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REPosChaa}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="PVD">PVD</option>
-                          <option value="Asteroid Hyalosis">
-                            Asteroid Hyalosis
-                          </option>
-                          <option value="Vitreous Haemorrhage">
-                            Vitreous Haemorrhage
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">CD Ratio</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RECDRatioR"
-                          value={OEForm?.RECDRatio}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RECDRatio}</option>
-                          <option value="0.05">0.05</option>
-                          <option value="0.1">0.1</option>
-                          <option value="0.15">0.15</option>
-                          <option value="0.2">0.2</option>
-                          <option value="0.25">0.25</option>
-                          <option value="0.3">0.3</option>
-                          <option value="0.35">0.35</option>
-                          <option value="0.4">0.4</option>
-                          <option value="0.45">0.45</option>
-                          <option value="0.5">0.5</option>
-                          <option value="0.45">0.45</option>
-                          <option value="0.5">0.5</option>
-                          <option value="0.55">0.55</option>
-                          <option value="0.6">0.6</option>
-                          <option value="0.65">0.65</option>
-                          <option value="0.7">0.7</option>
-                          <option value="0.75">0.75</option>
-                          <option value="0.8">0.8</option>
-                          <option value="0.85">0.85</option>
-                          <option value="0.9">0.9</option>
-                          <option value="0.95">0.95</option>
-                          <option value="1.0">1.0</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">NRR</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="RENRR"
-                          value={OEForm?.RENRR}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.RENRR}</option>
-
-                          <option value="Glaucomatous">Glaucomatous</option>
-                          <option value="NRR Thinning">NRR Thinning</option>
-                          <option value="Raised / Inflammation">
-                            Raised / Inflammation
-                          </option>
-                          <option value="Blurred Margins">
-                            Blurred Margins
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Macular</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REMacular"
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REMacular}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Clear Reflex">Clear Reflex</option>
-                          <option value="Drusen">Drusen</option>
-                          <option value="Dry AMD">Dry AMD</option>
-                          <option value="Wet AMD">Wet AMD</option>
-                          <option value="Macula Hole">Macula Hole</option>
-                          <option value="Diabetic Maculopathy">
-                            Diabetic Maculopathy
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">AV</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REAV"
-                          value={OEForm?.REAV}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REAV}</option>
-                          <option value="2/3">2/3</option>
-                          <option value="1/3">1/3</option>
-                          <option value="4/5">4/5</option>
-                          <option value="Tortuous">Tortuous</option>
-                          <option value="Nipping">Nipping</option>
-                          <option value="Atherosclerosis">
-                            Atherosclerosis
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Periphery</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="REPeriphery"
-                          value={OEForm?.REPeriphery}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.REPeriphery}</option>
-                          <option value="Clear/ Healthy Flat">
-                            Clear/ Healthy Flat
-                          </option>
-                          <option value="Nevus">Nevus</option>
-                          <option value="Melanoma">Melanoma</option>
-                          <option value="Retinal Detachment">
-                            Retinal Detachment
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div></div>
-                    </div>
-                    <div className="flex">
-                      <div className="saveCon_btn_elem">
-                        <div>All clear and Healthy</div>
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Eye
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column", gap: "10px" }}
-                        >
-                          {/* <svg width="150" height="50" viewBox="0 0 223 93" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M111.343 92C141.634 92 169.103 87.0051 189.037 78.8925C199.001 74.8372 207.131 69.9832 212.786 64.542C218.444 59.0982 221.686 53.0012 221.686 46.5C221.686 39.9988 218.444 33.9018 212.786 28.458C207.131 23.0168 199.001 18.1628 189.037 14.1075C169.103 5.99489 141.634 1 111.343 1C81.0522 1 53.5827 5.99489 33.6488 14.1075C23.6844 18.1628 15.5543 23.0168 9.89935 28.458C4.24165 33.9018 1 39.9988 1 46.5C1 53.0012 4.24165 59.0982 9.89935 64.542C15.5543 69.9832 23.6844 74.8372 33.6488 78.8925C53.5827 87.0051 81.0522 92 111.343 92Z" fill="white" stroke="black" stroke-width="2"/>
-                                        <circle cx="111.979" cy="47.1358" r="20.9786" fill="#212529"/>
-                                        <circle cx="207.971" cy="46.4999" r="12.7143" fill="#212529"/>
-                                        <circle cx="111.343" cy="46.5" r="45.5" stroke="black" stroke-width="2"/>
-                                    </svg> */}
-                          <svg
-                            width="150"
-                            height="50"
-                            viewBox="0 0 223 93"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M111.343 92C141.634 92 169.103 87.0051 189.037 78.8925C199.001 74.8372 207.131 69.9832 212.786 64.542C218.444 59.0982 221.686 53.0012 221.686 46.5C221.686 39.9988 218.444 33.9018 212.786 28.458C207.131 23.0168 199.001 18.1628 189.037 14.1075C169.103 5.99489 141.634 1 111.343 1C81.0522 1 53.5827 5.99489 33.6488 14.1075C23.6844 18.1628 15.5543 23.0168 9.89935 28.458C4.24165 33.9018 1 39.9988 1 46.5C1 53.0012 4.24165 59.0982 9.89935 64.542C15.5543 69.9832 23.6844 74.8372 33.6488 78.8925C53.5827 87.0051 81.0522 92 111.343 92Z"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                            <circle
-                              cx="111.343"
-                              cy="46.5"
-                              r="45.5"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
-                      </div>
-                      <div className="img_note_elem">
-                        <input
-                          name="REEye"
-                          type="text"
-                          placeholder="Notes"
-                          className="note_12"
-                          value={OEForm?.REEye}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Lens
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column", gap: "0px" }}
-                        >
-                          <svg
-                            width="127"
-                            height="70"
-                            viewBox="0 0 127 127"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <circle
-                              cx="63.5"
-                              cy="63.5"
-                              r="62.5"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
-                      </div>
-                      <div className="img_note_elem">
-                        <input
-                          name="RELens2"
-                          type="text"
-                          placeholder="Notes"
-                          className="note_12"
-                          value={OEForm?.RELens2}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Fundus
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column" }}
-                        >
-                          <svg
-                            width="132"
-                            height="70"
-                            viewBox="0 0 132 132"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <circle
-                              cx="66"
-                              cy="66"
-                              r="65"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                            <circle
-                              cx="90"
-                              cy="66"
-                              r="17"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
-                      </div>
-                      <div className="img_note_elem">
-                        <input
-                          name="REFundus"
-                          type="text"
-                          placeholder="Notes"
-                          className="note_12"
-                          value={OEForm?.REFundus}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p4_oe_con_elem pl1">
-                    <div className="p4_elem_text1">Left Eye</div>
-                    <div
-                      className="input_label"
-                      style={{ margin: "1rem 0", height: "1rem" }}
-                    >
+                <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
+                  <div>
+                    <div className="input_label">
                       Reason for visit{" "}
                       <span className="rx_txt2">Default value set</span>{" "}
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Lids</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LELids"
-                          value={OEForm?.LELids}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LELids}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="MGD GD1">MGD GD1</option>
-                          <option value="MGD GD2">MGD GD2</option>
-                          <option value="MGD GD3">MGD GD3</option>
-                          <option value="MGD GD4">MGD GD4</option>
-                          <option value="Chalazion">Chalazion</option>
-                          <option value="Stye">Stye</option>
-                          <option value="Allergic Papillae">
-                            Allergic Papillae
-                          </option>
-                          <option value="Ptosis">Ptosis</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                    <textarea
+                      id=""
+                      className="nst_ta"
+                      placeholder="Routine, Distance"
+                      name="reasonForVisit"
+                      value={formData?.reasonForVisit}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                  <div>
+                    <div className="input_label">
+                      POH <span className="rx_txt2">Default value set</span>{" "}
+                    </div>
+                    <textarea
+                      name="POH"
+                      id=""
+                      className="nst_ta"
+                      placeholder="None"
+                      value={formData?.POH}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
+                  <div>
+                    <div className="input_label">
+                      GH <span className="rx_txt2">Default value set</span>{" "}
+                    </div>
+                    <textarea
+                      name="GH"
+                      id=""
+                      className="nst_ta"
+                      placeholder="Good"
+                      value={formData?.GH}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                  <div>
+                    <div className="input_label">
+                      Medication <span className="rx_txt2"></span>{" "}
+                    </div>
+                    <textarea
+                      name="medication"
+                      id=""
+                      className="nst_ta"
+                      placeholder="None"
+                      value={formData?.medication}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="rb2_bottom3" style={{ marginBottom: "1rem" }}>
+                  <div>
+                    <div className="input_label">
+                      Family General Health (FGH){" "}
+                      <span className="rx_txt2">Default value set</span>{" "}
+                    </div>
+                    <textarea
+                      name="familyGeneralHealth"
+                      id=""
+                      className="nst_ta"
+                      placeholder="No significant headaches"
+                      value={formData?.familyGeneralHealth}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                  <div>
+                    <div className="input_label">
+                      Family Ocular Health (FOH){" "}
+                      <span className="rx_txt2">Default value set</span>{" "}
+                    </div>
+                    <textarea
+                      name="familyOcularHealth"
+                      id=""
+                      className="nst_ta"
+                      // placeholder="No significant Hx, No glaucoma"
+                      value={formData?.familyOcularHealth}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                </div>
+                <div className="ppe_btn_con">
+                  <div className="ppe_btn_elem">
+                    <svg
+                      width="33"
+                      height="20"
+                      viewBox="0 0 33 33"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M1.62305 16.5C2.91555 9.46 9.08517 4.125 16.4992 4.125C23.9132 4.125 30.0814 9.46 31.3753 16.5C30.0828 23.54 23.9132 28.875 16.4992 28.875C9.08517 28.875 2.91692 23.54 1.62305 16.5H1.62305ZM16.4983 23.3759C20.2952 23.3759 23.3733 20.2978 23.3733 16.5009C23.3733 12.7039 20.2953 9.62587 16.4983 9.62585C12.7014 9.62584 9.62331 12.7039 9.62329 16.5008C9.62327 20.2978 12.7013 23.3758 16.4982 23.3759H16.4983ZM16.4993 20.625C15.0255 20.625 13.6638 19.8388 12.9269 18.5625C12.1901 17.2862 12.1901 15.7138 12.9269 14.4375C13.6638 13.1612 15.0255 12.375 16.4993 12.375C17.973 12.375 19.3348 13.1612 20.0716 14.4375C20.8085 15.7138 20.8085 17.2862 20.0716 18.5625C19.3348 19.8388 17.973 20.625 16.4993 20.625Z"
+                        fill="#4C004A"
+                      />
+                    </svg>
+                    <div>Patients Previous Examination</div>
+                  </div>
+                </div>
+                <div
+                  className="nst_con2"
+                  style={{
+                    borderTop: "1px solid #D0D0D0",
+                    borderBottom: "1px solid #D0D0D0",
+                  }}
+                >
+                  <div
+                    className="nst_con2_elem"
+                    style={{
+                      borderRight: "1px solid #D0D0D0",
+                      paddingBottom: "1rem",
+                    }}
+                  >
+                    <div className="nst_con2_e1_txt1">Medication</div>
+                    <div className="c2_dual_con">
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="thyroxine"
+                          id="thyroxine"
+                          checked={formData?.thyroxine}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">Thyroxine</div>
                       </div>
-                      <div>
-                        <div className="p4_d_txt1">Lashes</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LELashes"
-                          value={OEForm?.LELashes}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LELashes}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Blepharitis GD1">
-                            Blepharitis GD1
-                          </option>
-                          <option value="Blepharitis GD2">
-                            Blepharitis GD2
-                          </option>
-                          <option value="Blepharitis GD3">
-                            Blepharitis GD3
-                          </option>
-                          <option value="Blepharitis GD4">
-                            Blepharitis GD4
-                          </option>
-                          <option value="Trichiasis">Trichiasis</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name=""
+                          id="timolol"
+                          checked={formData?.timolol}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">TIMOLOL</div>
                       </div>
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Conjunctiva</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEConjunctiva"
-                          value={OEForm?.LEConjunctiva}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEConjunctiva}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Hyperaemia GD1">Hyperaemia GD1</option>
-                          <option value="Hyperaemia GD2">Hyperaemia GD2</option>
-                          <option value="Hyperaemia GD3">Hyperaemia GD3</option>
-                          <option value="Hyperaemia GD4">Hyperaemia GD4</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                    <div className="c2_dual_con">
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="atenolol"
+                          id="atenolol"
+                          checked={formData?.atenolol}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">Atenolol</div>
                       </div>
-                      <div>
-                        <div className="p4_d_txt1">Sclera</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LESclera"
-                          value={OEForm?.LESclera}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LESclera}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Diffuse Scleritis">
-                            Diffuse Scleritis
-                          </option>
-                          <option value="Nodular Scleritis">
-                            Nodular Scleritis
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="timoptol"
+                          id="timoptol"
+                          checked={formData?.timoptol}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">TIMOPTOL</div>
                       </div>
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Cornea</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LECornea"
-                          value={OEForm?.LECornea}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LECornea}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="PDS">PDS</option>
-                          <option value="Scarring">Scarring</option>
-                          <option value="Epithelial erosion / Staining">
-                            Epithelial erosion / Staining
-                          </option>
-                          <option value="Dystrophy">Dystrophy</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                    <div className="c2_dual_con">
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="bendroflumethiazide"
+                          id="bendroflumethiazide"
+                          checked={formData?.bendroflumethiazide}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">
+                          Bendroflumethiazide
+                        </div>
                       </div>
-                      <div>
-                        <div className="p4_d_txt1">Ant. Cha</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEAndCha"
-                          value={OEForm?.LEAndCha}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEAndCha}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Aqueous Flare">Aqueous Flare</option>
-                          <option value="VH GD1">VH GD1</option>
-                          <option value="VH GD2">VH GD2</option>
-                          <option value="VH GD3">VH GD3</option>
-                          <option value="VH GD4">VH GD4</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="xalatan"
+                          id="xalatan"
+                          checked={formData?.xalatan}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">XALATAN</div>
                       </div>
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Iris</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEIris"
-                          value={OEForm?.LEIris}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEIris}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Nevus">Nevus</option>
-                          <option value="Transillumination">
-                            Transillumination
-                          </option>
-                          <option value="Distortion">Distortion</option>
-                          <option value="Surgical damage">
-                            Surgical damage
-                          </option>
-                          <option value="Melanoma">Melanoma</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                    <div className="c2_dual_con">
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="bisoprololfumarate"
+                          id="bisoprololfumarate"
+                          checked={formData?.bisoprololfumarate}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">
+                          Bisoprolol Fumarate
+                        </div>
                       </div>
-                      <div>
-                        <div className="p4_d_txt1">Pupils</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEPupils"
-                          value={OEForm?.LEPupils}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEPupils}</option>
-                          <option value="PERRLA/ NO RAPD">
-                            PERRLA/ NO RAPD
-                          </option>
-                          <option value="RAPD">RAPD</option>
-                          <option value="Holmes- Aidie Pupil">
-                            Holmes- Aidie Pupil
-                          </option>
-                          <option value="Horners Syndrome">
-                            Horners Syndrome
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
+                      <div className="c2_dual_elem">
+                        <input
+                          type="checkbox"
+                          name="betoptic"
+                          id="betoptic"
+                          checked={formData?.betoptic}
+                          onChange={handleInputChange}
+                        />
+                        <div className="nst_con2_e1_txt2">Betoptic</div>
                       </div>
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Lens</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LELense"
-                          value={OEForm?.LELense}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LELense}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Nuclear Change">Nuclear Change</option>
-                          <option value="Nuclear Cataract">
-                            Nuclear Cataract
-                          </option>
-                          <option value="Cortical Cataract">
-                            Cortical Cataract
-                          </option>
-                          <option value="Capsular Cataract">
-                            Capsular Cataract
-                          </option>
-                          <option value="Mixed Cataract">Mixed Cataract</option>
-                          <option value="Congenital Cataract">
-                            Congenital Cataract
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">Pos. Chaa</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEPosChaa"
-                          value={OEForm?.LEPosChaa}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEPosChaa}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="PVD">PVD</option>
-                          <option value="Asteroid Hyalosis">
-                            Asteroid Hyalosis
-                          </option>
-                          <option value="Vitreous Haemorrhage">
-                            Vitreous Haemorrhage
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">CD Ratio</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LECDRatio"
-                          value={OEForm?.LECDRatio}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LECDRatio}</option>
-                          <option value="0.05">0.05</option>
-                          <option value="0.1">0.1</option>
-                          <option value="0.15">0.15</option>
-                          <option value="0.2">0.2</option>
-                          <option value="0.25">0.25</option>
-                          <option value="0.3">0.3</option>
-                          <option value="0.35">0.35</option>
-                          <option value="0.4">0.4</option>
-                          <option value="0.45">0.45</option>
-                          <option value="0.5">0.5</option>
-                          <option value="0.45">0.45</option>
-                          <option value="0.5">0.5</option>
-                          <option value="0.55">0.55</option>
-                          <option value="0.6">0.6</option>
-                          <option value="0.65">0.65</option>
-                          <option value="0.7">0.7</option>
-                          <option value="0.75">0.75</option>
-                          <option value="0.8">0.8</option>
-                          <option value="0.85">0.85</option>
-                          <option value="0.9">0.9</option>
-                          <option value="0.95">0.95</option>
-                          <option value="1.0">1.0</option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">NRR</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LENRR"
-                          value={OEForm?.LENRR}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LENRR}</option>
 
-                          <option value="Glaucomatous">Glaucomatous</option>
-                          <option value="NRR Thinning">NRR Thinning</option>
-                          <option value="Raised / Inflammation">
-                            Raised / Inflammation
-                          </option>
-                          <option value="Blurred Margins">
-                            Blurred Margins
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="furosenide"
+                        id="furosenide"
+                        checked={formData?.furosenide}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">FUROsemide</div>
                     </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Macular</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEMacular"
-                          value={OEForm?.LEMacular}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEMacular}</option>
-                          <option value="Clear/ Healthy">Clear/ Healthy</option>
-                          <option value="Clear Reflex">Clear Reflex</option>
-                          <option value="Drusen">Drusen</option>
-                          <option value="Dry AMD">Dry AMD</option>
-                          <option value="Wet AMD">Wet AMD</option>
-                          <option value="Macula Hole">Macula Hole</option>
-                          <option value="Diabetic Maculopathy">
-                            Diabetic Maculopathy
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div>
-                        <div className="p4_d_txt1">AV</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEAV"
-                          value={OEForm?.LEAV}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEAV}</option>
-                          <option value="2/3, Clear/ Healthy">
-                            2/3, Clear/ Healthy
-                          </option>
-                          <option value="1/3">1/3</option>
-                          <option value="4/5">4/5</option>
-                          <option value="Tortuous">Tortuous</option>
-                          <option value="Nipping">Nipping</option>
-                          <option value="Atherosclerosis">
-                            Atherosclerosis
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p4_dual_con">
-                      <div>
-                        <div className="p4_d_txt1">Periphery</div>
-                        <select
-                          className="p4_select"
-                          placeholder="Select"
-                          name="LEPeriphery"
-                          value={OEForm?.LEPeriphery}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        >
-                          <option value="">{OEForm?.LEPeriphery}</option>
-                          <option value="Clear/ Healthy Flat">
-                            Clear/ Healthy Flat
-                          </option>
-                          <option value="Nevus">Nevus</option>
-                          <option value="Melanoma">Melanoma</option>
-                          <option value="Retinal Detachment">
-                            Retinal Detachment
-                          </option>
-                          <option value="See Notes">See Notes</option>
-                        </select>
-                      </div>
-                      <div></div>
-                    </div>
-                    <div className="flex">
-                      <div className="saveCon_btn_elem">
-                        <div>All clear and Healthy</div>
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Eye
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column", gap: "10px" }}
-                        >
-                          {/* <svg width="150" height="50" viewBox="0 0 223 93" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M111.343 92C81.052 92 53.5825 87.0051 33.6487 78.8925C23.6842 74.8372 15.5541 69.9832 9.89919 64.542C4.24147 59.0982 0.999832 53.0012 0.999832 46.5C0.999832 39.9988 4.24147 33.9018 9.89919 28.458C15.5541 23.0168 23.6842 18.1628 33.6487 14.1075C53.5825 5.99489 81.052 1 111.343 1C141.633 1 169.103 5.99489 189.037 14.1075C199.001 18.1628 207.131 23.0168 212.786 28.458C218.444 33.9018 221.686 39.9988 221.686 46.5C221.686 53.0012 218.444 59.0982 212.786 64.542C207.131 69.9832 199.001 74.8372 189.037 78.8925C169.103 87.0051 141.633 92 111.343 92Z" fill="white" stroke="black" stroke-width="2"/>
-                                        <circle cx="20.9786" cy="20.9786" r="20.9786" transform="matrix(-1 0 0 1 131.686 26.1572)" fill="#212529"/>
-                                        <circle cx="12.7143" cy="12.7143" r="12.7143" transform="matrix(-1 0 0 1 27.4287 33.7856)" fill="#212529"/>
-                                        <circle cx="44.5" cy="44.5" r="45.5" transform="matrix(-1 0 0 1 155.843 2)" stroke="black" stroke-width="2"/>
-                                    </svg> */}
-                          <svg
-                            width="150"
-                            height="50"
-                            viewBox="0 0 223 93"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M111.343 92C81.052 92 53.5825 87.0051 33.6487 78.8925C23.6842 74.8372 15.5541 69.9832 9.89919 64.542C4.24147 59.0982 0.999832 53.0012 0.999832 46.5C0.999832 39.9988 4.24147 33.9018 9.89919 28.458C15.5541 23.0168 23.6842 18.1628 33.6487 14.1075C53.5825 5.99489 81.052 1 111.343 1C141.633 1 169.103 5.99489 189.037 14.1075C199.001 18.1628 207.131 23.0168 212.786 28.458C218.444 33.9018 221.686 39.9988 221.686 46.5C221.686 53.0012 218.444 59.0982 212.786 64.542C207.131 69.9832 199.001 74.8372 189.037 78.8925C169.103 87.0051 141.633 92 111.343 92Z"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                            <circle
-                              cx="44.5"
-                              cy="44.5"
-                              r="45.5"
-                              transform="matrix(-1 0 0 1 155.843 2)"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
-                      </div>
-                      <div className="img_note_elem">
-                        <input
-                          name="LEEye"
-                          type="text"
-                          placeholder="Notes"
-                          className="note_12"
-                          value={OEForm?.LEEye}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Lens
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column", gap: "0px" }}
-                        >
-                          <svg
-                            width="127"
-                            height="70"
-                            viewBox="0 0 127 127"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <circle
-                              cx="63.5"
-                              cy="63.5"
-                              r="62.5"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
-                      </div>
-                      <div className="img_note_elem">
-                        <input
-                          type="text"
-                          name="LELens2"
-                          placeholder="Notes"
-                          className="note_12"
-                          value={OEForm?.LELens2}
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
-                      Fundus
-                    </div>
-                    <div className="img_note_con">
-                      <div
-                        className="img_note_elem"
-                        style={{ borderRight: "1px solid #D0D0D0" }}
-                      >
-                        <div
-                          className="flex"
-                          style={{ flexDirection: "column" }}
-                        >
-                          <svg
-                            width="132"
-                            height="70"
-                            viewBox="0 0 132 132"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <circle
-                              cx="66"
-                              cy="66"
-                              r="65"
-                              fill="white"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                            <circle
-                              cx="44"
-                              cy="69"
-                              r="17"
-                              stroke="black"
-                              stroke-width="2"
-                            />
-                          </svg>
 
-                          <div className="p4_d_txt3">Draw on Eye</div>
-                        </div>
+                    <div className="c2_dual_elem" style={{ marginTop: "2rem" }}>
+                      <input
+                        type="checkbox"
+                        name="gliclazide"
+                        id="gliclazide"
+                        value={formData?.gliclazide}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <div className="nst_con2_e1_txt2">Gliclazide</div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="insulin"
+                        id="insulin"
+                        checked={formData?.insulin}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">Insulin</div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="metforminHydrochiloride"
+                        id="metforminHydrochiloride"
+                        checked={formData?.metforminHydrochiloride}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">
+                        Metformin Hydrochiloride
                       </div>
-                      <div className="img_note_elem">
-                        <input
-                          name="LEFundus"
-                          type="text"
-                          placeholder="Notes"
-                          className="note_12"
-                          onChange={(e) =>
-                            setOEForm({
-                              ...OEForm,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
-                        />
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="omeprazole"
+                        id="omeprazole"
+                        checked={formData?.omeprazole}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">Omeprazole</div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="ramipril"
+                        id="ramipril"
+                        checked={formData?.ramipril}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">Ramipril</div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="statin"
+                        id="statin"
+                        checked={formData?.statin}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">Statin</div>
+                    </div>
+                  </div>
+                  <div
+                    className="nst_con2_elem"
+                    style={{ paddingLeft: "1rem" }}
+                  >
+                    <div className="nst_con2_e1_txt1">Patient Information</div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="patientHasGlucomaHS"
+                        id="patientHasGlucomaHS"
+                        checked={formData?.patientHasGlucomaHS}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">
+                        Patient has Glaucoma
+                      </div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="patientHasFamilyHistoryOfGlucoma"
+                        id="patientHasFamilyHistoryOfGlucoma"
+                        checked={formData?.patientHasFamilyHistoryOfGlucoma}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">
+                        Patient has family history of Glaucoma
+                      </div>
+                    </div>
+                    <div className="c2_dual_elem">
+                      <input
+                        type="checkbox"
+                        name="patientHasDiabeticHS"
+                        id="patientHasDiabeticHS"
+                        checked={formData?.patientHasDiabeticHS}
+                        onChange={handleInputChange}
+                      />
+                      <div className="nst_con2_e1_txt2">
+                        Patient is Diabetic
+                      </div>
+                    </div>
+                    <div className="ppe_btn_con">
+                      {plNote && (
+                        <div>
+                          <div className="input_label">
+                            Note <span className="rx_txt2"></span>{" "}
+                          </div>
+                          <textarea
+                            name="lifeStyleNote"
+                            id=""
+                            className="nst_ta"
+                            placeholder="Type here"
+                            value={formData?.lifeStyleNote}
+                            onChange={handleInputChange}
+                            required
+                          ></textarea>
+                        </div>
+                      )}
+                      <div
+                        className="ppe_btn_elem"
+                        onClick={() => {
+                          setplNote(!plNote);
+                        }}
+                      >
+                        <svg
+                          width="22"
+                          height="17"
+                          viewBox="0 0 22 23"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M18.6002 0.314537C18.1815 -0.104194 17.5144 -0.104194 17.0957 0.314537L9.01246 8.39773C8.88472 8.51841 8.79956 8.67451 8.74278 8.84483L7.42279 13.2519C7.30922 13.6281 7.41568 14.0326 7.69247 14.3094C7.89115 14.5152 8.16793 14.6216 8.44472 14.6216C8.54404 14.6216 8.65052 14.6074 8.74988 14.579L13.1569 13.259C13.3273 13.2022 13.4834 13.1171 13.604 12.9894L21.6873 4.90613C21.886 4.70744 21.9995 4.43776 21.9995 4.15388C21.9995 3.87003 21.886 3.60035 21.6873 3.40162L18.6002 0.314537Z"
+                            fill="#4C004A"
+                          />
+                          <path
+                            d="M20.9355 9.93793C20.3474 9.93793 19.871 10.4147 19.871 11.0024V18.0992C19.871 19.0778 19.075 19.8734 18.0968 19.8734H3.90323C2.92499 19.8734 2.12903 19.0778 2.12903 18.0992V3.90567C2.12903 2.92709 2.92499 2.13147 3.90323 2.13147H11C11.588 2.13147 12.0645 1.65466 12.0645 1.06696C12.0645 0.479259 11.588 0.00244141 11 0.00244141H3.90323C1.75098 0.00244141 0 1.75376 0 3.90567V18.0992C0 20.2511 1.75098 22.0024 3.90323 22.0024H18.0968C20.249 22.0024 22 20.2511 22 18.0992V11.0024C22 10.4147 21.5235 9.93793 20.9355 9.93793Z"
+                            fill="#4C004A"
+                          />
+                        </svg>
+                        <div>Patients lifestyle notes</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="input_label" style={{ marginTop: "1rem" }}>
-                  Ophthalmoscopy Notes:
+                <div className="rx_txt2" style={{ marginTop: "1rem" }}>
+                  Click to view MIMS website
                 </div>
+                <div className="input_label">Other Notes</div>
                 <textarea
-                  name="ophthalmoscopyNotes"
+                  name="otherNotes"
                   id=""
                   className="nst_ta"
                   style={{ width: "100%" }}
-                  placeholder={OEForm?.ophthalmoscopyNotes}
-                  onChange={(e) =>
-                    setOEForm({ ...OEForm, [e.target.name]: e.target.value })
-                  }
+                  placeholder="Type here"
+                  value={formData?.otherNotes}
+                  onChange={handleInputChange}
+                  required
                 ></textarea>
                 <div className="ppe_btn_con">
                   <div className="saveCon_btn_elem">
-                    <div onClick={handleSaveOccularExamination}>Update</div>
+                    <div onClick={handleSaveHistoryAndSymptoms}>Update</div>
                     <svg
                       width="25"
                       height="15"
@@ -3094,315 +1854,1664 @@ function PatientNew() {
                   </div>
                 </div>
               </div>
-              <div
-                className="report_header"
-                style={{ marginTop: "1rem", paddingLeft: "1rem" }}
-              >
-                Ocular Health Examination methods
-              </div>
-              <div
-                className="nst_body padd_com g_22"
-                style={{ height: "auto" }}
-              >
-                <div className="b_d_con_end">
-                  <input
-                    type="checkbox"
-                    name="slitLamp"
-                    checked={OEForm?.occularHealthExaminationMethods?.slitLamp}
-                    onChange={(e) =>
-                      setOEForm({
-                        ...OEForm,
-                        occularHealthExaminationMethods: {
-                          ...OEForm.occularHealthExaminationMethods,
-                          [e.target.name]: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                  <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
-                    Slit Lamp
-                  </div>
-                </div>
-                <div className="b_d_con_end">
-                  <input
-                    type="checkbox"
-                    name="directOphthalmoscope"
-                    id=""
-                    checked={
-                      OEForm?.occularHealthExaminationMethods
-                        ?.directOpthalmoscope
-                    }
-                    onChange={(e) =>
-                      setOEForm({
-                        ...OEForm,
-                        occularHealthExaminationMethods: {
-                          ...OEForm.occularHealthExaminationMethods,
-                          [e.target.name]: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                  <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
-                    Direct Ophthalmoscope
-                  </div>
-                </div>
-                <div className="b_d_con_end">
-                  <input
-                    type="checkbox"
-                    name="OCT"
-                    id=""
-                    checked={OEForm?.occularHealthExaminationMethods?.OCT}
-                    onChange={(e) =>
-                      setOEForm({
-                        ...OEForm,
-                        occularHealthExaminationMethods: {
-                          ...OEForm.occularHealthExaminationMethods,
-                          [e.target.name]: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                  <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
-                    OCT
-                  </div>
-                </div>
-                <div className="b_d_con_end">
-                  <input
-                    type="checkbox"
-                    name="volk"
-                    id=""
-                    checked={OEForm?.occularHealthExaminationMethods?.volk}
-                    onChange={(e) =>
-                      setOEForm({
-                        ...OEForm,
-                        occularHealthExaminationMethods: {
-                          ...OEForm.occularHealthExaminationMethods,
-                          [e.target.name]: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                  <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
-                    Volk
-                  </div>
-                </div>
-                <div className="b_d_con_end">
-                  <input
-                    type="checkbox"
-                    name="fundusImaging"
-                    id=""
-                    checked={
-                      OEForm?.occularHealthExaminationMethods?.fundusImaging
-                    }
-                    onChange={(e) =>
-                      setOEForm({
-                        ...OEForm,
-                        occularHealthExaminationMethods: {
-                          ...OEForm.occularHealthExaminationMethods,
-                          [e.target.name]: e.target.checked,
-                        },
-                      })
-                    }
-                  />
-                  <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
-                    Fundus Imaging
-                  </div>
-                </div>
-              </div>
-            </>
+            )}
 
-            <div className="pn_h2_mini">
-              <div
-                className="mini_header"
-                style={{ margin: "0", fontSize: "16px" }}
-              >
-                Sight Test History
-              </div>
-              <div className="pn_flex_mini2">
-                <div className="input_label" style={{ margin: "0" }}>
-                  Date:
+            {/* Occular Examination */}
+
+            {OEForm._id && (
+              <>
+                <div className="nst_body padd_com" style={{ height: "auto" }}>
+                  <div className="p4_oe_con">
+                    <div className="p4_oe_con_elem border-right1">
+                      <div className="p4_elem_text1">Right Eye</div>
+                      <div
+                        className="input_label"
+                        style={{ margin: "1rem 0", height: "1rem" }}
+                      ></div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Lids</div>
+                          <select
+                            id=""
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RELids"
+                            value={OEForm?.RELids}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RELids}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="MGD GD1">MGD GD1</option>
+                            <option value="MGD GD2">MGD GD2</option>
+                            <option value="MGD GD3">MGD GD3</option>
+                            <option value="MGD GD4">MGD GD4</option>
+                            <option value="Chalazion">Chalazion</option>
+                            <option value="Stye">Stye</option>
+                            <option value="Allergic Papillae">
+                              Allergic Papillae
+                            </option>
+                            <option value="Ptosis">Ptosis</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Lashes</div>
+                          <select
+                            id=""
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RELashes"
+                            value={OEForm?.RELashes}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RELashes}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Blepharitis GD1">
+                              Blepharitis GD1
+                            </option>
+                            <option value="Blepharitis GD2">
+                              Blepharitis GD2
+                            </option>
+                            <option value="Blepharitis GD3">
+                              Blepharitis GD3
+                            </option>
+                            <option value="Blepharitis GD4">
+                              Blepharitis GD4
+                            </option>
+                            <option value="Trichiasis">Trichiasis</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Conjunctiva</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REConjunctiva"
+                            value={OEForm?.REConjunctiva}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REConjunctiva}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Hyperaemia GD1">
+                              Hyperaemia GD1
+                            </option>
+                            <option value="Hyperaemia GD2">
+                              Hyperaemia GD2
+                            </option>
+                            <option value="yperaemia GD3">
+                              Hyperaemia GD3
+                            </option>
+                            <option value="Hyperaemia GD4">
+                              Hyperaemia GD4
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Sclera</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RESclera"
+                            value={OEForm?.RESclera}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RESclera}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Diffuse Scleritis">
+                              Diffuse Scleritis
+                            </option>
+                            <option value="Nodular Scleritis">
+                              Nodular Scleritis
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Cornea</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RECornea"
+                            value={OEForm?.RECornea}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RECornea}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="PDS">PDS</option>
+                            <option value="Scarring">Scarring</option>
+                            <option value="Epithelial erosion / Staining">
+                              Epithelial erosion / Staining
+                            </option>
+                            <option value="Dystrophy">Dystrophy</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Ant. Cha</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REAndCha"
+                            value={OEForm?.REAndCha}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REAndCha}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Aqueous Flare">Aqueous Flare</option>
+                            <option value="VH GD1">VH GD1</option>
+                            <option value="VH GD2">VH GD2</option>
+                            <option value="VH GD3">VH GD3</option>
+                            <option value="VH GD4">VH GD4</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Iris</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RELids"
+                            value={OEForm?.REIris}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REIris}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Nevus">Nevus</option>
+                            <option value="Transillumination">
+                              Transillumination
+                            </option>
+                            <option value="Distortion">Distortion</option>
+                            <option value="Surgical damage">
+                              Surgical damage
+                            </option>
+                            <option value="Melanoma">Melanoma</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Pupils</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REPupils"
+                            value={OEForm?.REPupils}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REPupils}</option>
+                            <option value="PERRLA/ NO RAPD">
+                              PERRLA/ NO RAPD
+                            </option>
+                            <option value="RAPD">RAPD</option>
+                            <option value="Holmes- Aidie Pupil">
+                              Holmes- Aidie Pupil
+                            </option>
+                            <option value="Horners Syndrome">
+                              Horners Syndrome
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Lens</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RELens"
+                            value={OEForm?.RELense}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RELense}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Nuclear Change">
+                              Nuclear Change
+                            </option>
+                            <option value="Nuclear Cataract">
+                              Nuclear Cataract
+                            </option>
+                            <option value="Cortical Cataract">
+                              Cortical Cataract
+                            </option>
+                            <option value="Capsular Cataract">
+                              Capsular Cataract
+                            </option>
+                            <option value="Mixed Cataract">
+                              Mixed Cataract
+                            </option>
+                            <option value="Congenital Cataract">
+                              Congenital Cataract
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Pos. Chaa</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REPosChaa"
+                            value={OEForm?.REPosChaa}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REPosChaa}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="PVD">PVD</option>
+                            <option value="Asteroid Hyalosis">
+                              Asteroid Hyalosis
+                            </option>
+                            <option value="Vitreous Haemorrhage">
+                              Vitreous Haemorrhage
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">CD Ratio</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RECDRatioR"
+                            value={OEForm?.RECDRatio}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RECDRatio}</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.1">0.1</option>
+                            <option value="0.15">0.15</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.35">0.35</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.45">0.45</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.45">0.45</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.55">0.55</option>
+                            <option value="0.6">0.6</option>
+                            <option value="0.65">0.65</option>
+                            <option value="0.7">0.7</option>
+                            <option value="0.75">0.75</option>
+                            <option value="0.8">0.8</option>
+                            <option value="0.85">0.85</option>
+                            <option value="0.9">0.9</option>
+                            <option value="0.95">0.95</option>
+                            <option value="1.0">1.0</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">NRR</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="RENRR"
+                            value={OEForm?.RENRR}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.RENRR}</option>
+
+                            <option value="Glaucomatous">Glaucomatous</option>
+                            <option value="NRR Thinning">NRR Thinning</option>
+                            <option value="Raised / Inflammation">
+                              Raised / Inflammation
+                            </option>
+                            <option value="Blurred Margins">
+                              Blurred Margins
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Macular</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REMacular"
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REMacular}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Clear Reflex">Clear Reflex</option>
+                            <option value="Drusen">Drusen</option>
+                            <option value="Dry AMD">Dry AMD</option>
+                            <option value="Wet AMD">Wet AMD</option>
+                            <option value="Macula Hole">Macula Hole</option>
+                            <option value="Diabetic Maculopathy">
+                              Diabetic Maculopathy
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">AV</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REAV"
+                            value={OEForm?.REAV}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REAV}</option>
+                            <option value="2/3">2/3</option>
+                            <option value="1/3">1/3</option>
+                            <option value="4/5">4/5</option>
+                            <option value="Tortuous">Tortuous</option>
+                            <option value="Nipping">Nipping</option>
+                            <option value="Atherosclerosis">
+                              Atherosclerosis
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Periphery</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="REPeriphery"
+                            value={OEForm?.REPeriphery}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.REPeriphery}</option>
+                            <option value="Clear/ Healthy Flat">
+                              Clear/ Healthy Flat
+                            </option>
+                            <option value="Nevus">Nevus</option>
+                            <option value="Melanoma">Melanoma</option>
+                            <option value="Retinal Detachment">
+                              Retinal Detachment
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div></div>
+                      </div>
+                      <div className="flex">
+                        <div className="saveCon_btn_elem">
+                          <div>All clear and Healthy</div>
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Eye
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column", gap: "10px" }}
+                          >
+                            {/* <svg width="150" height="50" viewBox="0 0 223 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M111.343 92C141.634 92 169.103 87.0051 189.037 78.8925C199.001 74.8372 207.131 69.9832 212.786 64.542C218.444 59.0982 221.686 53.0012 221.686 46.5C221.686 39.9988 218.444 33.9018 212.786 28.458C207.131 23.0168 199.001 18.1628 189.037 14.1075C169.103 5.99489 141.634 1 111.343 1C81.0522 1 53.5827 5.99489 33.6488 14.1075C23.6844 18.1628 15.5543 23.0168 9.89935 28.458C4.24165 33.9018 1 39.9988 1 46.5C1 53.0012 4.24165 59.0982 9.89935 64.542C15.5543 69.9832 23.6844 74.8372 33.6488 78.8925C53.5827 87.0051 81.0522 92 111.343 92Z" fill="white" stroke="black" stroke-width="2"/>
+                                        <circle cx="111.979" cy="47.1358" r="20.9786" fill="#212529"/>
+                                        <circle cx="207.971" cy="46.4999" r="12.7143" fill="#212529"/>
+                                        <circle cx="111.343" cy="46.5" r="45.5" stroke="black" stroke-width="2"/>
+                                    </svg> */}
+                            <svg
+                              width="150"
+                              height="50"
+                              viewBox="0 0 223 93"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M111.343 92C141.634 92 169.103 87.0051 189.037 78.8925C199.001 74.8372 207.131 69.9832 212.786 64.542C218.444 59.0982 221.686 53.0012 221.686 46.5C221.686 39.9988 218.444 33.9018 212.786 28.458C207.131 23.0168 199.001 18.1628 189.037 14.1075C169.103 5.99489 141.634 1 111.343 1C81.0522 1 53.5827 5.99489 33.6488 14.1075C23.6844 18.1628 15.5543 23.0168 9.89935 28.458C4.24165 33.9018 1 39.9988 1 46.5C1 53.0012 4.24165 59.0982 9.89935 64.542C15.5543 69.9832 23.6844 74.8372 33.6488 78.8925C53.5827 87.0051 81.0522 92 111.343 92Z"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                              <circle
+                                cx="111.343"
+                                cy="46.5"
+                                r="45.5"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            name="REEye"
+                            type="text"
+                            placeholder="Notes"
+                            className="note_12"
+                            value={OEForm?.REEye}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Lens
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column", gap: "0px" }}
+                          >
+                            <svg
+                              width="127"
+                              height="70"
+                              viewBox="0 0 127 127"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="63.5"
+                                cy="63.5"
+                                r="62.5"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            name="RELens2"
+                            type="text"
+                            placeholder="Notes"
+                            className="note_12"
+                            value={OEForm?.RELens2}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Fundus
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column" }}
+                          >
+                            <svg
+                              width="132"
+                              height="70"
+                              viewBox="0 0 132 132"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="66"
+                                cy="66"
+                                r="65"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                              <circle
+                                cx="90"
+                                cy="66"
+                                r="17"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            name="REFundus"
+                            type="text"
+                            placeholder="Notes"
+                            className="note_12"
+                            value={OEForm?.REFundus}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p4_oe_con_elem pl1">
+                      <div className="p4_elem_text1">Left Eye</div>
+                      <div
+                        className="input_label"
+                        style={{ margin: "1rem 0", height: "1rem" }}
+                      >
+                        Reason for visit{" "}
+                        <span className="rx_txt2">Default value set</span>{" "}
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Lids</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LELids"
+                            value={OEForm?.LELids}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LELids}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="MGD GD1">MGD GD1</option>
+                            <option value="MGD GD2">MGD GD2</option>
+                            <option value="MGD GD3">MGD GD3</option>
+                            <option value="MGD GD4">MGD GD4</option>
+                            <option value="Chalazion">Chalazion</option>
+                            <option value="Stye">Stye</option>
+                            <option value="Allergic Papillae">
+                              Allergic Papillae
+                            </option>
+                            <option value="Ptosis">Ptosis</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Lashes</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LELashes"
+                            value={OEForm?.LELashes}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LELashes}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Blepharitis GD1">
+                              Blepharitis GD1
+                            </option>
+                            <option value="Blepharitis GD2">
+                              Blepharitis GD2
+                            </option>
+                            <option value="Blepharitis GD3">
+                              Blepharitis GD3
+                            </option>
+                            <option value="Blepharitis GD4">
+                              Blepharitis GD4
+                            </option>
+                            <option value="Trichiasis">Trichiasis</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Conjunctiva</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEConjunctiva"
+                            value={OEForm?.LEConjunctiva}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEConjunctiva}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Hyperaemia GD1">
+                              Hyperaemia GD1
+                            </option>
+                            <option value="Hyperaemia GD2">
+                              Hyperaemia GD2
+                            </option>
+                            <option value="Hyperaemia GD3">
+                              Hyperaemia GD3
+                            </option>
+                            <option value="Hyperaemia GD4">
+                              Hyperaemia GD4
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Sclera</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LESclera"
+                            value={OEForm?.LESclera}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LESclera}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Diffuse Scleritis">
+                              Diffuse Scleritis
+                            </option>
+                            <option value="Nodular Scleritis">
+                              Nodular Scleritis
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Cornea</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LECornea"
+                            value={OEForm?.LECornea}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LECornea}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="PDS">PDS</option>
+                            <option value="Scarring">Scarring</option>
+                            <option value="Epithelial erosion / Staining">
+                              Epithelial erosion / Staining
+                            </option>
+                            <option value="Dystrophy">Dystrophy</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Ant. Cha</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEAndCha"
+                            value={OEForm?.LEAndCha}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEAndCha}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Aqueous Flare">Aqueous Flare</option>
+                            <option value="VH GD1">VH GD1</option>
+                            <option value="VH GD2">VH GD2</option>
+                            <option value="VH GD3">VH GD3</option>
+                            <option value="VH GD4">VH GD4</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Iris</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEIris"
+                            value={OEForm?.LEIris}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEIris}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Nevus">Nevus</option>
+                            <option value="Transillumination">
+                              Transillumination
+                            </option>
+                            <option value="Distortion">Distortion</option>
+                            <option value="Surgical damage">
+                              Surgical damage
+                            </option>
+                            <option value="Melanoma">Melanoma</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Pupils</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEPupils"
+                            value={OEForm?.LEPupils}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEPupils}</option>
+                            <option value="PERRLA/ NO RAPD">
+                              PERRLA/ NO RAPD
+                            </option>
+                            <option value="RAPD">RAPD</option>
+                            <option value="Holmes- Aidie Pupil">
+                              Holmes- Aidie Pupil
+                            </option>
+                            <option value="Horners Syndrome">
+                              Horners Syndrome
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Lens</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LELense"
+                            value={OEForm?.LELense}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LELense}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Nuclear Change">
+                              Nuclear Change
+                            </option>
+                            <option value="Nuclear Cataract">
+                              Nuclear Cataract
+                            </option>
+                            <option value="Cortical Cataract">
+                              Cortical Cataract
+                            </option>
+                            <option value="Capsular Cataract">
+                              Capsular Cataract
+                            </option>
+                            <option value="Mixed Cataract">
+                              Mixed Cataract
+                            </option>
+                            <option value="Congenital Cataract">
+                              Congenital Cataract
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">Pos. Chaa</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEPosChaa"
+                            value={OEForm?.LEPosChaa}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEPosChaa}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="PVD">PVD</option>
+                            <option value="Asteroid Hyalosis">
+                              Asteroid Hyalosis
+                            </option>
+                            <option value="Vitreous Haemorrhage">
+                              Vitreous Haemorrhage
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">CD Ratio</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LECDRatio"
+                            value={OEForm?.LECDRatio}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LECDRatio}</option>
+                            <option value="0.05">0.05</option>
+                            <option value="0.1">0.1</option>
+                            <option value="0.15">0.15</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.25">0.25</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.35">0.35</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.45">0.45</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.45">0.45</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.55">0.55</option>
+                            <option value="0.6">0.6</option>
+                            <option value="0.65">0.65</option>
+                            <option value="0.7">0.7</option>
+                            <option value="0.75">0.75</option>
+                            <option value="0.8">0.8</option>
+                            <option value="0.85">0.85</option>
+                            <option value="0.9">0.9</option>
+                            <option value="0.95">0.95</option>
+                            <option value="1.0">1.0</option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">NRR</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LENRR"
+                            value={OEForm?.LENRR}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LENRR}</option>
+
+                            <option value="Glaucomatous">Glaucomatous</option>
+                            <option value="NRR Thinning">NRR Thinning</option>
+                            <option value="Raised / Inflammation">
+                              Raised / Inflammation
+                            </option>
+                            <option value="Blurred Margins">
+                              Blurred Margins
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Macular</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEMacular"
+                            value={OEForm?.LEMacular}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEMacular}</option>
+                            <option value="Clear/ Healthy">
+                              Clear/ Healthy
+                            </option>
+                            <option value="Clear Reflex">Clear Reflex</option>
+                            <option value="Drusen">Drusen</option>
+                            <option value="Dry AMD">Dry AMD</option>
+                            <option value="Wet AMD">Wet AMD</option>
+                            <option value="Macula Hole">Macula Hole</option>
+                            <option value="Diabetic Maculopathy">
+                              Diabetic Maculopathy
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div>
+                          <div className="p4_d_txt1">AV</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEAV"
+                            value={OEForm?.LEAV}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEAV}</option>
+                            <option value="2/3, Clear/ Healthy">
+                              2/3, Clear/ Healthy
+                            </option>
+                            <option value="1/3">1/3</option>
+                            <option value="4/5">4/5</option>
+                            <option value="Tortuous">Tortuous</option>
+                            <option value="Nipping">Nipping</option>
+                            <option value="Atherosclerosis">
+                              Atherosclerosis
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="p4_dual_con">
+                        <div>
+                          <div className="p4_d_txt1">Periphery</div>
+                          <select
+                            className="p4_select"
+                            placeholder="Select"
+                            name="LEPeriphery"
+                            value={OEForm?.LEPeriphery}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">{OEForm?.LEPeriphery}</option>
+                            <option value="Clear/ Healthy Flat">
+                              Clear/ Healthy Flat
+                            </option>
+                            <option value="Nevus">Nevus</option>
+                            <option value="Melanoma">Melanoma</option>
+                            <option value="Retinal Detachment">
+                              Retinal Detachment
+                            </option>
+                            <option value="See Notes">See Notes</option>
+                          </select>
+                        </div>
+                        <div></div>
+                      </div>
+                      <div className="flex">
+                        <div className="saveCon_btn_elem">
+                          <div>All clear and Healthy</div>
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Eye
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column", gap: "10px" }}
+                          >
+                            {/* <svg width="150" height="50" viewBox="0 0 223 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M111.343 92C81.052 92 53.5825 87.0051 33.6487 78.8925C23.6842 74.8372 15.5541 69.9832 9.89919 64.542C4.24147 59.0982 0.999832 53.0012 0.999832 46.5C0.999832 39.9988 4.24147 33.9018 9.89919 28.458C15.5541 23.0168 23.6842 18.1628 33.6487 14.1075C53.5825 5.99489 81.052 1 111.343 1C141.633 1 169.103 5.99489 189.037 14.1075C199.001 18.1628 207.131 23.0168 212.786 28.458C218.444 33.9018 221.686 39.9988 221.686 46.5C221.686 53.0012 218.444 59.0982 212.786 64.542C207.131 69.9832 199.001 74.8372 189.037 78.8925C169.103 87.0051 141.633 92 111.343 92Z" fill="white" stroke="black" stroke-width="2"/>
+                                        <circle cx="20.9786" cy="20.9786" r="20.9786" transform="matrix(-1 0 0 1 131.686 26.1572)" fill="#212529"/>
+                                        <circle cx="12.7143" cy="12.7143" r="12.7143" transform="matrix(-1 0 0 1 27.4287 33.7856)" fill="#212529"/>
+                                        <circle cx="44.5" cy="44.5" r="45.5" transform="matrix(-1 0 0 1 155.843 2)" stroke="black" stroke-width="2"/>
+                                    </svg> */}
+                            <svg
+                              width="150"
+                              height="50"
+                              viewBox="0 0 223 93"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M111.343 92C81.052 92 53.5825 87.0051 33.6487 78.8925C23.6842 74.8372 15.5541 69.9832 9.89919 64.542C4.24147 59.0982 0.999832 53.0012 0.999832 46.5C0.999832 39.9988 4.24147 33.9018 9.89919 28.458C15.5541 23.0168 23.6842 18.1628 33.6487 14.1075C53.5825 5.99489 81.052 1 111.343 1C141.633 1 169.103 5.99489 189.037 14.1075C199.001 18.1628 207.131 23.0168 212.786 28.458C218.444 33.9018 221.686 39.9988 221.686 46.5C221.686 53.0012 218.444 59.0982 212.786 64.542C207.131 69.9832 199.001 74.8372 189.037 78.8925C169.103 87.0051 141.633 92 111.343 92Z"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                              <circle
+                                cx="44.5"
+                                cy="44.5"
+                                r="45.5"
+                                transform="matrix(-1 0 0 1 155.843 2)"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            name="LEEye"
+                            type="text"
+                            placeholder="Notes"
+                            className="note_12"
+                            value={OEForm?.LEEye}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Lens
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column", gap: "0px" }}
+                          >
+                            <svg
+                              width="127"
+                              height="70"
+                              viewBox="0 0 127 127"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="63.5"
+                                cy="63.5"
+                                r="62.5"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            type="text"
+                            name="LELens2"
+                            placeholder="Notes"
+                            className="note_12"
+                            value={OEForm?.LELens2}
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="p4_d_txt2" style={{ marginTop: "1rem" }}>
+                        Fundus
+                      </div>
+                      <div className="img_note_con">
+                        <div
+                          className="img_note_elem"
+                          style={{ borderRight: "1px solid #D0D0D0" }}
+                        >
+                          <div
+                            className="flex"
+                            style={{ flexDirection: "column" }}
+                          >
+                            <svg
+                              width="132"
+                              height="70"
+                              viewBox="0 0 132 132"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="66"
+                                cy="66"
+                                r="65"
+                                fill="white"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                              <circle
+                                cx="44"
+                                cy="69"
+                                r="17"
+                                stroke="black"
+                                stroke-width="2"
+                              />
+                            </svg>
+
+                            <div className="p4_d_txt3">Draw on Eye</div>
+                          </div>
+                        </div>
+                        <div className="img_note_elem">
+                          <input
+                            name="LEFundus"
+                            type="text"
+                            placeholder="Notes"
+                            className="note_12"
+                            onChange={(e) =>
+                              setOEForm({
+                                ...OEForm,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="input_label" style={{ marginTop: "1rem" }}>
+                    Ophthalmoscopy Notes:
+                  </div>
+                  <textarea
+                    name="ophthalmoscopyNotes"
+                    id=""
+                    className="nst_ta"
+                    style={{ width: "100%" }}
+                    placeholder={OEForm?.ophthalmoscopyNotes}
+                    onChange={(e) =>
+                      setOEForm({ ...OEForm, [e.target.name]: e.target.value })
+                    }
+                  ></textarea>
+                  <div className="ppe_btn_con">
+                    <div className="saveCon_btn_elem">
+                      <div onClick={handleSaveOccularExamination}>Update</div>
+                      <svg
+                        width="25"
+                        height="15"
+                        viewBox="0 0 25 25"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12.5"
+                          cy="12.5"
+                          r="12.5"
+                          fill="#4C004A"
+                          fill-opacity="0.2"
+                        />
+                        <path
+                          d="M7.08366 12.5002C7.08366 12.1262 7.3868 11.8231 7.76074 11.8231H15.3102L12.0094 8.52238C11.7397 8.2526 11.7435 7.81403 12.018 7.54906C12.2858 7.29062 12.7112 7.29437 12.9743 7.5575L17.8634 12.4465C17.893 12.4762 17.893 12.5242 17.8634 12.5538L12.9753 17.4418C12.713 17.7042 12.2877 17.7041 12.0253 17.4418C11.7638 17.1803 11.7629 16.7566 12.0232 16.494L15.3102 13.1772H7.76074C7.3868 13.1772 7.08366 12.8741 7.08366 12.5002Z"
+                          fill="#4C004A"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-                <input
-                  type="date"
-                  placeholder="12/08/2023"
-                  className="pn_input_form2"
-                />
-              </div>
-            </div>
-            <div
-              className="pn_header1 pn_header1_modified"
-              style={{ gridTemplateColumns: "8% 9% 7% 70% 6%" }}
-            >
-              <div className="flex">Record ID</div>
-              <div className="flex">Test Date</div>
-              <div className="flex">Payment</div>
-              <div>Final RX</div>
-              <div className="flex">Action</div>
-            </div>
-            <div
-              className="pn_body2 pn_body2_modified"
-              style={{
-                height: "auto",
-                padding: "35px 0",
-                gridTemplateColumns: "8% 9% 7% 70% 6%",
-              }}
-            >
-              <div className="flex">1234</div>
-              <div className="flex">12/08/2023</div>
-              <div className="flex">$26.6</div>
-              <div>
-                <div className="p6_dual_matrix">
+                <div
+                  className="report_header"
+                  style={{ marginTop: "1rem", paddingLeft: "1rem" }}
+                >
+                  Ocular Health Examination methods
+                </div>
+                <div
+                  className="nst_body padd_com g_22"
+                  style={{ height: "auto" }}
+                >
+                  <div className="b_d_con_end">
+                    <input
+                      type="checkbox"
+                      name="slitLamp"
+                      checked={
+                        OEForm?.occularHealthExaminationMethods?.slitLamp
+                      }
+                      onChange={(e) =>
+                        setOEForm({
+                          ...OEForm,
+                          occularHealthExaminationMethods: {
+                            ...OEForm.occularHealthExaminationMethods,
+                            [e.target.name]: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
+                      Slit Lamp
+                    </div>
+                  </div>
+                  <div className="b_d_con_end">
+                    <input
+                      type="checkbox"
+                      name="directOphthalmoscope"
+                      id=""
+                      checked={
+                        OEForm?.occularHealthExaminationMethods
+                          ?.directOpthalmoscope
+                      }
+                      onChange={(e) =>
+                        setOEForm({
+                          ...OEForm,
+                          occularHealthExaminationMethods: {
+                            ...OEForm.occularHealthExaminationMethods,
+                            [e.target.name]: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
+                      Direct Ophthalmoscope
+                    </div>
+                  </div>
+                  <div className="b_d_con_end">
+                    <input
+                      type="checkbox"
+                      name="OCT"
+                      id=""
+                      checked={OEForm?.occularHealthExaminationMethods?.OCT}
+                      onChange={(e) =>
+                        setOEForm({
+                          ...OEForm,
+                          occularHealthExaminationMethods: {
+                            ...OEForm.occularHealthExaminationMethods,
+                            [e.target.name]: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
+                      OCT
+                    </div>
+                  </div>
+                  <div className="b_d_con_end">
+                    <input
+                      type="checkbox"
+                      name="volk"
+                      id=""
+                      checked={OEForm?.occularHealthExaminationMethods?.volk}
+                      onChange={(e) =>
+                        setOEForm({
+                          ...OEForm,
+                          occularHealthExaminationMethods: {
+                            ...OEForm.occularHealthExaminationMethods,
+                            [e.target.name]: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
+                      Volk
+                    </div>
+                  </div>
+                  <div className="b_d_con_end">
+                    <input
+                      type="checkbox"
+                      name="fundusImaging"
+                      id=""
+                      checked={
+                        OEForm?.occularHealthExaminationMethods?.fundusImaging
+                      }
+                      onChange={(e) =>
+                        setOEForm({
+                          ...OEForm,
+                          occularHealthExaminationMethods: {
+                            ...OEForm.occularHealthExaminationMethods,
+                            [e.target.name]: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                    <div className="p4_d_txt2" style={{ paddingBottom: "0px" }}>
+                      Fundus Imaging
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {refraction[0]._id && (
+              <>
+                <div className="pn_h2_mini">
                   <div
-                    className="rl_con2"
-                    style={{
-                      gridTemplateColumns: "7% 13% 13% 14% 16% 22% 15%",
-                      width: "18rem",
-                    }}
+                    className="mini_header"
+                    style={{ margin: "0", fontSize: "16px" }}
                   >
-                    <div className="rl_item2">
-                      <div className="rl_item_r1_2"></div>
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "center" }}
-                      >
-                        R:
-                      </div>
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "center" }}
-                      >
-                        L:
-                      </div>
+                    Sight Test History
+                  </div>
+                  <div className="pn_flex_mini2">
+                    <div className="input_label" style={{ margin: "0" }}>
+                      Date:
                     </div>
-                    <div className="rl_item2">
+                    <input
+                      type="date"
+                      placeholder="12/08/2023"
+                      className="pn_input_form2"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="pn_header1 pn_header1_modified"
+                  style={{ gridTemplateColumns: "8% 9% 7% 70% 6%" }}
+                >
+                  <div className="flex">Record ID</div>
+                  <div className="flex">Test Date</div>
+                  <div className="flex">Payment</div>
+                  <div>Final RX</div>
+                  <div className="flex">Action</div>
+                </div>
+                <div
+                  className="pn_body2 pn_body2_modified"
+                  style={{
+                    height: "auto",
+                    padding: "35px 0",
+                    gridTemplateColumns: "8% 9% 7% 70% 6%",
+                  }}
+                >
+                  <div className="flex">1234</div>
+                  <div className="flex">12/08/2023</div>
+                  <div className="flex">$26.6</div>
+                  <div>
+                    <div className="p6_dual_matrix">
                       <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
+                        className="rl_con2"
+                        style={{
+                          gridTemplateColumns: "7% 13% 13% 14% 16% 22% 15%",
+                          width: "18rem",
+                        }}
                       >
-                        SPH
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        CYL
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Axis
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Prism
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Direction
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                    </div>
-                    {/* <div className="rl_item2">
+                        <div className="rl_item2">
+                          <div className="rl_item_r1_2"></div>
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "center" }}
+                          >
+                            R:
+                          </div>
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "center" }}
+                          >
+                            L:
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            SPH
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RSPH}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LSPH}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            CYL
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RCYL}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LCYL}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Axis
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RAxis}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LAxis}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Prism
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RPrism}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LPrism}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Direction
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RDirection}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LDirection}
+                            />
+                          </div>
+                        </div>
+                        {/* <div className="rl_item2">
                       <div className="rl_item_r1_2" style={{alignItems: 'end'}} >Add</div>
                       <div className="rl_item_r1_2">
                         <input type="text" name="" id="" className='input_5_2' placeholder='' />
@@ -3411,23 +3520,343 @@ function PatientNew() {
                         <input type="text" name="" id="" className='input_5_2' placeholder='' />
                       </div>
                     </div>             */}
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        VA
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            VA
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.RVA}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.retinoscopy.LVA}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <div className="rl_item_r1_2">
+                      <div
+                        className="rl_con3"
+                        style={{
+                          gridTemplateColumns:
+                            "13% 13% 11% 13% 13% 12% 12% 13% 11%",
+                          width: "29rem",
+                        }}
+                      >
+                        <div className="rl_item2 no_display">
+                          <div className="rl_item_r1_2"></div>
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "center" }}
+                          >
+                            R:
+                          </div>
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "center" }}
+                          >
+                            L:
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Near Add
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX?.RNEARADD}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX?.LNEARADD}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Prism
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX?.RVPrism}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX?.LVPrism}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Direction
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              value={refraction[0]?.complexRX?.RDirection}
+                            ></input>
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              value={refraction[0]?.complexRX?.LDirection}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Near VA
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              value={refraction[0]?.complexRX.RNEARADD}
+                            ></input>
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              value={refraction[0]?.complexRX.RNEARADD}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Int Add
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.RINTADD}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.RINTADD}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Prism
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.RVPrism}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.LVPrism}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Direction
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.RDirection2}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.complexRX.LDirection2}
+                            />
+                          </div>
+                        </div>
+                        <div className="rl_item2">
+                          <div
+                            className="rl_item_r1_2"
+                            style={{ alignItems: "end" }}
+                          >
+                            Int VA
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.subjectiveRX.REINTVA}
+                            />
+                          </div>
+                          <div className="rl_item_r1_2">
+                            <input
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_5_2"
+                              placeholder=""
+                              value={refraction[0]?.subjectiveRX.LEINTVA}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="matrix_below"
+                      style={{ marginBottom: "2rem" }}
+                    >
+                      <div className="matrix_below_elem">
+                        <div className="input_label" style={{ margin: "0" }}>
+                          PD Right
+                        </div>
                         <input
                           type="text"
                           name=""
                           id=""
                           className="input_5_2"
                           placeholder=""
+                          value={refraction[0]?.retinoscopy.REPD}
                         />
                       </div>
-                      <div className="rl_item_r1_2">
+                      <div className="matrix_below_elem">
+                        <div className="input_label" style={{ margin: "0" }}>
+                          PD Left
+                        </div>
+                        <input
+                          type="text"
+                          name=""
+                          id=""
+                          className="input_5_2"
+                          placeholder=""
+                          value={refraction[0]?.retinoscopy.REPD}
+                        />
+                      </div>
+                      <div className="matrix_below_elem">
+                        <div className="input_label" style={{ margin: "0" }}>
+                          PD Combined
+                        </div>
+                        <input
+                          type="text"
+                          name=""
+                          id=""
+                          className="input_5_2"
+                          placeholder=""
+                          value={
+                            refraction[0]?.retinoscopy.REPD +
+                            refraction[0]?.retinoscopy.LEPD
+                          }
+                        />
+                      </div>
+                      <div className="matrix_below_elem">
+                        <div className="input_label" style={{ margin: "0" }}>
+                          BVD
+                        </div>
+                        <input
+                          type="text"
+                          name=""
+                          id=""
+                          className="input_5_2"
+                          placeholder=""
+                          value={refraction[0]?.retinoscopy.BVD}
+                        />
+                      </div>
+                      <div className="matrix_below_elem">
+                        <div className="input_label" style={{ margin: "0" }}>
+                          BIN BVCA
+                        </div>
                         <input
                           type="text"
                           name=""
@@ -3438,295 +3867,7 @@ function PatientNew() {
                       </div>
                     </div>
                   </div>
-                  <div
-                    className="rl_con3"
-                    style={{
-                      gridTemplateColumns:
-                        "13% 13% 11% 13% 13% 12% 12% 13% 11%",
-                      width: "29rem",
-                    }}
-                  >
-                    <div className="rl_item2 no_display">
-                      <div className="rl_item_r1_2"></div>
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "center" }}
-                      >
-                        R:
-                      </div>
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "center" }}
-                      >
-                        L:
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Near Add
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Prism
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Direction
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Near VA
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Int Add
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Prism
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Direction
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                    </div>
-                    <div className="rl_item2">
-                      <div
-                        className="rl_item_r1_2"
-                        style={{ alignItems: "end" }}
-                      >
-                        Int VA
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                      <div className="rl_item_r1_2">
-                        <select
-                          type="text"
-                          name=""
-                          id=""
-                          className="input_5_2"
-                        ></select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="matrix_below" style={{ marginBottom: "2rem" }}>
-                  <div className="matrix_below_elem">
-                    <div className="input_label" style={{ margin: "0" }}>
-                      PD Right
-                    </div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="matrix_below_elem">
-                    <div className="input_label" style={{ margin: "0" }}>
-                      PD Left
-                    </div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="matrix_below_elem">
-                    <div className="input_label" style={{ margin: "0" }}>
-                      PD Combined
-                    </div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="matrix_below_elem">
-                    <div className="input_label" style={{ margin: "0" }}>
-                      BVD
-                    </div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="matrix_below_elem">
-                    <div className="input_label" style={{ margin: "0" }}>
-                      BIN BVCA
-                    </div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="input_5_2"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* <div className='flex' >
+                  {/* <div className='flex' >
                 <div>
                   <div className="p4_txt1 txt_8px">Lens Name/Type</div>
                     <div className="p4_mini_dual" style={{marginBottom:'0.5rem'}} >
@@ -3745,7 +3886,7 @@ function PatientNew() {
                   </div>
                 </div>
               </div> */}
-              <div className="flex" style={{ grid: "7px" }}>
+                  {/* <div className="flex" style={{ grid: "7px" }}>
                 <svg
                   width="27"
                   height="16"
@@ -3779,357 +3920,393 @@ function PatientNew() {
                     fill="#C03221"
                   />
                 </svg>
-              </div>
-            </div>
-
-            <div className="pn_h2_mini">
-              <div
-                className="mini_header"
-                style={{ margin: "0", fontSize: "16px" }}
-              >
-                Contact Lens History
-              </div>
-
-              <div className="pn_flex_mini2">
-                <div className="input_label" style={{ margin: "0" }}>
-                  Date:
+              </div> */}
                 </div>
-                <input
-                  type="date"
-                  placeholder="12/08/2023"
-                  className="pn_input_form2"
-                />
-              </div>
-            </div>
-            <div className="pn_header1">
-              <div className="flex">Record ID</div>
-              <div className="flex">Test Date</div>
-              <div className="flex">Payment</div>
-              <div>C/L RX</div>
-              <div>Lens Type</div>
-              <div className="flex">Action</div>
-            </div>
+              </>
+            )}
 
-            <div
-              className="pn_body2"
-              style={{ height: "auto", padding: "35px 0" }}
-            >
-              <div className="flex">1234</div>
-              <div className="flex">12/08/2023</div>
-              <div className="flex">$26.6</div>
-              <div>
-                <div className="input_label" style={{ margin: "0" }}>
-                  Final RX
-                </div>
-                <div className="pn_con22">
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2"></div>
-                    <div
-                      className="pn_item_r1_2"
-                      style={{ alignItems: "center" }}
-                    >
-                      R:
-                    </div>
-                    <div
-                      className="pn_item_r1_2"
-                      style={{ alignItems: "center" }}
-                    >
-                      L:
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      Sph
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="RESPH"
-                        id="RESPH"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.RESPH}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, RESPH: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LESPH"
-                        id="LESPH"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LESPH}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LESPH: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      CYL
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="RECYL"
-                        id="RECYL"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.RECYL}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, RECYL: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LECYL"
-                        id="LECYL"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LECYL}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LECYL: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      Axis
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="REAXIS"
-                        id="REAXIS"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.REAXIS}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, REAXIS: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LEAXIS"
-                        id="LEAXIS"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LEAXIS}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LEAXIS: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      Add
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="READD"
-                        id="READD"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.READD}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, READD: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LEADD"
-                        id="LEADD"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LEADD}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LEADD: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      BC
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="REBC"
-                        id="REBC"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.REBC}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, REBC: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LEBC"
-                        id="LEBC"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LEBC}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LEBC: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="rl_item2">
-                    <div className="pn_item_r1_2" style={{ alignItems: "end" }}>
-                      Diameter
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="REDiameter"
-                        id="REDiameter"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.REDiameter}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, REDiameter: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="pn_item_r1_2">
-                      <input
-                        type="text"
-                        name="LEDiameter"
-                        id="LEDiameter"
-                        className="input_5_2"
-                        placeholder=""
-                        value={CLData?.LEDiameter}
-                        onChange={(e) =>
-                          setCLData({ ...CLData, LEDiameter: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex">
-                <div>
-                  <div className="p4_txt1 txt_8px">Lens Name/Type</div>
+            {CLData._id && (
+              <>
+                <div className="pn_h2_mini">
                   <div
-                    className="p4_mini_dual"
-                    style={{ marginBottom: "0.5rem" }}
+                    className="mini_header"
+                    style={{ margin: "0", fontSize: "16px" }}
                   >
-                    <div className="p4_txt1 txt_8px">RE:</div>
+                    Contact Lens History
+                  </div>
+
+                  <div className="pn_flex_mini2">
+                    <div className="input_label" style={{ margin: "0" }}>
+                      Date:
+                    </div>
                     <input
-                      type="text"
-                      name="lenseTypeRE"
-                      id="lenseTypeRE"
-                      className="pn_input1"
-                      placeholder=""
-                      value={CLData?.lenseTypeRE}
-                      onChange={(e) =>
-                        setCLData({ ...CLData, lenseTypeRE: e.target.value })
-                      }
+                      type="date"
+                      placeholder="12/08/2023"
+                      className="pn_input_form2"
                     />
+                  </div>
+                </div>
+                <div className="pn_header1">
+                  <div className="flex">Record ID</div>
+                  <div className="flex">Test Date</div>
+                  <div className="flex">Payment</div>
+                  <div>C/L RX</div>
+                  <div>Lens Type</div>
+                  <div className="flex">Action</div>
+                </div>
+
+                <div
+                  className="pn_body2"
+                  style={{ height: "auto", padding: "35px 0" }}
+                >
+                  <div className="flex">1234</div>
+                  <div className="flex">12/08/2023</div>
+                  <div className="flex">$26.6</div>
+                  <div>
+                    <div className="input_label" style={{ margin: "0" }}>
+                      Final RX
+                    </div>
+                    <div className="pn_con22">
+                      <div className="rl_item2">
+                        <div className="pn_item_r1_2"></div>
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "center" }}
+                        >
+                          R:
+                        </div>
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "center" }}
+                        >
+                          L:
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          Sph
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="RESPH"
+                            id="RESPH"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.RESPH}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, RESPH: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LESPH"
+                            id="LESPH"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LESPH}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, LESPH: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          CYL
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="RECYL"
+                            id="RECYL"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.RECYL}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, RECYL: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LECYL"
+                            id="LECYL"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LECYL}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, LECYL: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          Axis
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="REAXIS"
+                            id="REAXIS"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.REAXIS}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, REAXIS: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LEAXIS"
+                            id="LEAXIS"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LEAXIS}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, LEAXIS: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          Add
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="READD"
+                            id="READD"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.READD}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, READD: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LEADD"
+                            id="LEADD"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LEADD}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, LEADD: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          BC
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="REBC"
+                            id="REBC"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.REBC}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, REBC: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LEBC"
+                            id="LEBC"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LEBC}
+                            onChange={(e) =>
+                              setCLData({ ...CLData, LEBC: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="rl_item2">
+                        <div
+                          className="pn_item_r1_2"
+                          style={{ alignItems: "end" }}
+                        >
+                          Diameter
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="REDiameter"
+                            id="REDiameter"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.REDiameter}
+                            onChange={(e) =>
+                              setCLData({
+                                ...CLData,
+                                REDiameter: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="pn_item_r1_2">
+                          <input
+                            type="text"
+                            name="LEDiameter"
+                            id="LEDiameter"
+                            className="input_5_2"
+                            placeholder=""
+                            value={CLData?.LEDiameter}
+                            onChange={(e) =>
+                              setCLData({
+                                ...CLData,
+                                LEDiameter: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div>
+                      <div className="p4_txt1 txt_8px">Lens Name/Type</div>
+                      <div
+                        className="p4_mini_dual"
+                        style={{ marginBottom: "0.5rem" }}
+                      >
+                        <div className="p4_txt1 txt_8px">RE:</div>
+                        <input
+                          type="text"
+                          name="lenseTypeRE"
+                          id="lenseTypeRE"
+                          className="pn_input1"
+                          placeholder=""
+                          value={CLData?.lenseTypeRE}
+                          onChange={(e) =>
+                            setCLData({
+                              ...CLData,
+                              lenseTypeRE: e.target.value,
+                            })
+                          }
+                        />
+                        <svg
+                          width="34"
+                          height="16"
+                          viewBox="0 0 34 28"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M0.770508 14C2.18051 6.32 8.91101 0.5 16.999 0.5C25.087 0.5 31.816 6.32 33.2275 14C31.8175 21.68 25.087 27.5 16.999 27.5C8.91101 27.5 2.18201 21.68 0.770508 14H0.770508ZM16.9982 21.5008C21.1403 21.5008 24.4982 18.143 24.4982 14.0009C24.4982 9.85873 21.1404 6.50086 16.9982 6.50084C12.8561 6.50083 9.49825 9.85867 9.49823 14.0008C9.49821 18.1429 12.856 21.5008 16.9982 21.5008H16.9982ZM16.9999 18.5C15.3922 18.5 13.9066 17.6423 13.1028 16.25C12.2989 14.8577 12.2989 13.1423 13.1028 11.75C13.9066 10.3577 15.3922 9.5 16.9999 9.5C18.6076 9.5 20.0932 10.3577 20.897 11.75C21.7009 13.1423 21.7009 14.8577 20.897 16.25C20.0932 17.6423 18.6076 18.5 16.9999 18.5Z"
+                            fill="#405189"
+                          />
+                        </svg>
+                      </div>
+                      <div
+                        className="p4_mini_dual"
+                        style={{ marginBottom: "2rem" }}
+                      >
+                        <div className="p4_txt1 txt_8px">LE:</div>
+                        <input
+                          type="text"
+                          name="lenseTypeLE"
+                          id="lenseTypeLE"
+                          className="pn_input1"
+                          placeholder=""
+                          value={CLData?.lenseTypeLE}
+                          onChange={(e) =>
+                            setCLData({
+                              ...CLData,
+                              lenseTypeLE: e.target.value,
+                            })
+                          }
+                        />
+                        <svg
+                          width="34"
+                          height="16"
+                          viewBox="0 0 34 28"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M0.770508 14C2.18051 6.32 8.91101 0.5 16.999 0.5C25.087 0.5 31.816 6.32 33.2275 14C31.8175 21.68 25.087 27.5 16.999 27.5C8.91101 27.5 2.18201 21.68 0.770508 14H0.770508ZM16.9982 21.5008C21.1403 21.5008 24.4982 18.143 24.4982 14.0009C24.4982 9.85873 21.1404 6.50086 16.9982 6.50084C12.8561 6.50083 9.49825 9.85867 9.49823 14.0008C9.49821 18.1429 12.856 21.5008 16.9982 21.5008H16.9982ZM16.9999 18.5C15.3922 18.5 13.9066 17.6423 13.1028 16.25C12.2989 14.8577 12.2989 13.1423 13.1028 11.75C13.9066 10.3577 15.3922 9.5 16.9999 9.5C18.6076 9.5 20.0932 10.3577 20.897 11.75C21.7009 13.1423 21.7009 14.8577 20.897 16.25C20.0932 17.6423 18.6076 18.5 16.9999 18.5Z"
+                            fill="#405189"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex" style={{ grid: "7px" }}>
                     <svg
-                      width="34"
+                      width="27"
                       height="16"
-                      viewBox="0 0 34 28"
+                      viewBox="0 0 27 28"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      onClick={handleCLEdit}
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0.770508 14C2.18051 6.32 8.91101 0.5 16.999 0.5C25.087 0.5 31.816 6.32 33.2275 14C31.8175 21.68 25.087 27.5 16.999 27.5C8.91101 27.5 2.18201 21.68 0.770508 14H0.770508ZM16.9982 21.5008C21.1403 21.5008 24.4982 18.143 24.4982 14.0009C24.4982 9.85873 21.1404 6.50086 16.9982 6.50084C12.8561 6.50083 9.49825 9.85867 9.49823 14.0008C9.49821 18.1429 12.856 21.5008 16.9982 21.5008H16.9982ZM16.9999 18.5C15.3922 18.5 13.9066 17.6423 13.1028 16.25C12.2989 14.8577 12.2989 13.1423 13.1028 11.75C13.9066 10.3577 15.3922 9.5 16.9999 9.5C18.6076 9.5 20.0932 10.3577 20.897 11.75C21.7009 13.1423 21.7009 14.8577 20.897 16.25C20.0932 17.6423 18.6076 18.5 16.9999 18.5Z"
-                        fill="#405189"
+                        d="M22.8275 0.385423C22.3136 -0.128474 21.4949 -0.128474 20.981 0.385423L11.0607 10.3057C10.9039 10.4538 10.7994 10.6454 10.7297 10.8544L9.10974 16.2631C8.97036 16.7248 9.10102 17.2212 9.44071 17.5609C9.68455 17.8135 10.0242 17.9441 10.3639 17.9441C10.4858 17.9441 10.6165 17.9267 10.7384 17.8918L16.1471 16.2719C16.3562 16.2022 16.5478 16.0977 16.6958 15.9409L26.6162 6.02056C26.8601 5.77671 26.9994 5.44575 26.9994 5.09734C26.9994 4.74899 26.8601 4.41801 26.6162 4.17412L22.8275 0.385423Z"
+                        fill="#3A57E8"
+                      />
+                      <path
+                        d="M25.6935 12.196C24.9719 12.196 24.3871 12.7812 24.3871 13.5024V22.2121C24.3871 23.4131 23.4102 24.3895 22.2097 24.3895H4.79032C3.58976 24.3895 2.6129 23.4131 2.6129 22.2121V4.79276C2.6129 3.59178 3.58976 2.61534 4.79032 2.61534H13.5C14.2217 2.61534 14.8065 2.03016 14.8065 1.30889C14.8065 0.587627 14.2217 0.00244141 13.5 0.00244141H4.79032C2.14893 0.00244141 0 2.15179 0 4.79276V22.2121C0 24.8531 2.14893 27.0024 4.79032 27.0024H22.2097C24.8511 27.0024 27 24.8531 27 22.2121V13.5024C27 12.7812 26.4152 12.196 25.6935 12.196Z"
+                        fill="#3A57E8"
+                      />
+                    </svg>
+                    <svg
+                      width="25"
+                      height="17"
+                      viewBox="0 0 25 29"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      onClick={handleCLDelete}
+                    >
+                      <path
+                        opacity="0.4"
+                        d="M22.3729 11.0401C22.3729 11.1335 21.6845 20.3975 21.2913 24.2964C21.0451 26.689 19.5954 28.1402 17.4209 28.1815C15.7502 28.2213 14.1146 28.2351 12.5054 28.2351C10.7969 28.2351 9.12614 28.2213 7.50437 28.1815C5.40272 28.1279 3.9518 26.6478 3.71814 24.2964C3.31364 20.3838 2.6378 11.1335 2.62523 11.0401C2.61267 10.7584 2.69809 10.4904 2.87145 10.2732C3.0423 10.0726 3.28851 9.95166 3.54729 9.95166H21.4634C21.7209 9.95166 21.9546 10.0726 22.1393 10.2732C22.3114 10.4904 22.398 10.7584 22.3729 11.0401Z"
+                        fill="#C03221"
+                      />
+                      <path
+                        d="M24.125 6.21404C24.125 5.64921 23.7067 5.20669 23.2042 5.20669H19.4381C18.6718 5.20669 18.006 4.62675 17.8351 3.80905L17.6241 2.8072C17.3289 1.59646 16.3101 0.748535 15.1669 0.748535H9.83432C8.6786 0.748535 7.66986 1.59646 7.36334 2.87317L7.16612 3.81043C6.99402 4.62675 6.32822 5.20669 5.56319 5.20669H1.79706C1.29332 5.20669 0.875 5.64921 0.875 6.21404V6.73626C0.875 7.28735 1.29332 7.74361 1.79706 7.74361H23.2042C23.7067 7.74361 24.125 7.28735 24.125 6.73626V6.21404Z"
+                        fill="#C03221"
                       />
                     </svg>
                   </div>
-                  <div
-                    className="p4_mini_dual"
-                    style={{ marginBottom: "2rem" }}
-                  >
-                    <div className="p4_txt1 txt_8px">LE:</div>
-                    <input
-                      type="text"
-                      name="lenseTypeLE"
-                      id="lenseTypeLE"
-                      className="pn_input1"
-                      placeholder=""
-                      value={CLData?.lenseTypeLE}
-                      onChange={(e) =>
-                        setCLData({ ...CLData, lenseTypeLE: e.target.value })
-                      }
-                    />
-                    <svg
-                      width="34"
-                      height="16"
-                      viewBox="0 0 34 28"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0.770508 14C2.18051 6.32 8.91101 0.5 16.999 0.5C25.087 0.5 31.816 6.32 33.2275 14C31.8175 21.68 25.087 27.5 16.999 27.5C8.91101 27.5 2.18201 21.68 0.770508 14H0.770508ZM16.9982 21.5008C21.1403 21.5008 24.4982 18.143 24.4982 14.0009C24.4982 9.85873 21.1404 6.50086 16.9982 6.50084C12.8561 6.50083 9.49825 9.85867 9.49823 14.0008C9.49821 18.1429 12.856 21.5008 16.9982 21.5008H16.9982ZM16.9999 18.5C15.3922 18.5 13.9066 17.6423 13.1028 16.25C12.2989 14.8577 12.2989 13.1423 13.1028 11.75C13.9066 10.3577 15.3922 9.5 16.9999 9.5C18.6076 9.5 20.0932 10.3577 20.897 11.75C21.7009 13.1423 21.7009 14.8577 20.897 16.25C20.0932 17.6423 18.6076 18.5 16.9999 18.5Z"
-                        fill="#405189"
-                      />
-                    </svg>
-                  </div>
                 </div>
-              </div>
-              <div className="flex" style={{ grid: "7px" }}>
-                <svg
-                  width="27"
-                  height="16"
-                  viewBox="0 0 27 28"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  onClick={handleCLEdit}
-                >
-                  <path
-                    d="M22.8275 0.385423C22.3136 -0.128474 21.4949 -0.128474 20.981 0.385423L11.0607 10.3057C10.9039 10.4538 10.7994 10.6454 10.7297 10.8544L9.10974 16.2631C8.97036 16.7248 9.10102 17.2212 9.44071 17.5609C9.68455 17.8135 10.0242 17.9441 10.3639 17.9441C10.4858 17.9441 10.6165 17.9267 10.7384 17.8918L16.1471 16.2719C16.3562 16.2022 16.5478 16.0977 16.6958 15.9409L26.6162 6.02056C26.8601 5.77671 26.9994 5.44575 26.9994 5.09734C26.9994 4.74899 26.8601 4.41801 26.6162 4.17412L22.8275 0.385423Z"
-                    fill="#3A57E8"
-                  />
-                  <path
-                    d="M25.6935 12.196C24.9719 12.196 24.3871 12.7812 24.3871 13.5024V22.2121C24.3871 23.4131 23.4102 24.3895 22.2097 24.3895H4.79032C3.58976 24.3895 2.6129 23.4131 2.6129 22.2121V4.79276C2.6129 3.59178 3.58976 2.61534 4.79032 2.61534H13.5C14.2217 2.61534 14.8065 2.03016 14.8065 1.30889C14.8065 0.587627 14.2217 0.00244141 13.5 0.00244141H4.79032C2.14893 0.00244141 0 2.15179 0 4.79276V22.2121C0 24.8531 2.14893 27.0024 4.79032 27.0024H22.2097C24.8511 27.0024 27 24.8531 27 22.2121V13.5024C27 12.7812 26.4152 12.196 25.6935 12.196Z"
-                    fill="#3A57E8"
-                  />
-                </svg>
-                <svg
-                  width="25"
-                  height="17"
-                  viewBox="0 0 25 29"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  onClick={handleCLDelete}
-                >
-                  <path
-                    opacity="0.4"
-                    d="M22.3729 11.0401C22.3729 11.1335 21.6845 20.3975 21.2913 24.2964C21.0451 26.689 19.5954 28.1402 17.4209 28.1815C15.7502 28.2213 14.1146 28.2351 12.5054 28.2351C10.7969 28.2351 9.12614 28.2213 7.50437 28.1815C5.40272 28.1279 3.9518 26.6478 3.71814 24.2964C3.31364 20.3838 2.6378 11.1335 2.62523 11.0401C2.61267 10.7584 2.69809 10.4904 2.87145 10.2732C3.0423 10.0726 3.28851 9.95166 3.54729 9.95166H21.4634C21.7209 9.95166 21.9546 10.0726 22.1393 10.2732C22.3114 10.4904 22.398 10.7584 22.3729 11.0401Z"
-                    fill="#C03221"
-                  />
-                  <path
-                    d="M24.125 6.21404C24.125 5.64921 23.7067 5.20669 23.2042 5.20669H19.4381C18.6718 5.20669 18.006 4.62675 17.8351 3.80905L17.6241 2.8072C17.3289 1.59646 16.3101 0.748535 15.1669 0.748535H9.83432C8.6786 0.748535 7.66986 1.59646 7.36334 2.87317L7.16612 3.81043C6.99402 4.62675 6.32822 5.20669 5.56319 5.20669H1.79706C1.29332 5.20669 0.875 5.64921 0.875 6.21404V6.73626C0.875 7.28735 1.29332 7.74361 1.79706 7.74361H23.2042C23.7067 7.74361 24.125 7.28735 24.125 6.73626V6.21404Z"
-                    fill="#C03221"
-                  />
-                </svg>
-              </div>
-            </div>
+              </>
+            )}
 
             <div className="pn_h2_mini">
               <div
@@ -4349,7 +4526,7 @@ function PatientNew() {
       ) : (
         <></>
       )}
-      {showMakeAppmnt && (
+      {/* {showMakeAppmnt && (
         <div className="popup">
           <div className="make_a_con">
             <div className="ma_title">Make Appointment</div>
@@ -4391,7 +4568,7 @@ function PatientNew() {
               </div>
             </div> */}
 
-            <label
+            {/* <label
               style={{
                 fontSize: "16px",
                 display: "block",
@@ -4511,9 +4688,9 @@ function PatientNew() {
                   }}
                 />
               </div>
-            )}
+            )} */}
 
-            {selectedTime && (
+            {/* {selectedTime && (
               <button
                 onClick={handleAppointmentSubmit}
                 style={{
@@ -4530,9 +4707,9 @@ function PatientNew() {
               >
                 Book Appointment
               </button>
-            )}
+            )} */}
 
-            <svg
+            {/* <svg
               className="login_xmark"
               onClick={() => {
                 setshowMakeAppmnt(false);
@@ -4547,7 +4724,7 @@ function PatientNew() {
             </svg>
           </div>
         </div>
-      )}
+      )} */} 
       {newAttach && (
         <div className="popup">
           <div className="make_a_con">

@@ -33,46 +33,46 @@ import EditUser from "./EditUser";
 import Signin from "./Signin";
 import Protected from "./Protected";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser,setSearchPatients } from "./redux/spectrumSlice";
-import axios from 'axios';
+import { setUser, setSearchPatients } from "./redux/spectrumSlice";
+import axios from "axios";
 import { baseUrl } from "./utils/data";
 import CreateDoctorForm from "./CreateDoctorForm";
 
 function App() {
   const user = useSelector((state) => state.spectrumReducer.user);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState();
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
 
   const handleClick = (patient) => {
-     dispatch(setSearchPatients(patient))
+    dispatch(setSearchPatients(patient));
     setShowSearch(false);
-  }
+  };
 
   const handleSearch = async () => {
     console.log("s", searchValue);
     try {
-      const response = await axios.get(`${baseUrl}/api/search?value=${searchValue}`);
+      const response = await axios.get(
+        `${baseUrl}/api/search?value=${searchValue}`
+      );
       // if(response.data.length === 0) {
       //   alert("No result found")
       //   setShowSearch(false);
       //   return
       // }
-       setSearchResult(response.data)
+      setSearchResult(response.data);
       setShowSearch(true);
     } catch (error) {
       console.error(error);
     }
   };
 
-
   useEffect(() => {
-
-    if(searchValue.trim().length > 0) {
+    if (searchValue.trim().length > 0) {
       setTimeout(() => {
         handleSearch();
-      }, 2000)
+      }, 4000);
     }
   }, [searchValue]);
 
@@ -124,8 +124,8 @@ function App() {
     setDoctor(false);
     // setshowSignup(false);
     setDashboard(false);
-    setDiary(true);
-    setPatient(false);
+    setDiary(false);
+    setPatient(true);
     setCommunication(false);
     setTasks(false);
     setStock(false);
@@ -392,6 +392,9 @@ function App() {
     setgos4(false);
     setgos6(true);
   }
+  const MakeAppoit = () => {
+    window.open("Diary.html", "_blank");
+  };
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -464,7 +467,7 @@ function App() {
           </div>
           {user.username && (
             <ul className="sidebar_list_elem">
-              <NavLink className="sidebar_list_con" to="/">
+              {/* <NavLink className="sidebar_list_con" to="/">
                 <li
                   onClick={activeDashboard}
                   style={{ background: dashboard ? "#F4F3F6" : "none" }}
@@ -485,8 +488,8 @@ function App() {
                     Dashboard
                   </div>
                 </li>
-              </NavLink>
-              <NavLink className="sidebar_list_con" to="/diary">
+              </NavLink> */}
+              <NavLink className="sidebar_list_con" onClick={MakeAppoit}>
                 <li
                   onClick={activeDiary}
                   style={{ background: diary ? "#F4F3F6" : "none" }}
@@ -537,7 +540,7 @@ function App() {
                   </div>
                 </li>
               </NavLink>
-              <NavLink className="sidebar_list_con" to="/doctor">
+              {/* <NavLink className="sidebar_list_con" to="/doctor">
                 <li
                   onClick={activeDoctor}
                   style={{ background: doctor ? "#F4F3F6" : "none" }}
@@ -565,7 +568,7 @@ function App() {
                     Doctor
                   </div>
                 </li>
-              </NavLink>
+              </NavLink> */}
               {/* <NavLink className="sidebar_list_con" to="/communication">
                 <li
                   onClick={activeCommunication}
@@ -846,7 +849,7 @@ function App() {
                   setgosReveal(!gosReveal);
                 }}
               >
-                <li style={{ background: "none", cursor: "pointer" }}>
+                {/* <li style={{ background: "none", cursor: "pointer" }}>
                   <svg
                     width="22"
                     height="22"
@@ -889,13 +892,13 @@ function App() {
                       />
                     </svg>
                   </div>
-                </li>
+                </li> */}
               </div>
-              <div
+              {/* <div
                 className="gos_childs"
                 style={{ display: gosReveal ? "block" : "none" }}
-              >
-                {/* <NavLink className="sidebar_list_con" to="/gos1">
+              > */}
+              {/* <NavLink className="sidebar_list_con" to="/gos1">
                   <li
                     onClick={activeGos1}
                     style={{ background: gos1 ? "#F4F3F6" : "none" }}
@@ -914,7 +917,7 @@ function App() {
                     </div>
                   </li>
                 </NavLink> */}
-                {/* <NavLink className="sidebar_list_con" to="/gos3">
+              {/* <NavLink className="sidebar_list_con" to="/gos3">
                   <li
                     onClick={activeGos3}
                     style={{ background: gos3 ? "#F4F3F6" : "none" }}
@@ -985,10 +988,8 @@ function App() {
                   </div>
                 </li>
               </NavLink> */}
-          </div>
-
+              {/* </div> */}
             </ul>
-            
           )}
           <div className="sponsored_logo">
             <div className="flex powered_txt">Powered By</div>
@@ -998,81 +999,113 @@ function App() {
           </div>
         </div>
         <div className="home_page_right">
-        {user.username && 
-          <div className="navbar">
-            <div className="nav_left">
-              <div className="search_con">
-                <input
-                  className="nav_search_input"
-                  type="text"
-                  placeholder="Search"
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 27 27"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M19.3389 17.4129L26.6015 24.6758C26.8568 24.9312 27.0001 25.2776 27 25.6388C26.9999 25.9999 26.8563 26.3462 26.6008 26.6015C26.3454 26.8568 25.999 27.0001 25.6379 27C25.2767 26.9999 24.9304 26.8563 24.6752 26.6008L17.4125 19.338C15.2414 21.0196 12.5112 21.811 9.77742 21.5511C7.04359 21.2912 4.51146 19.9995 2.69613 17.9389C0.880803 15.8783 -0.0813541 13.2035 0.00539479 10.4586C0.0921436 7.71377 1.22128 5.10506 3.16311 3.16318C5.10493 1.22131 7.71357 0.0921459 10.4584 0.00539492C13.2031 -0.0813561 15.8779 0.880824 17.9384 2.6962C19.999 4.51157 21.2906 7.04377 21.5505 9.77767C21.8104 12.5116 21.0191 15.2418 19.3375 17.4129H19.3389ZM10.8005 18.8992C12.9487 18.8992 15.0088 18.0459 16.5278 16.5269C18.0468 15.0079 18.9001 12.9476 18.9001 10.7994C18.9001 8.65121 18.0468 6.59099 16.5278 5.07198C15.0088 3.55297 12.9487 2.6996 10.8005 2.6996C8.65235 2.6996 6.59218 3.55297 5.0732 5.07198C3.55423 6.59099 2.70088 8.65121 2.70088 10.7994C2.70088 12.9476 3.55423 15.0079 5.0732 16.5269C6.59218 18.0459 8.65235 18.8992 10.8005 18.8992Z"
-                    fill="#777777"
+          {user.username && (
+            <div className="navbar">
+              <div className="nav_left">
+                <div className="search_con">
+                  <input
+                    className="nav_search_input"
+                    type="text"
+                    placeholder="Search"
+                    onChange={(e) => setSearchValue(e.target.value)}
                   />
-                </svg>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 27 27"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M19.3389 17.4129L26.6015 24.6758C26.8568 24.9312 27.0001 25.2776 27 25.6388C26.9999 25.9999 26.8563 26.3462 26.6008 26.6015C26.3454 26.8568 25.999 27.0001 25.6379 27C25.2767 26.9999 24.9304 26.8563 24.6752 26.6008L17.4125 19.338C15.2414 21.0196 12.5112 21.811 9.77742 21.5511C7.04359 21.2912 4.51146 19.9995 2.69613 17.9389C0.880803 15.8783 -0.0813541 13.2035 0.00539479 10.4586C0.0921436 7.71377 1.22128 5.10506 3.16311 3.16318C5.10493 1.22131 7.71357 0.0921459 10.4584 0.00539492C13.2031 -0.0813561 15.8779 0.880824 17.9384 2.6962C19.999 4.51157 21.2906 7.04377 21.5505 9.77767C21.8104 12.5116 21.0191 15.2418 19.3375 17.4129H19.3389ZM10.8005 18.8992C12.9487 18.8992 15.0088 18.0459 16.5278 16.5269C18.0468 15.0079 18.9001 12.9476 18.9001 10.7994C18.9001 8.65121 18.0468 6.59099 16.5278 5.07198C15.0088 3.55297 12.9487 2.6996 10.8005 2.6996C8.65235 2.6996 6.59218 3.55297 5.0732 5.07198C3.55423 6.59099 2.70088 8.65121 2.70088 10.7994C2.70088 12.9476 3.55423 15.0079 5.0732 16.5269C6.59218 18.0459 8.65235 18.8992 10.8005 18.8992Z"
+                      fill="#777777"
+                    />
+                  </svg>
+                </div>
+                <div className="notify_con flex">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8.67386 19.8681C8.0578 19.7785 7.47568 19.5299 6.98482 19.147C6.78961 19.0193 6.62594 18.8489 6.50617 18.6488C6.3864 18.4486 6.31367 18.2238 6.29342 17.9914C6.29342 17.4975 6.74776 17.2605 7.17249 17.1617C8.48769 17.0649 9.80822 17.0649 11.1234 17.1617C11.5481 17.2605 12.0025 17.4877 12.0025 17.9914C11.9841 18.2231 11.9132 18.4476 11.7951 18.6478C11.677 18.8481 11.5149 19.0188 11.321 19.147C10.8275 19.5319 10.2417 19.7806 9.62208 19.8681C9.45761 19.8782 9.29268 19.8782 9.12821 19.8681C8.97687 19.8764 8.8252 19.8764 8.67386 19.8681V19.8681ZM4.50563 15.6999C3.41282 15.6009 2.39395 15.1055 1.64118 14.3072C1.08521 13.6508 0.783746 12.8165 0.791744 11.9563C0.741911 11.1328 0.998783 10.32 1.5128 9.67469C1.87321 9.30388 2.15243 8.86207 2.3327 8.37741C2.51296 7.89274 2.5903 7.37584 2.55979 6.85964V6.43492C2.49577 5.05283 2.95016 3.69666 3.83395 2.63215C4.48519 1.85553 5.29815 1.23044 6.21598 0.800528C7.13382 0.370611 8.13442 0.146233 9.14796 0.143066H9.23685C10.273 0.144306 11.2956 0.378397 12.2291 0.828041C13.1626 1.27768 13.983 1.93138 14.6299 2.7408C15.4654 3.78476 15.8873 5.09975 15.8152 6.43492V6.85964C15.7913 7.37353 15.8699 7.88702 16.0462 8.37029C16.2225 8.85355 16.4932 9.29694 16.8424 9.67469C17.3547 10.3209 17.6114 11.1331 17.5635 11.9563C17.5715 12.8165 17.27 13.6508 16.714 14.3072C15.9612 15.1055 14.9424 15.6009 13.8496 15.6999C12.2988 15.8381 10.7382 15.9468 9.16773 15.9468C7.61028 15.9525 6.05376 15.87 4.50563 15.6999V15.6999Z"
+                      fill="#7D8CAC"
+                    />
+                  </svg>
+                </div>
               </div>
-              <div className="notify_con flex">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+              {/* <div className="nav_right">
+                <div className="nav_right_image">
+                  <img src="/profile.jpeg" alt="" />
+                </div>
+                <div className="nav_right_text">John Smith</div>
+              </div> */}
+            </div>
+          )}
+
+          {showSearch && (
+            <div
+              style={{
+                position: "relative",
+                backgroundColor: "#f5f5f5",
+                padding: "15px",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                borderRadius: "5px",
+              }}
+            >
+              <div
+                className="close-container"
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginBottom: "10px",
+                }}
+              >
+                <div
+                  className="close"
+                  onClick={() => setShowSearch(false)}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
                 >
-                  <path
-                    d="M8.67386 19.8681C8.0578 19.7785 7.47568 19.5299 6.98482 19.147C6.78961 19.0193 6.62594 18.8489 6.50617 18.6488C6.3864 18.4486 6.31367 18.2238 6.29342 17.9914C6.29342 17.4975 6.74776 17.2605 7.17249 17.1617C8.48769 17.0649 9.80822 17.0649 11.1234 17.1617C11.5481 17.2605 12.0025 17.4877 12.0025 17.9914C11.9841 18.2231 11.9132 18.4476 11.7951 18.6478C11.677 18.8481 11.5149 19.0188 11.321 19.147C10.8275 19.5319 10.2417 19.7806 9.62208 19.8681C9.45761 19.8782 9.29268 19.8782 9.12821 19.8681C8.97687 19.8764 8.8252 19.8764 8.67386 19.8681V19.8681ZM4.50563 15.6999C3.41282 15.6009 2.39395 15.1055 1.64118 14.3072C1.08521 13.6508 0.783746 12.8165 0.791744 11.9563C0.741911 11.1328 0.998783 10.32 1.5128 9.67469C1.87321 9.30388 2.15243 8.86207 2.3327 8.37741C2.51296 7.89274 2.5903 7.37584 2.55979 6.85964V6.43492C2.49577 5.05283 2.95016 3.69666 3.83395 2.63215C4.48519 1.85553 5.29815 1.23044 6.21598 0.800528C7.13382 0.370611 8.13442 0.146233 9.14796 0.143066H9.23685C10.273 0.144306 11.2956 0.378397 12.2291 0.828041C13.1626 1.27768 13.983 1.93138 14.6299 2.7408C15.4654 3.78476 15.8873 5.09975 15.8152 6.43492V6.85964C15.7913 7.37353 15.8699 7.88702 16.0462 8.37029C16.2225 8.85355 16.4932 9.29694 16.8424 9.67469C17.3547 10.3209 17.6114 11.1331 17.5635 11.9563C17.5715 12.8165 17.27 13.6508 16.714 14.3072C15.9612 15.1055 14.9424 15.6009 13.8496 15.6999C12.2988 15.8381 10.7382 15.9468 9.16773 15.9468C7.61028 15.9525 6.05376 15.87 4.50563 15.6999V15.6999Z"
-                    fill="#7D8CAC"
-                  />
-                </svg>
+                  ✕
+                </div>
               </div>
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                {searchResult?.map((patient) => (
+                  <li
+                    onClick={() => handleClick(patient)}
+                    style={{
+                      padding: "10px",
+                      cursor: "pointer",
+                      borderBottom: "1px solid #ddd",
+                      color: "#333",
+                      fontWeight: "500",
+                    }}
+                    key={patient._id}
+                  >
+                    {patient.forename + " " + patient.surname}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="nav_right">
-              <div className="nav_right_image">
-                <img src="/profile.jpeg" alt="" />
-              </div>
-              <div className="nav_right_text">John Smith</div>
-            </div>
-          </div>}
-          
-            {showSearch && 
-           <div style={{ position: 'relative', backgroundColor: '#f5f5f5', padding: '15px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)', borderRadius: '5px' }}>
-           <div className="close-container" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-             <div className="close" onClick={() => setShowSearch(false)} style={{ cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: '#333' }}>✕</div>
-           </div>
-           <ul style={{ listStyle: 'none', padding: 0 }}>
-             {searchResult?.map((patient) => (
-               <li
-                 onClick={() => handleClick(patient)}
-                 style={{ padding: '10px', cursor: 'pointer', borderBottom: '1px solid #ddd', color: '#333', fontWeight: '500' }}
-                 key={patient._id}
-               >
-                 {patient.forename + ' ' + patient.surname}
-               </li>
-             ))}
-           </ul>
-         </div>
-         
-          }
-          
+          )}
+
           <div className="main_pages">
             <Routes>
               <Route
                 path="/"
                 element={
                   <Protected user={user}>
-                    <Dashboard />
+                    <PatientNew />
                   </Protected>
                 }
               />

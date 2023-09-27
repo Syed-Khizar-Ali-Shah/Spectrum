@@ -16,6 +16,8 @@ const taskRoutes = require('./routes/task');
 const newSightTestRoutes = require('./routes/newSightTest')
 const searchRoutes = require('./routes/search')
 const contactLenseRoutes = require('./routes/contactLense');
+const previosRXRoutes = require('./routes/previousRX');
+const refractionRoutes = require('./routes/refraction');
 
 // app.use(cors(
 //     {
@@ -51,6 +53,8 @@ app.use('/api/task', taskRoutes)
 app.use('/api/newSightTest', newSightTestRoutes)
 app.use('/api/search', searchRoutes);
 app.use('/api/contactLense', contactLenseRoutes);
+app.use('/api/previousRX', previosRXRoutes);
+app.use('/api/refraction', refractionRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
